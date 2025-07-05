@@ -22,4 +22,4 @@ jobs:
 
     - name: Deploy via SSH
       run: |
-        rsync -az --delete --exclude=".git*" --exclude="node_modules" ./ ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }}:${{ secrets.DEPLOY_PATH }}
+        rsync -az -e "ssh -p ${{ secrets.HOSTINGER_PORT }}" --delete --exclude=".git*" --exclude="node_modules" ./ ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }}:${{ secrets.DEPLOY_PATH }}

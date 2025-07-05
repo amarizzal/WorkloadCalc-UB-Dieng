@@ -112,6 +112,7 @@
             });
         });
     </script>
+    @yield('scripts')
     
     
 </body>

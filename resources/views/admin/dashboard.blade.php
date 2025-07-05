@@ -18,7 +18,7 @@
             </a>
         </div>
         <div class="col-md-4 col-12">
-            <a class="d-block" href="#" style="text-decoration: none; color: inherit;">
+            <a class="d-block" href="{{route('admin.data-rumah-sakit')}}" style="text-decoration: none; color: inherit;">
             <img src="images/icon/dataRumahSakit.png" alt="FIKES UB" class="text-center mx-auto d-block" style="width: 200px; ">
             <h3 class="text-center"><strong>Data Rumah Sakit</strong></h3>
             </a>

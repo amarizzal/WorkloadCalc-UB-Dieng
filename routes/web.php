@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\MasterController;
 use App\Http\Controllers\Perawat\PerawatController;
 use App\Http\Controllers\Admin\LaporanController;
+use App\Http\Controllers\Admin\HospitalController;
 use App\Http\Controllers\Perawat\NotifikasiController;
 
 use Illuminate\Support\Facades\Auth;
@@ -72,8 +73,12 @@ Route::prefix('admin')
         Route::get('/laporan6', [LaporanController::class, 'index6'])->name('admin.laporan.index6');
         Route::get('/laporan/detail-tindakan/{tindakanId}/{userId}', [LaporanController::class, 'detailTindakan'])->name('admin.laporan.detailTindakan');
 
+        // DATA RUMAH SAKIT
+        Route::get('/data-rumah-sakit', [HospitalController::class, 'index'])->name('admin.data-rumah-sakit');
+        Route::post('/data-rumah-sakit/update', [HospitalController::class, 'update'])->name('admin.data-rumah-sakit.update');
 
-    });
+
+});
 
 ////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -112,4 +117,4 @@ Route::prefix('perawat')
 
         Route::get('/notifikasi', [NotifikasiController::class, 'index']);
         Route::post('/notifikasi/{id}/read', [NotifikasiController::class, 'markAsRead']);
-    });
+});

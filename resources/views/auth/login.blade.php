@@ -182,7 +182,7 @@
                     <!-- Welcome Text -->
                     <div class="welcome-text">
                         <h1 class="display-6 fw-bold mb-1">Hai!</h1>
-                        <h2 class="display-6 fw-bold mb-4">Selamat Datangg</h2>
+                        <h2 class="display-6 fw-bold mb-4">Selamat Datang</h2>
                         <p class="text-muted">Isilah Data dibawah dengan benar</p>
                     </div>
 

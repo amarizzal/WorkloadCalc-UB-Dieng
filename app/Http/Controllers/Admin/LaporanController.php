@@ -65,7 +65,7 @@ class LaporanController extends Controller
 
         // Menghitung rata-rata waktu per tindakan
         $rataRataWaktu = [];
-        $tindakanPokok = TindakanWaktu::where('status', 'Tugas Pokok')->get();
+        $tindakanPokok = TindakanWaktu::where('status', 'Tugas Pokok')->with(['laporanTindakan.user'])->get();
 
         foreach ($tindakanPokok as $tindakan) {
             $laporanTindakan = $laporan->where('tindakan_id', $tindakan->id);

@@ -66,7 +66,12 @@ Route::prefix('admin')
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Route::get('/laporan', [LaporanController::class, 'index'])->name('admin.laporan.index');
-        Route::get('/laporan2', [LaporanController::class, 'index2'])->name('admin.laporan.index2');
+        Route::get('/laporan2', 
+        
+        // tugas pokok
+        [LaporanController::class, 'index2'])->name('admin.laporan.index2');
+
+        
         Route::get('/laporan3', [LaporanController::class, 'index3'])->name('admin.laporan.index3');
         Route::get('/laporan4', [LaporanController::class, 'index4'])->name('admin.laporan.index4');
         Route::get('/laporan5', [LaporanController::class, 'index5'])->name('admin.laporan.index5');

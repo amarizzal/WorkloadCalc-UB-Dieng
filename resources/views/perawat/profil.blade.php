@@ -7,7 +7,7 @@
             <h5 class="card-title">Profil Saya</h5>
             <div class="text-center mb-4">
                 <div class="profile-img mx-auto mb-3" style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 4px solid red;">
-                    <img src="{{ asset('storage/user_photos/' . auth()->user()->foto) }}" 
+                    <img src="{{ asset('storage/user_photos/' . auth()->user()->foto) ?? 'default-profile.png' }}" 
                     alt="Foto Profil" 
                     style="width: 100%; height: 100%; object-fit: cover;">
                 </div>

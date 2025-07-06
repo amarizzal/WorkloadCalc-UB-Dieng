@@ -6,7 +6,12 @@
             <div class="profile-img me-3"
                 style="width: 40px; height: 40px; border-radius: 50%; overflow: hidden; background-color: #6c757d;">
                 <!-- Gambar Profil -->
-                <img src="{{ asset('storage/user_photos/' . auth()->user()->foto) }}" alt="Foto Profil"
+                <img src="
+                @if(auth()->user() != null)
+                    {{ asset('storage/user_photos/' . auth()->user()->foto) }}
+                @else
+                    {{ asset('storage/user_photos/default-profile.png') }}
+                @endif" alt="Foto Profil"
                     style="width: 100%; height: 100%; object-fit: cover;">
             </div>
             <div>
@@ -44,58 +49,58 @@
     </div>
 </div>
 <script>
-    // Fungsi untuk mengambil notifikasi
-    function fetchNotifications() {
-        fetch('/public/perawat/notifikasi') // Ambil notifikasi dari controller
-            .then(response => response.json())
-            .then(data => {
-                console.log(data); // Cek apa yang diterima dari server
+    // // Fungsi untuk mengambil notifikasi
+    // function fetchNotifications() {
+    //     fetch('/public/perawat/notifikasi') // Ambil notifikasi dari controller
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             console.log(data); // Cek apa yang diterima dari server
 
-                // Pastikan ada data yang diterima
-                if (data.notifications && data.notifications.length > 0) {
-                    const notificationCount = data.notifications.length;
-                    const notificationBadge = document.querySelector('.notification-count');
-                    notificationBadge.textContent = notificationCount; // Update jumlah notifikasi di badge
+    //             // Pastikan ada data yang diterima
+    //             if (data.notifications && data.notifications.length > 0) {
+    //                 const notificationCount = data.notifications.length;
+    //                 const notificationBadge = document.querySelector('.notification-count');
+    //                 notificationBadge.textContent = notificationCount; // Update jumlah notifikasi di badge
 
-                    const notificationList = document.getElementById('notification-list');
-                    notificationList.innerHTML = ''; // Kosongkan daftar notifikasi
+    //                 const notificationList = document.getElementById('notification-list');
+    //                 notificationList.innerHTML = ''; // Kosongkan daftar notifikasi
 
-                    // Menampilkan notifikasi
-                    data.notifications.forEach((notification) => {
-                        const notificationItem = document.createElement('div');
-                        notificationItem.classList.add('notification-item', 'mb-3', 'p-2', 'border',
-                            'rounded');
-                        notificationItem.setAttribute('data-id', notification
-                        .id); // Gunakan ID notifikasi dari server
+    //                 // Menampilkan notifikasi
+    //                 data.notifications.forEach((notification) => {
+    //                     const notificationItem = document.createElement('div');
+    //                     notificationItem.classList.add('notification-item', 'mb-3', 'p-2', 'border',
+    //                         'rounded');
+    //                     notificationItem.setAttribute('data-id', notification
+    //                     .id); // Gunakan ID notifikasi dari server
 
-                        // Teks notifikasi
-                        const notificationText = document.createElement('p');
-                        notificationText.textContent = notification.message; // Gunakan pesan notifikasi
+    //                     // Teks notifikasi
+    //                     const notificationText = document.createElement('p');
+    //                     notificationText.textContent = notification.message; // Gunakan pesan notifikasi
 
-                        // Tombol untuk menandai dibaca
-                        const clearButton = document.createElement('button');
-                        clearButton.textContent = 'Tandai Dibaca';
-                        clearButton.classList.add('btn', 'btn-sm', 'btn-secondary', 'ms-2');
-                        clearButton.onclick = function() {
-                            clearNotification(notification
-                            .id); // Gunakan ID notifikasi untuk menandai dibaca
-                        };
+    //                     // Tombol untuk menandai dibaca
+    //                     const clearButton = document.createElement('button');
+    //                     clearButton.textContent = 'Tandai Dibaca';
+    //                     clearButton.classList.add('btn', 'btn-sm', 'btn-secondary', 'ms-2');
+    //                     clearButton.onclick = function() {
+    //                         clearNotification(notification
+    //                         .id); // Gunakan ID notifikasi untuk menandai dibaca
+    //                     };
 
-                        // Tambahkan elemen ke item notifikasi
-                        notificationItem.appendChild(notificationText);
-                        notificationItem.appendChild(clearButton);
+    //                     // Tambahkan elemen ke item notifikasi
+    //                     notificationItem.appendChild(notificationText);
+    //                     notificationItem.appendChild(clearButton);
 
-                        // Tambahkan item ke daftar notifikasi
-                        notificationList.appendChild(notificationItem);
-                    });
-                } else {
-                    // Jika tidak ada notifikasi
-                    const notificationList = document.getElementById('notification-list');
-                    notificationList.innerHTML = '<p>Tidak ada notifikasi baru.</p>';
-                }
-            })
-            .catch(error => console.error('Error fetching notifications:', error));
-    }
+    //                     // Tambahkan item ke daftar notifikasi
+    //                     notificationList.appendChild(notificationItem);
+    //                 });
+    //             } else {
+    //                 // Jika tidak ada notifikasi
+    //                 const notificationList = document.getElementById('notification-list');
+    //                 notificationList.innerHTML = '<p>Tidak ada notifikasi baru.</p>';
+    //             }
+    //         })
+    //         .catch(error => console.error('Error fetching notifications:', error));
+    // }
 
     // Fungsi untuk menandai notifikasi sebagai dibaca dan menyimpannya di localStorage
     function clearNotification(notificationId) {

@@ -226,7 +226,7 @@ class LaporanController extends Controller
         // Query untuk mengambil laporan dengan status "Tambahan"
         $query = LaporanTindakanPerawat::with(['user', 'tindakan'])
             ->whereHas('tindakan', function ($q) {
-                $q->where('status', 'Tambahan');
+                $q->where('status', 'tambahan');
             });
 
         // Ambil input tanggal dari request
@@ -241,51 +241,59 @@ class LaporanController extends Controller
         // Ambil data laporan yang telah difilter
         $laporan = $query->get();
 
-        // Ambil daftar perawat yang memiliki tindakan "Tambahan"
-        $perawat = $laporan->pluck('user')->unique('id');
+        // // Ambil daftar perawat yang memiliki tindakan "Tambahan"
+        // $perawat = $laporan->pluck('user')->unique('id');
 
-        // Ambil daftar tindakan yang memiliki status "Tambahan"
-        $tindakanTambahan = $laporan->pluck('tindakan')->unique('id');
+        // // Ambil daftar tindakan yang memiliki status "Tambahan"
+        // $tindakanTambahan = $laporan->pluck('tindakan')->unique('id');
 
         // Hitung jumlah tindakan per tindakan dan per perawat
-        $perawatTindakan = [];
-        foreach ($perawat as $perawatItem) {
-            foreach ($tindakanTambahan as $tindakan) {
-                $perawatTindakan[$perawatItem->id][$tindakan->id] = $laporan
-                    ->where('user_id', $perawatItem->id)
-                    ->where('tindakan_id', $tindakan->id)
-                    ->count();
-            }
-        }
+        // $perawatTindakan = [];
+        // foreach ($perawat as $perawatItem) {
+        //     foreach ($tindakanTambahan as $tindakan) {
+        //         $perawatTindakan[$perawatItem->id][$tindakan->id] = $laporan
+        //             ->where('user_id', $perawatItem->id)
+        //             ->where('tindakan_id', $tindakan->id)
+        //             ->count();
+        //     }
+        // }
 
         // Hitung total tindakan untuk setiap jenis tindakan
-        $totalTindakan = [];
-        foreach ($tindakanTambahan as $tindakan) {
-            $totalTindakan[$tindakan->id] = $laporan->where('tindakan_id', $tindakan->id)->count();
-        }
+        // $totalTindakan = [];
+        // foreach ($tindakanTambahan as $tindakan) {
+        //     $totalTindakan[$tindakan->id] = $laporan->where('tindakan_id', $tindakan->id)->count();
+        // }
 
         // Menghitung rata-rata waktu per tindakan
-        $rataRataWaktu = [];
-        $tindakanTambahan = TindakanWaktu::where('status', 'Tambahan')->get();
+        // $rataRataWaktu = [];
+        // $tindakanTambahan = TindakanWaktu::where('status', 'Tambahan')->get();
 
-        foreach ($tindakanTambahan as $tindakan) {
-            $laporanTindakan = $laporan->where('tindakan_id', $tindakan->id);
-            $totalDurasi = $laporanTindakan->sum('durasi');
-            $jumlahTindakan = $laporanTindakan->count();
+        // foreach ($tindakanTambahan as $tindakan) {
+        //     $laporanTindakan = $laporan->where('tindakan_id', $tindakan->id);
+        //     $totalDurasi = $laporanTindakan->sum('durasi');
+        //     $jumlahTindakan = $laporanTindakan->count();
 
-            $rataRataWaktu[$tindakan->id] = $jumlahTindakan > 0 ? ($totalDurasi / $jumlahTindakan) / 60 : 0;
-        }
+        //     $rataRataWaktu[$tindakan->id] = $jumlahTindakan > 0 ? ($totalDurasi / $jumlahTindakan) / 60 : 0;
+        // }
 
         // Menghitung standar workload (SWL)
-        $swl = [];
-        $jamTersediaPerTahun = 2000;
-        foreach ($rataRataWaktu as $tindakanId => $rataWaktu) {
-            $swl[$tindakanId] = $rataWaktu > 0 ? $jamTersediaPerTahun / ($rataWaktu / 60) : 0;
-        }
+        // $swl = [];
+        // $jamTersediaPerTahun = 2000;
+        // foreach ($rataRataWaktu as $tindakanId => $rataWaktu) {
+        //     $swl[$tindakanId] = $rataWaktu > 0 ? $jamTersediaPerTahun / ($rataWaktu / 60) : 0;
+        // }
 
+        $tindakanTambahan = $laporan;
+        $hospitalTime = \App\Models\Hospital::first()->waktu_kerja_tersedia;
+
+        // dd($tindakanTambahan);
+
+        // return view('admin.laporan.laporanhasil5', compact(
+        //     'perawat', 'perawatTindakan', 'tindakanTambahan', 'laporan',
+        //     'rataRataWaktu', 'swl', 'totalTindakan', 'tanggalAwal', 'tanggalAkhir'
+        // ));
         return view('admin.laporan.laporanhasil5', compact(
-            'perawat', 'perawatTindakan', 'tindakanTambahan', 'laporan',
-            'rataRataWaktu', 'swl', 'totalTindakan', 'tanggalAwal', 'tanggalAkhir'
+            'tindakanTambahan',  'tanggalAwal', 'tanggalAkhir', 'hospitalTime'
         ));
     }
 

@@ -4,11 +4,11 @@
 <div class="container mt-4">
     
 
-    <!-- Form untuk Tindakan Penunjang -->
-    <div class="card shadow-sm mt-3" id="form_tindakan_lain">
+    <!-- Form untuk Tindakan Tambahan -->
+    <div class="card shadow-sm mt-3" id="form_tindakan_tambahan">
         <div class="card-body">
-            <h5 class="card-title text-center">Tambah Jenis Tindakan Penunjang</h5>
-            <form action="{{ route('perawat.tindakan.store') }}" method="POST">
+            <h5 class="card-title text-center">Tambah Jenis Tindakan Tambahan</h5>
+            <form action="{{ route('perawat.tindakan.storeTambahan') }}" method="POST">
                 @csrf
                 <div class="mb-3">
                     <label for="select_jenis_tindakan" class="form-label">Jenis Tindakan</label>
@@ -19,68 +19,15 @@
                         @endforeach
                     </select>
                 </div>
-
-                <input type="hidden" name="waktu" value="0">
-                <input type="hidden" name="status" value="Tugas Penunjang">
-
                 <div class="mb-3">
                     <label for="tanggal" class="form-label">Tanggal</label>
                     <input type="date" class="form-control" name="tanggal" required>
                 </div>
                 <div class="mb-3">
-                    <label for="jam_mulai" class="form-label">Waktu</label>
-                    <input type="number" class="form-control" name="waktu" placeholder="" required>
+                    <label for="waktu" class="form-label">Waktu (Jam)</label>
+                    <input type="number" class="form-control" name="waktu" required>
                 </div>
-                <div class="mb-3">
-                    <label for="satuan" class="form-label">Satuan</label>
-                    <select name="satuan" id="satuan" class="form-select" required>
-                        <option value="" disabled selected>Pilih Satuan</option>
-                        <option value="menit">Menit</option>
-                        <option value="jam">Jam</option>
-                        <option value="hari">Hari</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="kategori" class="form-label">Kategori</label>
-                    <select name="kategori" id="kategori" class="form-select" required>
-                        <option value="" disabled selected>Pilih Kategori</option>
-                        <option value="harian">Harian</option>
-                        <option value="mingguan">Mingguan</option>
-                        <option value="bulanan">Bulanan</option>
-                        <option value="tahunan">Tahunan</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="keterangan" class="form-label">Keterangan</label>
-                    <textarea class="form-control" name="keterangan" rows="3" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Simpan Tindakan</button>
-            </form>
-        </div>
-    </div>
-    <!-- Form untuk Tindakan Tambahan -->
-    <div class="card shadow-sm mt-3 d-none" id="form_tindakan_tambahan">
-        <div class="card-body">
-            <h5 class="card-title text-center">Tambah Jenis Tindakan Tambahan</h5>
-            <form action="{{ route('perawat.tindakan.storeTambahan') }}" method="POST">
-                @csrf
-                <div class="mb-3">
-                    <label for="tanggal" class="form-label">Tanggal</label>
-                    <input type="date" class="form-control" name="tanggal" required>
-                </div>
-                <div class="mb-3">
-                    <label for="jam_mulai" class="form-label">Jam Mulai</label>
-                    <input type="time" class="form-control" name="jam_mulai" required>
-                </div>
-                <div class="mb-3">
-                    <label for="jam_berhenti" class="form-label">Jam Berhenti</label>
-                    <input type="time" class="form-control" name="jam_berhenti" required>
-                </div>
-                <div class="mb-3">
-                    <label for="keterangan" class="form-label">Keterangan</label>
-                    <textarea class="form-control" name="keterangan" rows="3" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Simpan Tindakan Tambahan</button>
+                <button type="submit" class="btn btn-primary w-100">Simpan</button>
             </form>
         </div>
     </div>

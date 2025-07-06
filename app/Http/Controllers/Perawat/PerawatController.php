@@ -238,10 +238,10 @@ class PerawatController extends Controller
         $jamMulaiInput = Carbon::now()->format('H:i'); // Ambil jam mulai saat ini
         $shiftId = $this->getShiftByJamMulai($jamMulaiInput);
     
-        // if (!$shiftId) {
-        //     session()->flash('error', 'Shift tidak ditemukan untuk jam mulai yang dimasukkan.');
-        //     return redirect()->back();
-        // }
+        if (!$shiftId) {
+            session()->flash('error', 'Shift tidak ditemukan untuk waktu sekarang.');
+            return redirect()->back();
+        }
     
         // Periksa apakah tindakan sudah ada di database atau merupakan tindakan baru
         $tindakan = TindakanWaktu::where('tindakan', $request->jenis_tindakan)->first();
@@ -289,6 +289,13 @@ class PerawatController extends Controller
         return view('perawat.tindakan', compact('jenisTindakan'));
     }
     
+    public function tindakanTambahan()
+    {
+        $jenisTindakan = TindakanWaktu::where('status', 'tambahan')->get();
+
+        return view('perawat.tindakanTambahan', compact('jenisTindakan'));
+    }
+    
 
     public function getShiftByJamMulai($jamMulai)
     {
@@ -319,46 +326,58 @@ class PerawatController extends Controller
             session()->flash('error', 'Ruangan belum terhubung dengan akun Anda.');
             return redirect()->back();
         }
-    
-        // Ambil jam_mulai yang diinputkan
-        $jamMulaiInput = $request->input('jam_mulai');
-    
+
+        // Ambil waktu yang diinputkan
+        $waktu = $request->input('waktu');
+
         // Gunakan getShiftByJamMulai untuk mendapatkan shift berdasarkan jam_mulai yang dimasukkan
+        $jamMulaiInput = Carbon::now()->format('H:i'); // Ambil jam mulai saat ini
         $shiftId = $this->getShiftByJamMulai($jamMulaiInput);
     
         // Pastikan shift ditemukan
         if (!$shiftId) {
-            session()->flash('error', 'Shift tidak ditemukan untuk jam mulai yang dimasukkan.');
+            session()->flash('error', 'Shift tidak ditemukan untuk waktu sekarang.');
             return redirect()->back();
         }
     
-        // Gunakan tindakan_id tetap yaitu 40 untuk "Tugas Tambahan"
-        $tindakanId = 40;
-    
-        $request->validate([
-            'tanggal' => 'required|date',
-            'jam_mulai' => 'required|date_format:H:i',
-            'jam_berhenti' => 'required|date_format:H:i|after:jam_mulai',
-            'keterangan' => 'required|string|max:255',
-        ]);
+        // Periksa apakah tindakan sudah ada di database atau merupakan tindakan baru
+        $tindakan = TindakanWaktu::where(['tindakan' => $request->jenis_tindakan, 'status' => 'tambahan'])->first();
+
+        if (!$tindakan) {
+            // Jika tindakan belum ada, buat yang baru dengan waktu = 0 dan status = Tugas Tambahan
+            $tindakan = TindakanWaktu::create([
+                'tindakan' => $request->jenis_tindakan,
+                'waktu' => $request->waktu, // Waktu default 0 jika tidak diisi
+                'status' => 'tambahan'
+            ]);
+        } else {
+            // Jika tindakan sudah ada, gunakan ID tindakan yang sudah ada
+            $tindakan->waktu = $request->waktu + $tindakan->waktu; // Update waktu jika diperlukan
+            $tindakan->save(); // Simpan perubahan
+        }
     
         // Menambahkan tanggal pada jam_mulai dan jam_berhenti
-        $tanggal = $request->input('tanggal');
-        $jamMulai = Carbon::parse($tanggal . ' ' . $request->input('jam_mulai') . ':00');
-        $jamBerhenti = Carbon::parse($tanggal . ' ' . $request->input('jam_berhenti') . ':00');
+        // $tanggal = $request->input('tanggal');
+        // $jamMulai = Carbon::parse($tanggal . ' ' . $request->input('jam_mulai') . ':00');
+        // $jamBerhenti = Carbon::parse($tanggal . ' ' . $request->input('jam_berhenti') . ':00');
     
-        $durasi = $jamBerhenti->diffInSeconds($jamMulai); // Hitung durasi dalam detik
+        $durasi = 0; // Hitung durasi dalam detik
+
+        // dd($user);
     
         // Simpan data ke dalam database
+        // check if LaporanTindakanPerawat truly created
+        if (!$user) {
+            session()->flash('error', 'User tidak ditemukan.');
+            return redirect()->back();
+        }
         LaporanTindakanPerawat::create([
             'user_id' => $user->id,
             'ruangan_id' => $ruanganId,
             'shift_id' => $shiftId, // Gunakan shift yang ditemukan
-            'tindakan_id' => $tindakanId, // Selalu menggunakan tindakan ID 40
-            'tanggal' => $tanggal,
-            'jam_mulai' => $jamMulai,
-            'jam_berhenti' => $jamBerhenti,
-            'durasi' => $durasi,
+            'tindakan_id' => $tindakan->id, // Selalu menggunakan tindakan ID 40
+            'tanggal' => $request->input('tanggal'),
+            'durasi' => $waktu,
             'keterangan' => $request->input('keterangan'),
         ]);
     

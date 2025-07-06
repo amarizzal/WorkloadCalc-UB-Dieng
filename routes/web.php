@@ -106,7 +106,9 @@ Route::prefix('perawat')
         Route::post('/tindakan/store', [PerawatController::class, 'storeTindakanLain'])->name('tindakan.store');
         Route::post('/tindakan/store-tambahan', [PerawatController::class, 'storeTindakanTambahan'])->name('tindakan.storeTambahan');
         Route::get('/tindakan', [PerawatController::class, 'tindakan'])->name('tindakan');
-
+        
+        // TINDKAN TAMBAHAN
+        Route::get('/tindakan-tambahan', [PerawatController::class, 'tindakanTambahan'])->name('tindakan.tambahan');
         //////////////////////////////////////////////////////////////////////
         Route::get('/profil', [PerawatController::class, 'profil'])->name('profil');
         //////////////////////////////////////////////////////////////////////

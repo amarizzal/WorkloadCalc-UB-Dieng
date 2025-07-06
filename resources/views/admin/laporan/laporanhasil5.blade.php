@@ -25,21 +25,17 @@
         <table id="laporanTable" class="table table-striped table-bordered table-hover">
             <thead class="table-dark">
                 <tr>
-                    <th>Total</th>
                     <th>Tindakan</th>
-                    @foreach($perawat as $perawatItem)
-                        <th>{{ $perawatItem->nama_lengkap ?? 'Tidak Ada Data' }}</th>
-                    @endforeach
+                    <th>Nama Perawat</th>
+                    <th>Waktu (Jam)</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($tindakanTambahan as $tindakan)
                     <tr>
-                        <td>{{ $totalTindakan[$tindakan->id] ?? 0 }}</td>
-                        <td>{{ $tindakan->tindakan ?? 'Tidak Ada Data' }}</td>
-                        @foreach($perawat as $perawatItem)
-                            <td>{{ $perawatTindakan[$perawatItem->id][$tindakan->id] ?? 0 }}</td>
-                        @endforeach
+                        <td>{{ $tindakan->tindakan->tindakan ?? 'Tidak Ada Data' }}</td>
+                        <td>{{ $tindakan->user->nama_lengkap ?? '-' }}</td>
+                        <td>{{ $tindakan->durasi ?? '-' }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -47,26 +43,54 @@
     </div>
 
     <div class="mt-4">
-        <h4>Rata-rata Waktu Per Tindakan</h4>
+        <h4>Ringkasan</h4>
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Tindakan</th>
-                    <th>Total Tindakan</th>
-                    <th>Rata-rata Waktu (Jam)</th>
-                    <th>Standar Workload (SWL)</th>
+                    <th>Nama Perawat</th>
+                    <th>Total IAS (Jam)</th>
+                    <th>IAF (Jam)</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($rataRataWaktu as $tindakanId => $rataWaktu)
-                    @if($rataWaktu > 0) <!-- Menampilkan hanya tindakan yang memiliki waktu -->
-                        <tr>
-                            <td>{{ $laporan->where('tindakan_id', $tindakanId)->first()->tindakan->tindakan ?? 'Tidak Ada Data' }}</td>
-                            <td>{{ $totalTindakan[$tindakanId] ?? 0 }}</td>
-                            <td>{{ number_format($rataWaktu / 60, 2) }} jam</td>
-                            <td>{{ number_format($swl[$tindakanId], 2) }}</td>
-                        </tr>
-                    @endif
+                @php
+                    $totalPerawat = [];
+                    foreach ($tindakanTambahan as $tindakan) {
+                        $namaPerawat = $tindakan->user->nama_lengkap ?? 'Tidak Ada Data';
+                        $namaTindakan = $tindakan->tindakan->tindakan ?? 'Tidak Ada Data';
+                        $durasi = $tindakan->durasi ?? 0;
+
+                        if (!isset($totalPerawat[$namaPerawat])) {
+                            $totalPerawat[$namaPerawat] = [];
+                        }
+                        if (!isset($totalPerawat[$namaPerawat][$namaTindakan])) {
+                            $totalPerawat[$namaPerawat][$namaTindakan] = [
+                                'frequency' => 0,
+                                'durasi' => 0
+                            ];
+                        }
+                        // Increment frequency and sum durasi if tindakan and perawat match
+                        $totalPerawat[$namaPerawat][$namaTindakan]['frequency']++;
+                        $totalPerawat[$namaPerawat][$namaTindakan]['durasi'] += $durasi;
+                    }
+
+                    // Hitung total waktu per perawat
+                    $totalPerawatWaktu = [];
+                    foreach ($totalPerawat as $namaPerawat => $tindakans) {
+                        $totalWaktu = 0;
+                        foreach ($tindakans as $tindakan) {
+                            $totalWaktu += ($tindakan['frequency'] * $tindakan['durasi']);
+                        }
+                        $totalPerawatWaktu[$namaPerawat] = $totalWaktu;
+                    }
+                    $totalPerawat = $totalPerawatWaktu;
+                @endphp
+                @foreach ($totalPerawat as $namaPerawat => $totalWaktu)
+                    <tr>
+                        <td>{{ $namaPerawat }}</td>
+                        <td>{{ $totalPerawat[$namaPerawat] ?? 0 }}</td>
+                        <td>{{ $totalPerawat[$namaPerawat] / $hospitalTime }}</td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>

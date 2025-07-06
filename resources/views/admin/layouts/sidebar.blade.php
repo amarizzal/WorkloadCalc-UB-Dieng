@@ -10,7 +10,7 @@
 
 
             {{--  --}}
-            <a class="nav-link {{ request()->routeIs('admin.master-*') ? '' : 'collapsed' }}" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+            <a class="nav-link {{ request()->routeIs('admin.master-*') ? 'active' : 'collapsed' }}" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                 Master
                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
@@ -27,7 +27,7 @@
                 </nav>
             </div>
             {{--  --}}
-            <a class="nav-link {{ request()->routeIs('admin.laporan.*') ? '' : 'collapsed' }}" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+            <a class="nav-link {{ request()->routeIs('admin.laporan.*') ? 'active' : 'collapsed' }}" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                 <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
                 Laporan
                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>

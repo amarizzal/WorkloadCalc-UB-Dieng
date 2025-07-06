@@ -114,6 +114,9 @@ class LaporanController extends Controller
         // Ambil daftar tindakan yang memiliki status "Tugas Penunjang"
         $tindakanPenunjang = $laporan->pluck('tindakan')->unique('id');
 
+        // Ambil data rumah sakit
+        $hospitalTime = \App\Models\Hospital::first()->waktu_kerja_tersedia;
+
         // Hitung jumlah tindakan per tindakan dan per perawat
         $perawatTindakan = [];
         foreach ($perawat as $perawatItem) {
@@ -128,7 +131,7 @@ class LaporanController extends Controller
         // Hitung total tindakan untuk setiap jenis tindakan
         $totalTindakan = [];
         foreach ($tindakanPenunjang as $tindakan) {
-            $totalTindakan[$tindakan->id] = $laporan->where('tindakan_id', $tindakan->id)->count();
+            $totalTindakan[$tindakan->id] = $laporan->where('tindakan_id', $tindakan->id) ? $laporan->where('tindakan_id', $tindakan->id)->count() : 0;
         }
 
         // Menghitung rata-rata waktu per tindakan
@@ -152,7 +155,7 @@ class LaporanController extends Controller
 
         return view('admin.laporan.laporanhasil3', compact(
             'perawat', 'perawatTindakan', 'tindakanPenunjang', 'laporan',
-            'rataRataWaktu', 'swl', 'totalTindakan', 'tanggalAwal', 'tanggalAkhir'
+            'rataRataWaktu', 'swl', 'totalTindakan', 'tanggalAwal', 'tanggalAkhir', 'hospitalTime'
         ));
     }
 

@@ -27,21 +27,80 @@
                 <tr>
                     <th>Total</th>
                     <th>Tindakan</th>
-                    @foreach($perawat as $perawatItem)
-                        <th>{{ $perawatItem->nama_lengkap ?? 'Tidak Ada Data' }}</th>
-                    @endforeach
+                    <th>Satuan</th>
+                    <th>Kategori</th>
+                    <th>Waktu Kegiatan (jam)</th>
+                    <th>Faktor (%)</th>
                 </tr>
             </thead>
             <tbody>
+                @php
+                    $totalFaktor = 0;
+                @endphp
                 @foreach($tindakanPenunjang as $tindakan)
                     <tr>
                         <td>{{ $totalTindakan[$tindakan->id] ?? 0 }}</td>
                         <td>{{ $tindakan->tindakan ?? 'Tidak Ada Data' }}</td>
-                        @foreach($perawat as $perawatItem)
-                            <td>{{ $perawatTindakan[$perawatItem->id][$tindakan->id] ?? 0 }}</td>
-                        @endforeach
+                        <td>{{ $tindakan->satuan ?? '-' }}</td>
+                        <td>{{ $tindakan->kategori ?? '-' }}</td>
+                        <td>
+                            @php
+                                // Menghitung waktu kegiatan dalam jam
+                                if ($tindakan->satuan == 'jam') {
+                                    $waktuJam = $tindakan->waktu; 
+                                } elseif ($tindakan->satuan == 'menit') {
+                                    $waktuJam = number_format($tindakan->waktu / 60, 2); 
+                                } elseif ($tindakan->satuan == 'hari') {
+                                    $waktuJam = number_format($tindakan->waktu * 24, 2); 
+                                } else {
+                                    $waktuJam = 0; // Jika satuan tidak dikenali
+                                }
+                            @endphp
+                            {{ $waktuJam }}
+                        </td>
+                        <td>
+                            @php
+                                $totalWaktu = 0;
+                                if($tindakan->satuan == 'jam') {
+                                    $totalWaktu = $tindakan->waktu * 1; 
+                                } elseif($tindakan->satuan == 'menit') {
+                                    $totalWaktu = $tindakan->waktu / 60; 
+                                } elseif($tindakan->satuan == 'hari') {
+                                    $totalWaktu = $tindakan->waktu * 24; 
+                                }
+                                if ($tindakan->kategori == 'harian') {
+                                    $totalWaktu = $totalWaktu * 264; // 264 hari kerja dalam setahun
+                                } elseif ($tindakan->kategori == 'mingguan') {
+                                    $totalWaktu = $totalWaktu * 52; // 52 minggu dalam setahun
+                                } elseif ($tindakan->kategori == 'bulanan') {
+                                    $totalWaktu = $totalWaktu * 12; // 12 bulan dalam setahun
+                                } elseif ($tindakan->kategori == 'tahunan') {
+                                    $totalWaktu = $totalWaktu; // Sudah dalam satuan tahunan
+                                }
+                                $faktor = $totalWaktu > 0 ? ($totalWaktu / $hospitalTime) * 100 : 0;
+                                $faktor = number_format($faktor, 2);
+
+                                $totalFaktor += $faktor;
+                            @endphp
+                            {{ $faktor }}
+                        </td>
                     </tr>
                 @endforeach
+                @php
+                    // Menghitung rata-rata faktor
+                    $totalTindakanForFaktor = count($tindakanPenunjang);
+                    $averageFaktor = $totalTindakanForFaktor > 0 ? $totalFaktor / $totalTindakanForFaktor : 0;
+                    $averageFaktor = number_format($averageFaktor, 2);
+                @endphp
+                <tr>
+                    <td colspan="5" class="text-end fw-bold">Rata-rata Faktor (%)</td>
+                    <td class="d-none"></td>
+                    <td class="d-none"></td>
+                    <td class="d-none"></td>
+                    <td class="d-none"></td>
+                    <td>{{ $averageFaktor }}</td>
+                    <td class="d-none"></td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -55,16 +114,26 @@
                     <th>Total Tindakan</th>
                     <th>Rata-rata Waktu (Jam)</th>
                     <th>Standar Workload (SWL)</th>
+                    <th>Allowance Factor (AF)</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($rataRataWaktu as $tindakanId => $rataWaktu)
-                    @if($rataWaktu > 0) <!-- Menampilkan hanya tindakan yang memiliki waktu -->
+                @foreach($tindakanPenunjang as $tindakan)
+                    @if( isset($tindakan->waktu) && $tindakan->waktu > 0 && !array_key_exists($tindakan->id, $totalTindakan))
+                        @continue <!-- Lewati tindakan dengan waktu 0 -->
+                    @else   
+                        @php
+                            
+                            $jamTersediaPerTahun = $hospitalTime; // Total jam kerja per tahun
+                            $rataWaktu = $tindakan->waktu > 0 ? ($tindakan->waktu / $tindakan->count()) : 0;
+                            $swl = $rataWaktu > 0 ? $jamTersediaPerTahun / ($rataWaktu / 60) : 0;
+                        @endphp
                         <tr>
-                            <td>{{ $laporan->where('tindakan_id', $tindakanId)->first()->tindakan->tindakan ?? 'Tidak Ada Data' }}</td>
-                            <td>{{ $totalTindakan[$tindakanId] ?? 0 }}</td>
+                            <td>{{ $tindakan->tindakan ?? 'Tidak Ada Data' }}</td>
+                            <td>{{ $totalTindakan[$tindakan->id] ?? 0 }}</td>
                             <td>{{ number_format($rataWaktu / 60, 2) }} jam</td>
-                            <td>{{ number_format($swl[$tindakanId], 2) }}</td>
+                            <td>{{ number_format($swl, 2) }}</td>
+                            <td>{{ number_format(1 / (1 - ($averageFaktor/100)), 2) }}</td>
                         </tr>
                     @endif
                 @endforeach

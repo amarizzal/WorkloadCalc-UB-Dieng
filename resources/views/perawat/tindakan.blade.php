@@ -21,10 +21,10 @@
                 @csrf
                 <div class="mb-3">
                     <label for="select_jenis_tindakan" class="form-label">Jenis Tindakan</label>
-                    <select class="form-select select2-tindakan" id="select_jenis_tindakan" name="jenis_tindakan" required>
+                    <select onchange="selectTindakan(this.value)" class="form-select select2-tindakan" id="select_jenis_tindakan" name="jenis_tindakan" required>
                         <option value="" disabled selected>Pilih atau Tambah Tindakan</option>
                         @foreach($jenisTindakan as $tindakan)
-                            <option value="{{ $tindakan->nama }}">{{ $tindakan->nama }}</option>
+                            <option value="{{ $tindakan->tindakan }}" data-satuan="{{ $tindakan->satuan }}" data-kategori="{{ $tindakan->kategori }}">{{ $tindakan->tindakan }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -37,12 +37,27 @@
                     <input type="date" class="form-control" name="tanggal" required>
                 </div>
                 <div class="mb-3">
-                    <label for="jam_mulai" class="form-label">Jam Mulai</label>
-                    <input type="time" class="form-control" name="jam_mulai" required>
+                    <label for="jam_mulai" class="form-label">Waktu</label>
+                    <input type="number" class="form-control" name="waktu" placeholder="" required>
                 </div>
                 <div class="mb-3">
-                    <label for="jam_berhenti" class="form-label">Jam Berhenti</label>
-                    <input type="time" class="form-control" name="jam_berhenti" required>
+                    <label for="satuan" class="form-label">Satuan</label>
+                    <select name="satuan" id="satuan" class="form-select" required>
+                        <option value="" disabled selected>Pilih Satuan</option>
+                        <option value="menit">Menit</option>
+                        <option value="jam">Jam</option>
+                        <option value="hari">Hari</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="kategori" class="form-label">Kategori</label>
+                    <select name="kategori" id="kategori" class="form-select" required>
+                        <option value="" disabled selected>Pilih Kategori</option>
+                        <option value="harian">Harian</option>
+                        <option value="mingguan">Mingguan</option>
+                        <option value="bulanan">Bulanan</option>
+                        <option value="tahunan">Tahunan</option>
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label for="keterangan" class="form-label">Keterangan</label>
@@ -160,6 +175,30 @@ $(document).ready(function() {
             tindakanTambahan.removeClass('d-none');
         }
     });
+
+    // Fungsi untuk mengisi satuan dan kategori berdasarkan tindakan yang dipilih
+    window.selectTindakan = function(value) {
+        // Ambil data tindakan yang dipilih
+        let selectedOption = $('#select_jenis_tindakan option[value="' + value + '"]');
+        if (selectedOption.length) {
+            let satuan = selectedOption.data('satuan');
+            let kategori = selectedOption.data('kategori');
+
+            // Set nilai satuan dan kategori pada form
+            $('#satuan').val(satuan).trigger('change');
+            $('#kategori').val(kategori).trigger('change');
+            // set agar disabled
+            $('#satuan').prop('disabled', true);
+            $('#kategori').prop('disabled', true);
+        } else {
+            // Jika tidak ada data, kosongkan input
+            $('#satuan').val('').trigger('change');
+            $('#kategori').val('').trigger('change');
+            // set agar disabled
+            $('#satuan').prop('disabled', false);
+            $('#kategori').prop('disabled', false);
+        }
+    };
 });
 </script>
 

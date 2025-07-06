@@ -15,6 +15,8 @@ class TindakanWaktu extends Model
         'tindakan',
         'waktu',
         'status', // Tambahkan status di sini
+        'satuan',
+        'kategori'
     ];
 
 

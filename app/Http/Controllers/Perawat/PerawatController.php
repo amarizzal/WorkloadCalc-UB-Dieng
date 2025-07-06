@@ -234,13 +234,14 @@ class PerawatController extends Controller
             return redirect()->back();
         }
     
-        $jamMulaiInput = $request->input('jam_mulai');
+        // REMOVE
+        $jamMulaiInput = Carbon::now()->format('H:i'); // Ambil jam mulai saat ini
         $shiftId = $this->getShiftByJamMulai($jamMulaiInput);
     
-        if (!$shiftId) {
-            session()->flash('error', 'Shift tidak ditemukan untuk jam mulai yang dimasukkan.');
-            return redirect()->back();
-        }
+        // if (!$shiftId) {
+        //     session()->flash('error', 'Shift tidak ditemukan untuk jam mulai yang dimasukkan.');
+        //     return redirect()->back();
+        // }
     
         // Periksa apakah tindakan sudah ada di database atau merupakan tindakan baru
         $tindakan = TindakanWaktu::where('tindakan', $request->jenis_tindakan)->first();
@@ -249,9 +250,15 @@ class PerawatController extends Controller
             // Jika tindakan belum ada, buat yang baru dengan waktu = 0 dan status = Tugas Penunjang
             $tindakan = TindakanWaktu::create([
                 'tindakan' => $request->jenis_tindakan,
-                'waktu' => 0,
-                'status' => 'Tugas Penunjang'
+                'waktu' => $request->waktu, // Waktu default 0 jika tidak diisi
+                'status' => 'Tugas Penunjang',
+                'satuan' => $request->satuan, 
+                'kategori' => $request->kategori 
             ]);
+        } else {
+            // Jika tindakan sudah ada, gunakan ID tindakan yang sudah ada
+            $tindakan->waktu = $request->waktu + $tindakan->waktu; // Update waktu jika diperlukan
+            $tindakan->save(); // Simpan perubahan
         }
     
         // Simpan laporan tindakan
@@ -277,6 +284,7 @@ class PerawatController extends Controller
     public function tindakan()
     {
         $jenisTindakan = TindakanWaktu::where('status', 'Tugas Penunjang')->get();
+
         
         return view('perawat.tindakan', compact('jenisTindakan'));
     }

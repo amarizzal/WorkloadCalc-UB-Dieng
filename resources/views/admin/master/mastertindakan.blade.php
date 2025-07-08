@@ -40,7 +40,7 @@
                                     <option disabled selected>Pilih Jenis Tindakan</option>
                                     <option value="Tugas Pokok">Tugas Pokok</option>
                                     <option value="Tugas Penunjang">Tugas Penunjang</option>
-                                    <option value="tambahan">Tugas Tambahan</option>
+                                    {{-- <option value="tambahan">Tugas Tambahan</option> --}}
                                 </select>
                             </div>
                             

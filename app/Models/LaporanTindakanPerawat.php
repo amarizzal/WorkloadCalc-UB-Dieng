@@ -21,7 +21,8 @@ class LaporanTindakanPerawat extends Model
         'jam_mulai',
         'jam_berhenti',
         'durasi',
-        'keterangan'
+        'keterangan',
+        'record_analisa_data_id'
     ];
 
     // Relasi ke model User
@@ -46,6 +47,11 @@ class LaporanTindakanPerawat extends Model
     public function tindakan()
     {
         return $this->belongsTo(TindakanWaktu::class);
+    }
+
+    public function recordAnalisa()
+    {
+        return $this->belongsTo(RecordAnalisaData::class, 'record_analisa_data_id');
     }
 
     // Event trigger

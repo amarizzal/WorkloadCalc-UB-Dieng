@@ -11,6 +11,7 @@ use App\Models\TindakanWaktu;
 use App\Models\ShiftKerja;
 use Carbon\Carbon;
 use App\Models\LaporanTindakanPerawat;
+use App\Models\RecordAnalisaData;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -189,8 +190,8 @@ class PerawatController extends Controller
         $user = Auth::user();
     
         // Ambil tanggal mulai dan tanggal akhir dari request atau default ke hari ini
-        $startDate = $request->input('start_date', Carbon::today()->format('Y-m-d'));
-        $endDate = $request->input('end_date', Carbon::today()->format('Y-m-d'));
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
     
         // Pastikan endDate lebih besar atau sama dengan startDate
         if ($startDate > $endDate) {
@@ -199,12 +200,21 @@ class PerawatController extends Controller
     
         // Ambil laporan berdasarkan user_id dan rentang tanggal yang dipilih
         $laporan = LaporanTindakanPerawat::with(['tindakan', 'shift'])
-            ->where('user_id', $user->id)
-            ->whereBetween('jam_berhenti', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']) // Filter berdasarkan rentang tanggal
-            ->orderBy('jam_berhenti', 'desc')
-            ->get();
-    
-        return view('perawat.hasil', compact('laporan', 'startDate', 'endDate'));
+            ->where('user_id', $user->id);
+
+        if ($startDate && $endDate) {
+            $laporan->whereBetween('jam_berhenti', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']) // Filter berdasarkan rentang tanggal
+            ->orderBy('jam_berhenti', 'desc');
+        }
+
+        $laporan = $laporan->get();
+
+        // get record analisa data by user_id
+        $recordAnalisa = RecordAnalisaData::where('user_id', $user->id)
+            ->first();
+
+
+        return view('perawat.hasil', compact('laporan', 'startDate', 'endDate', 'recordAnalisa'));
     }
     
     public function storeKeterangan(Request $request, $id)

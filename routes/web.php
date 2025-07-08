@@ -77,6 +77,7 @@ Route::prefix('admin')
         Route::get('/laporan5', [LaporanController::class, 'index5'])->name('admin.laporan.index5');
         Route::get('/laporan6', [LaporanController::class, 'index6'])->name('admin.laporan.index6');
         Route::get('/laporan/detail-tindakan/{tindakanId}/{userId}', [LaporanController::class, 'detailTindakan'])->name('admin.laporan.detailTindakan');
+        Route::get('/laporan/analisa-data/{userId}', [LaporanController::class, 'analisaData'])->name('admin.laporan.analisaData');
 
         // DATA RUMAH SAKIT
         Route::get('/data-rumah-sakit', [HospitalController::class, 'index'])->name('admin.data-rumah-sakit');

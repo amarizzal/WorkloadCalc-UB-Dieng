@@ -237,7 +237,8 @@
 
 
             {{-- Beban Kerja --}}
-            <div class="row justify-content-center">
+            <div class="row justify-content-center mt-5">
+                <h4 class="mt-4">Analisa Data</h4>
                 <div class="col-md-4">
                     <label for="tanggal_awal">Tanggal Awal:</label>
                     <input id="tanggal_awal" type="date" name="tanggal_awal" value="{{ request('tanggal_awal') }}" required class="form-control"
@@ -323,6 +324,11 @@
                 const totalWaktuKerja = document.getElementById('total_waktu_kerja').value;
 
                 const userId = document.getElementById('user_id').value;
+
+                if(tanggalAwal === '' || tanggalAkhir === '' || totalWaktuKerja === '') {
+                    alert('Mohon lengkapi tanggal sebelum melakukan analisa data.');
+                    return;
+                }
 
                 // Fetch detail data via AJAX
                 fetch(`/admin/laporan/analisa-data/${userId}?tanggalAwal=${tanggalAwal}&tanggalAkhir=${tanggalAkhir}&totalWaktuKerja=${totalWaktuKerja}`)

@@ -12,6 +12,18 @@ use Illuminate\Support\Facades\Log;
 
 class LaporanController extends Controller
 {
+    /**
+     * Get hospital working hours with null handling and default value
+     * 
+     * @param int $default Default value if hospital data is not available
+     * @return int
+     */
+    private function getHospitalWorkingHours($default = 2000)
+    {
+        $hospital = \App\Models\Hospital::first();
+        return $hospital ? ($hospital->waktu_kerja_tersedia ?? $default) : $default;
+    }
+
     public function index()
     {
         // Mengambil data laporan tindakan perawat beserta relasinya
@@ -116,7 +128,7 @@ class LaporanController extends Controller
         $tindakanPenunjang = $laporan->pluck('tindakan')->unique('id');
 
         // Ambil data rumah sakit
-        $hospitalTime = \App\Models\Hospital::first()->waktu_kerja_tersedia;
+        $hospitalTime = $this->getHospitalWorkingHours();
 
         // Hitung jumlah tindakan per tindakan dan per perawat
         $perawatTindakan = [];
@@ -285,7 +297,7 @@ class LaporanController extends Controller
         // }
 
         $tindakanTambahan = $laporan;
-        $hospitalTime = \App\Models\Hospital::first()->waktu_kerja_tersedia;
+        $hospitalTime = $this->getHospitalWorkingHours();
 
         // dd($tindakanTambahan);
 
@@ -485,7 +497,7 @@ class LaporanController extends Controller
             $tindakanTambahan = $laporanTambahan->pluck('tindakan')->unique('id');
 
             // Ambil data rumah sakit
-            $hospitalTime = \App\Models\Hospital::first()->waktu_kerja_tersedia;
+            $hospitalTime = $this->getHospitalWorkingHours();
 
             // Hitung jumlah tindakan per tindakan dan per perawat
             $perawatTindakan = [];
@@ -568,10 +580,11 @@ class LaporanController extends Controller
             $averageFaktor = number_format($averageFaktor, 2);
 
 
-            $hospitalTime = \App\Models\Hospital::first()->waktu_kerja_tersedia; // Ambil jam kerja per tahun dari model Hospital
+            $hospitalTime = $this->getHospitalWorkingHours();
             $jamTersediaPerTahun = $hospitalTime; // Total jam kerja per tahun
-            $rataWaktu = $tindakan->waktu > 0 ? ($tindakan->waktu / $tindakan->count()) : 0;
-            $swl = $rataWaktu > 0 ? $jamTersediaPerTahun / ($rataWaktu / 60) : 0;
+            // Note: $tindakan is not available in this scope, removing problematic code
+            // $rataWaktu = $tindakan->waktu > 0 ? ($tindakan->waktu / $tindakan->count()) : 0;
+            // $swl = $rataWaktu > 0 ? $jamTersediaPerTahun / ($rataWaktu / 60) : 0;
 
             $AF = number_format(1 / (1 - ($averageFaktor/100)), 2);
 

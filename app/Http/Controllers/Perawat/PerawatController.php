@@ -337,6 +337,7 @@ class PerawatController extends Controller
     {
         $user = Auth::user(); // Ambil user yang sedang login
         $ruanganId = $user->ruangan_id; // Ambil ruangan_id dari user
+
     
         if (!$ruanganId) {
             session()->flash('error', 'Ruangan belum terhubung dengan akun Anda.');

@@ -134,11 +134,11 @@
         </thead>
         <tbody>
             @if ($laporan->where('tindakan.status', 'tambahan')->count() > 0)
-                @foreach ($laporan->where('tindakan.status', 'tambahan') as $data)
+                @foreach ($laporan->where('tindakan.status', 'tambahan') as $tindakan)
                     <tr>
                         <td>{{ $tindakan->tindakan->tindakan ?? 'Tidak Ada Data' }}</td>
                         <td>{{ $tindakan->tanggal ?? '-' }}</td>
-                        <td>{{ $tindakan->waktu ?? '-' }}</td>
+                        <td>{{ $tindakan->durasi ?? '-' }} Jam</td>
                         <td>{{ $tindakan->keterangan ?? '-' }}</td>
                     </tr>
                 @endforeach

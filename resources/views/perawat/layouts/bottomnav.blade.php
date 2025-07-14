@@ -22,7 +22,7 @@
         </div>
         <div class="col">
             <a href="{{ route('perawat.tindakan.tambahan') }}" class="nav-item {{ request()->routeIs('perawat.tindakan.tambahan') ? 'active' : '' }}">
-                <i class="bi bi-pencil-square"></i>
+                <i class="bi bi-plus-square"></i>
                 <span>Tugas Tambahan</span>
             </a>
         </div>

@@ -207,9 +207,12 @@
                                 @endif
                             </td>
                             <td class="text-center">
-                                {{ number_format($totalJamTindakan * $tindakan->laporanTindakan->count(), 3) }}
                                 @php
-                                    $totalHasil += number_format(number_format($totalJamTindakan, 3) * $tindakan->laporanTindakan->count(), 2)
+                                    $totalHasilPerTindakan = number_format($totalJamTindakan * $tindakan->laporanTindakan->count(), 3);
+                                @endphp
+                                {{ $totalHasilPerTindakan }}
+                                @php
+                                    $totalHasil += $totalHasilPerTindakan;
                                 @endphp
                             </td>
                             @php

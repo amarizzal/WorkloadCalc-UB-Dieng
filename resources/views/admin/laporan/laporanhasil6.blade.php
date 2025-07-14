@@ -17,6 +17,9 @@
                             </option>
                         @endforeach
                     </select>
+                    @if ($users->count() == 0)
+                        <label for="user_id" class="form-label text-danger">Belum ada perawat yang melakukan tindakan.</label>
+                    @endif
                 </div>
             </div>
         </form>

@@ -114,7 +114,6 @@
                             <th>Tindakan</th>
                             <th>Tanggal </th>
                             <th>Waktu </th>
-                            <th>Keterangan </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -128,8 +127,7 @@
                                     <tr>
                                         <td>{{ $tindakan->tindakan->tindakan ?? 'Tidak Ada Data' }}</td>
                                         <td>{{ $tindakan->tanggal ?? '-' }}</td>
-                                        <td>{{ $tindakan->waktu ?? '-' }}</td>
-                                        <td>{{ $tindakan->keterangan ?? '-' }}</td>
+                                        <td>{{ $tindakan->durasi ?? '-' }} Jam</td>
                                     </tr>
                                 @endforeach
                             @endif

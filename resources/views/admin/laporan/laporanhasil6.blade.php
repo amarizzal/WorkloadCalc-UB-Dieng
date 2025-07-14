@@ -172,17 +172,21 @@
                                     });
                                 @endphp
                             @endforeach
-                            
+                            {{-- tindakan --}}
                             <td>
                                 <strong>{{ $tindakan->tindakan ?? 'Tidak Ada Data' }}</strong>
 
                             </td>
+
+                            {{-- frekuensi --}}
                             <td class="text-center">
                                 <strong>{{ $tindakan->laporanTindakan->count() }}</strong>
                             </td>
+
+                            {{-- swl --}}
                             <td class="text-center">
                                 @if ($tindakan->laporanTindakan->count() > 0)
-                                    <strong>{{ number_format($totalJamTindakan, 3) }}</strong>
+                                    <strong>{{ number_format($totalJamTindakan, 3)/$tindakan->laporanTindakan->count() }}</strong>
                                 @else
                                     <strong>0</strong>
                                 @endif

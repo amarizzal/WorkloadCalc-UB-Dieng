@@ -437,8 +437,7 @@ class LaporanController extends Controller
         }
     }
 
-    public function analisaData($userId, Request $request)
-    {
+    public function analisaData($userId, Request $request) {
         try {
             $tanggalAwal = $request->query('tanggalAwal');
             $tanggalAkhir = $request->query('tanggalAkhir');
@@ -499,6 +498,8 @@ class LaporanController extends Controller
             // Ambil data rumah sakit
             $hospitalTime = $this->getHospitalWorkingHours();
 
+            
+
             // Hitung jumlah tindakan per tindakan dan per perawat
             $perawatTindakan = [];
             foreach ($perawat as $perawatItem) {
@@ -527,6 +528,8 @@ class LaporanController extends Controller
 
                 $rataRataWaktu[$tindakan->id] = $jumlahTindakan > 0 ? ($totalDurasi / $jumlahTindakan) / 60 : 0;
             }
+
+            
 
             // Menghitung standar workload (SWL)
             $swl = [];
@@ -572,6 +575,7 @@ class LaporanController extends Controller
                 $totalFaktor += $faktor;
             }
 
+            
 
             
             // Menghitung rata-rata faktor
@@ -622,11 +626,13 @@ class LaporanController extends Controller
                 $totalHasil += number_format(($totalJamTindakan * $frequency), 2);
             }
 
+            
+
             // $tindakanTambahan = $laporanQuery
             //     ->whereHas('tindakan', function ($q) {
             //         $q->where('status', 'tambahan');
             //     })->whereBetween('tanggal', [$tanggalAwal . " 00:00:00", $tanggalAkhir . " 23:59:59"])->get();
-
+            $totalTindakan = [];
             $totalWaktuTambahan = 0;
             foreach ($tindakanTambahan as $tindakan) {
                 // Karena $tindakan sudah hanya untuk satu user, cukup rekap per tindakan saja
@@ -652,29 +658,30 @@ class LaporanController extends Controller
             $IAF = $totalWaktuTambahan / $hospitalTime; // Menghitung IAF (Indeks Aktivitas Fungsional)
 
 
+
             $result = (($totalHasil * $AF) / $hospitalTime) + $IAF;
 
             $data = [
-                // 'laporan' => $laporan,
-                // 'perawat' => $perawat,
-                // 'tindakanPokok' => $tindakanPokok,
-                // 'tindakanPenunjang' => $tindakanPenunjang,
-                // 'tindakanTambahan' => $tindakanTambahan,
-                // 'rataRataWaktu' => $rataRataWaktu,
-                // 'swl' => $swl,
-                // 'totalTindakan' => $totalTindakan,
-                // 'tanggalAwal' => $tanggalAwal,
-                // 'tanggalAkhir' => $tanggalAkhir,
-                // 'hospitalTime' => $hospitalTime,
-                // 'averageFaktor' => $averageFaktor,
-                // 'totalHasil' => $totalHasil,
-                // 'laporanPokok' => $laporanPokok,
-                // 'laporanTambahan' => $laporanTambahan,
-                // 'queryTambahan' => $queryTambahan,
-                // 'AF' => $AF,
-                // 'IAF' => $IAF,
+                'laporan' => $laporan,
+                'perawat' => $perawat,
+                'tindakanPokok' => $tindakanPokok,
+                'tindakanPenunjang' => $tindakanPenunjang,
+                'tindakanTambahan' => $tindakanTambahan,
+                'rataRataWaktu' => $rataRataWaktu,
+                'swl' => $swl,
+                'totalTindakan' => $totalTindakan,
+                'tanggalAwal' => $tanggalAwal,
+                'tanggalAkhir' => $tanggalAkhir,
+                'hospitalTime' => $hospitalTime,
+                'averageFaktor' => $averageFaktor,
+                'totalHasil' => $totalHasil,
+                'laporanPokok' => $laporanPokok,
+                'laporanTambahan' => $laporanTambahan,
+                'queryTambahan' => $queryTambahan,
+                'AF' => $AF,
+                'IAF' => $IAF,
                 'result' => $result,
-                // 'debug' => $debugData,
+                'debug' => $debugData,
             ];
 
             // Buat record baru

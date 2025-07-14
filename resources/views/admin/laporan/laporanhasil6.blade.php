@@ -154,11 +154,11 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        $totalHasil = 0;
+                    @endphp
                     @foreach($tindakanPokok as $tindakan)
                         <tr>
-                            @php
-                                $totalHasil = 0;
-                            @endphp
                             @foreach($tindakanPokok as $perawatItem)
                                 @php
                                     // Kelompokkan laporan berdasarkan user_id

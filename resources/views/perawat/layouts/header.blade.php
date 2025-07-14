@@ -131,15 +131,15 @@
 
 
     // Fungsi untuk polling notifikasi secara berkala
-    setInterval(fetchNotifications, 5000); // Polling setiap 5 detik
+    // setInterval(fetchNotifications, 5000); // Polling setiap 5 detik
 
-    document.getElementById('notification-badge').addEventListener('click', function() {
-        const notificationCount = document.querySelector('.notification-count').textContent;
-        if (parseInt(notificationCount) > 0) {
-            const myModal = new bootstrap.Modal(document.getElementById('notificationModal'), {
-                keyboard: false
-            });
-            myModal.show();
-        }
-    });
+    // document.getElementById('notification-badge').addEventListener('click', function() {
+    //     const notificationCount = document.querySelector('.notification-count').textContent;
+    //     if (parseInt(notificationCount) > 0) {
+    //         const myModal = new bootstrap.Modal(document.getElementById('notificationModal'), {
+    //             keyboard: false
+    //         });
+    //         myModal.show();
+    //     }
+    // });
 </script>

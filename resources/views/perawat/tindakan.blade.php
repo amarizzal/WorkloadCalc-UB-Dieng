@@ -15,7 +15,7 @@
                     <select onchange="selectTindakan(this.value)" class="form-select select2-tindakan" id="select_jenis_tindakan" name="jenis_tindakan" required>
                         <option value="" disabled selected>Pilih atau Tambah Tindakan</option>
                         @foreach($jenisTindakan as $tindakan)
-                            <option value="{{ $tindakan->tindakan }}" data-satuan="{{ $tindakan->satuan }}" data-kategori="{{ $tindakan->kategori }}">{{ $tindakan->tindakan }}</option>
+                            <option value="{{ $tindakan->tindakan }}" data-satuan="{{ $tindakan->satuan ? $tindakan->satuan : '' }}" data-kategori="{{ $tindakan->kategori ? $tindakan->kategori : '' }}">{{ $tindakan->tindakan }} - {{ $tindakan->satuan ? $tindakan->satuan : '(belum ada satuan)' }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -174,13 +174,19 @@ $(document).ready(function() {
         if (selectedOption.length) {
             let satuan = selectedOption.data('satuan');
             let kategori = selectedOption.data('kategori');
+            console.log(satuan);
+            console.log(kategori);
 
             // Set nilai satuan dan kategori pada form
-            $('#satuan').val(satuan).trigger('change');
-            $('#kategori').val(kategori).trigger('change');
+            if (satuan != "") {
+                $('#satuan').val(satuan).trigger('change');
+                $('#satuan').prop('disabled', true);
+            }
+            if (kategori) {
+                $('#kategori').val(kategori).trigger('change');
+                $('#kategori').prop('disabled', true);
+            }
             // set agar disabled
-            $('#satuan').prop('disabled', true);
-            $('#kategori').prop('disabled', true);
         } else {
             // Jika tidak ada data, kosongkan input
             $('#satuan').val('').trigger('change');

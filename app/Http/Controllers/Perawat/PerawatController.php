@@ -268,6 +268,12 @@ class PerawatController extends Controller
         } else {
             // Jika tindakan sudah ada, gunakan ID tindakan yang sudah ada
             $tindakan->waktu = $request->waktu + $tindakan->waktu; // Update waktu jika diperlukan
+            if ($tindakan->satuan == null) {
+                $tindakan->satuan = $request->satuan; 
+            }
+            if ($tindakan->kategori == null) {
+                $tindakan->kategori = $request->kategori; 
+            }
             $tindakan->save(); // Simpan perubahan
         }
     
@@ -280,7 +286,7 @@ class PerawatController extends Controller
             'tanggal' => $request->input('tanggal'),
             'jam_mulai' => Carbon::parse($request->input('tanggal') . ' ' . $request->input('jam_mulai')),
             'jam_berhenti' => Carbon::parse($request->input('tanggal') . ' ' . $request->input('jam_berhenti')),
-            'durasi' => Carbon::parse($request->input('jam_berhenti'))->diffInSeconds(Carbon::parse($request->input('jam_mulai'))),
+            'durasi' => $request->waktu,
             'keterangan' => $request->input('keterangan'),
             'jenis_tindakan' => $tindakan->tindakan
         ]);

@@ -118,7 +118,7 @@
                         </td>
                         <td class="text-center">
                             @if ($tindakan->laporanTindakan->count() > 0)
-                                <strong>{{ number_format($totalJamTindakan, 3)/$tindakan->laporanTindakan->count() }}</strong>
+                                <strong>{{ number_format(number_format($totalJamTindakan, 3)/$tindakan->laporanTindakan->count(), 3) }}</strong>
                             @else
                                 <strong>0</strong>
                             @endif

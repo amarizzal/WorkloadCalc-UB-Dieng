@@ -92,7 +92,7 @@
                         </td>
                         <td class="text-center">
                             @if ($tindakan->laporanTindakan->count() > 0)
-                                <strong>{{ number_format($totalJamTindakan, 2) }}</strong>
+                                <strong>{{ number_format($totalJamTindakan, 3) }}</strong>
                             @else
                                 <strong>0</strong>
                             @endif
@@ -111,14 +111,14 @@
                                             });
                                         @endphp
 
-                                        <p class="text-center my-2">{{ number_format($totalJam, 2) }}</p>
+                                        <p class="text-center my-2">{{ number_format($totalJam, 3) }}</p>
                                     @endforeach
                                 </div>
                             @endif
                         </td>
                         <td class="text-center">
                             @if ($tindakan->laporanTindakan->count() > 0)
-                                <strong>{{ number_format($totalJamTindakan, 2)/$tindakan->laporanTindakan->count() }}</strong>
+                                <strong>{{ number_format($totalJamTindakan, 3)/$tindakan->laporanTindakan->count() }}</strong>
                             @else
                                 <strong>0</strong>
                             @endif

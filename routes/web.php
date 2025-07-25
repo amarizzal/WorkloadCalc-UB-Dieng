@@ -19,10 +19,9 @@ Route::post('/register', [LoginController::class, 'register']);
 
 Route::middleware(['auth'])->group(function () {
     // Route untuk dashboard admin
-    Route::get('/admin', [HomeController::class, 'admin'])->name('admin.dashboard');
+   
 
-    // Route untuk dashboard perawat
-    Route::get('/perawat', [HomeController::class, 'perawat'])->name('perawat.dashboard');
+    
 });
 
 Route::get('/', function () {
@@ -32,9 +31,10 @@ Route::get('/', function () {
 // Route untuk logout
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::prefix('admin')
+Route::middleware(['role:admin'])->prefix('admin')
     ->middleware(['auth'])
     ->group(function () {
+        Route::get('/', [HomeController::class, 'admin'])->name('admin.dashboard');
         Route::get('/master-user', [MasterController::class, 'masterUser'])->name('admin.master-user');
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -89,9 +89,11 @@ Route::prefix('admin')
 ////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-Route::prefix('perawat')
+Route::middleware(['role:perawat'])->prefix('perawat')
     ->name('perawat.')
     ->group(function () {
+        // Route untuk dashboard perawat
+        Route::get('/', [HomeController::class, 'perawat'])->name('perawat.dashboard');
         Route::get('/home', [PerawatController::class, 'home'])->name('home');
 
         /////////////////////////////////////////////////////////////////////////////////////////////////

@@ -8,11 +8,23 @@ use Illuminate\Support\Facades\Auth;
 
 class RoleMiddleware
 {
-    public function handle(Request $request, Closure $next, $role)
+    public function handle(Request $request, Closure $next, $roles)
     {
-        if (!Auth::check() || Auth::user()->role !== $role) {
-            return redirect('/'); // Redirect ke halaman utama jika tidak sesuai role
+        $user = $request->user();
+
+        // Jika belum login
+        if (!$user) {
+            return redirect()->route('login');
         }
+
+        // Ubah string 'admin,editor' menjadi array ['admin', 'editor']
+        $roles = explode(',', $roles);
+        // Cek apakah user memiliki salah satu role yang diperbolehkan
+        if (!in_array($user->role, $roles)) {
+            Auth::logout(); // Logout user
+            return redirect()->route('login')->with('error', 'Akses ditolak.');
+        }
+
         return $next($request);
     }
 }

@@ -25,8 +25,12 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/', function () {
-    return redirect()->route('login');
+    return view('pages.home');
 });
+
+// Route::get('/login', function () {
+//     return redirect()->route('login');
+// });
 
 // Route untuk logout
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

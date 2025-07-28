@@ -1,0 +1,182 @@
+/* --- General Table Styling --- */
+table.dataTable {
+    border-collapse: separate !important;
+    border-spacing: 0 12px !important; /* spacing antar row */
+    width: 100%;
+  }
+  
+  table.dataTable thead th {
+    border-bottom: none;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #8898aa;
+    background: transparent;
+  }
+  
+//   table.dataTable tbody tr {
+//     background: #fff;
+//     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+//     border-radius: 12px;
+//   }
+  
+//   table.dataTable tbody td {
+//     padding: 1rem;
+//     vertical-align: middle;
+//     border-top: none;
+//     font-size: 0.875rem;
+//     color: #344767;
+//   }
+  
+  /* --- Entries Per Page & Search --- */
+  .dt_length select,
+  .dt_filter input {
+    border: 1px solid #e16d6d;
+    border-radius: 10px;
+    padding: 5px 10px;
+    background-color: #fff;
+    margin-left: 5px;
+    font-size: 0.875rem;
+    color: #495057;
+  }
+  
+  /* Hide search label */
+  .dt_filter label {
+    font-weight: 600;
+    color: #060606;
+  }
+  
+  /* --- Pagination --- */
+  .dt_paginate {
+    margin-top: 1rem;
+  }
+  
+  .dt_paginate .paginate_button {
+    border: none;
+    border-radius: 50%;
+    background: #f0f2f5;
+    margin: 0 3px;
+    padding: 5px 12px;
+    color: #344767 !important;
+    font-weight: 500;
+    transition: all 0.3s;
+  }
+  
+  .dt_paginate .paginate_button:hover {
+    background: #e0e0e0;
+  }
+  
+  .dt_paginate .paginate_button.current {
+    background-color: #e91e63 !important; /* pink seperti contohmu */
+    color: #fff !important;
+    font-weight: bold;
+  }
+  
+  /* Info Text */
+  .dt-info {
+    color: #6c757d;
+    font-size: 0.8rem;
+    padding-top: 1rem;
+  }
+  
+  /* Responsive icons (optional) */
+  table.dataTable.dtr-inline.collapsed>tbody>tr>td:first-child:before {
+    background-color: #e91e63 !important;
+  }
+
+  .dt-length select {
+    border-radius: 0.5rem; // atau sesuai preferensimu, misal 8px
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    appearance: none; // untuk hilangkan style native browser
+  }
+
+  /* Untuk DataTables export buttons */
+div.dt-buttons {
+    float: right;
+  }
+  
+  /* Untuk pagination dan info */
+  .dataTables_wrapper .dataTables_paginate {
+    float: right;
+    margin-top: 1rem;
+  }
+  
+  .dataTables_wrapper .dataTables_info {
+    float: left;
+    margin-top: 1rem;
+  }
+  
+  /* Clear float */
+  .dataTables_wrapper:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+
+  @mixin respond($breakpoint) {
+    @if $breakpoint == sm {
+      @media (max-width: 576px) { @content; }
+    } @else if $breakpoint == md {
+      @media (max-width: 768px) { @content; }
+    } @else if $breakpoint == lg {
+      @media (max-width: 992px) { @content; }
+    } @else if $breakpoint == xl {
+      @media (max-width: 1200px) { @content; }
+    }
+  }
+
+  .dt-info {
+    padding: 12px;
+    float:right;
+
+    @include respond(sm) {
+        padding: 12px;
+        float:none;
+    }
+  }
+
+  .dt-paging {
+    padding: 12px;
+  }
+
+  .dt-buttons {
+    padding-right: 12px;
+    margin-bottom: 0rem;
+    @include respond(sm) {
+        padding-right: 2rem;
+        padding-left: 2rem;
+        margin-right: auto;
+        margin-left: auto;
+        width: -webkit-fill-available;
+    }
+  }
+  
+.limited-height {
+  max-height: 100px;
+  overflow: hidden;
+  display: -webkit-box;
+  line-clamp: 2;      /* maksimal 4 baris */
+  -webkit-box-orient: vertical;
+}
+
+.dt-search input {
+  // width: 100%;
+  font-size: 0.875rem;
+  max-width: 150px; /* batas maksimal lebar input */
+  border-radius: 10px;
+  // position: absolute;
+  // left: 10px;
+  // padding-left: 10px;
+  // margin-left: 10px;
+  @include respond(sm) {
+      max-width: 100%; /* batas maksimal lebar input */
+      padding-left: 3rem;
+      padding-right: 3rem;
+  }
+}
+
+table td {
+  padding-top: 0;
+  padding-bottom: 0;
+}

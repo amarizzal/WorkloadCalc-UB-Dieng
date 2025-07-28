@@ -1,17 +1,25 @@
 const mix = require('laravel-mix');
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
-/*
- |--------------------------------------------------------------------------
- | Mix Asset Management
- |--------------------------------------------------------------------------
- |
- | Mix provides a clean, fluent API for defining some Webpack build steps
- | for your Laravel applications. By default, we are compiling the CSS
- | file for the application as well as bundling up all the JS files.
- |
- */
+mix.sass('resources/scss/material-dashboard.scss', 'public/css');
+mix.sass('resources/scss/custom-datatables.scss', 'public/css');
+mix.js('resources/js/app.js', 'public/js');
 
-mix.js('resources/js/app.js', 'public/js')
-    .postCss('resources/css/app.css', 'public/css', [
-        //
-    ]);
+mix.webpackConfig({
+    plugins: [
+        new BrowserSyncPlugin({
+            proxy: 'http://127.0.0.1:8000', // ganti sesuai host lokal Laravel kamu
+            files: [
+                'app/**/*.php',
+                'resources/views/**/*.php',
+                'resources/views/**/**/*.php',
+                'resources/scss/**/*.scss',
+                'resources/js/**/*.js',
+                'public/css/**/*.css',
+                'public/js/**/*.js'
+            ],
+            open: false,
+            reloadDelay: 500
+        })
+    ]
+});

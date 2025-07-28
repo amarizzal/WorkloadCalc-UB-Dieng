@@ -8,10 +8,11 @@
         "php": "^8.0",
         "fruitcake/laravel-cors": "^2.0.5",
         "guzzlehttp/guzzle": "^7.2",
+        "laravel-frontend-presets/material-dashboard": "^2.0",
         "laravel/framework": "^9.0",
         "laravel/sanctum": "^2.14",
         "laravel/tinker": "^2.7",
-        "laravel/ui": "^4.5",
+        "laravel/ui": "^4.6",
         "nesbot/carbon": "^2.72"
     },
     "require-dev": {
@@ -26,12 +27,14 @@
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/"
+            "Database\\Seeders\\": "database/seeders/",
+            "LaravelFrontendPresets\\MaterialPreset\\": "presets/material/src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Tests\\": "tests/",
+            "LaravelFrontendPresets\\MaterialPreset\\": "presets/material/src"
         }
     },
     "scripts": {

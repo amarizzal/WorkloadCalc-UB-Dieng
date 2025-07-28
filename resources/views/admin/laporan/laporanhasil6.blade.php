@@ -222,13 +222,7 @@
                             @endphp
                         </tr>
                     @endforeach
-                    {{-- @foreach($rataRataWaktu as $tindakanId => $rataWaktu)
-                        <tr>
-                            <td>{{ $laporan->where('tindakan_id', $tindakanId)->first()->tindakan->tindakan ?? 'Tidak Ada Data' }}</td>
-                            <td>{{ number_format($rataWaktu, 2) }} jam</td>
-                            <td>{{ number_format($swl[$tindakanId], 2) }}</td>
-                        </tr>
-                    @endforeach --}}
+                    
                 </tbody>
             </table>
 

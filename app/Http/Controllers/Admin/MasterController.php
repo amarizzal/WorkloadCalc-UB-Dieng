@@ -15,7 +15,7 @@ class MasterController extends Controller
    public function masterUser()
 {
     $users = User::with(['jenisKelamin', 'ruangan'])->get();  // Eager load relasi jenisKelamin dan ruangan
-    return view('admin.master.masteruser', compact('users'));
+    return view('pages.master-user', compact('users'));
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ public function masterTindakan()
     // Mengambil semua data tindakan dan waktu
     $tindakanWaktu = TindakanWaktu::all();
     
-    return view('admin.master.mastertindakan', compact('tindakanWaktu'));
+    return view('pages.master-tindakan', compact('tindakanWaktu'));
 }
 
 public function storeTindakan(Request $request)
@@ -120,7 +120,7 @@ public function updateTindakan(Request $request, $id)
         // Ambil data shift kerja dari database untuk ditampilkan di tabel
         $shiftKerja = ShiftKerja::all();
         
-        return view('admin.master.mastershiftkerja', compact('shiftKerja'));
+        return view('pages.master-shift', compact('shiftKerja'));
     }
     public function storeShiftKerja(Request $request)
     {
@@ -174,7 +174,7 @@ public function deleteShiftKerja($id)
     public function masterRuangan()
 {
     $ruangan = Ruangan::all();  // Ambil semua data ruangan
-    return view('admin.master.masterruangan', compact('ruangan'));  // Kirim data ke view
+    return view('pages.master-ruangan', compact('ruangan'));  // Kirim data ke view
 }
 
 public function storeRuangan(Request $request)

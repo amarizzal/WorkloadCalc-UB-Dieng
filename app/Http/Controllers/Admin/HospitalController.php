@@ -13,7 +13,7 @@ class HospitalController extends Controller
         // get hospital data
         $hospital = Hospital::first();
 
-        return view('admin.rumah-sakit.dataRumahSakit', compact('hospital'));
+        return view('pages.master-hospital', compact('hospital'));
     }
     public function update(Request $request)
     {

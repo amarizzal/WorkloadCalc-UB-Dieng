@@ -30,7 +30,7 @@ class LaporanController extends Controller
         $laporan = LaporanTindakanPerawat::with(['user', 'ruangan', 'shift', 'tindakan'])->get();
 
         // Jika sudah benar, kembalikan ke view
-        return view('admin.laporan.laporanhasil', compact('laporan'));
+        return view('pages.laporan-hasil', compact('laporan'));
     }
 
     public function index2(Request $request)
@@ -95,7 +95,7 @@ class LaporanController extends Controller
             $swl[$tindakanId] = $rataWaktu > 0 ? $jamTersediaPerTahun / ($rataWaktu / 60) : 0;
         }
 
-        return view('admin.laporan.laporanhasil2', compact(
+        return view('pages.laporan-pokok', compact(
             'perawat', 'perawatTindakan', 'tindakanPokok', 'laporan',
             'rataRataWaktu', 'swl', 'totalTindakan', 'tanggalAwal', 'tanggalAkhir'
         ));
@@ -166,7 +166,7 @@ class LaporanController extends Controller
             $swl[$tindakanId] = $rataWaktu > 0 ? $jamTersediaPerTahun / ($rataWaktu / 60) : 0;
         }
 
-        return view('admin.laporan.laporanhasil3', compact(
+        return view('pages.laporan-penunjang', compact(
             'perawat', 'perawatTindakan', 'tindakanPenunjang', 'laporan',
             'rataRataWaktu', 'swl', 'totalTindakan', 'tanggalAwal', 'tanggalAkhir', 'hospitalTime'
         ));
@@ -232,7 +232,7 @@ class LaporanController extends Controller
             }
         }
 
-        return view('admin.laporan.laporanhasil4', compact('laporan', 'tindakanLainLain', 'perawatTindakan', 'rataRataWaktu', 'swl'));
+        return view('pages.laporan-tambahan', compact('laporan', 'tindakanLainLain', 'perawatTindakan', 'rataRataWaktu', 'swl'));
     }
     public function index5(Request $request)
     {
@@ -305,7 +305,7 @@ class LaporanController extends Controller
         //     'perawat', 'perawatTindakan', 'tindakanTambahan', 'laporan',
         //     'rataRataWaktu', 'swl', 'totalTindakan', 'tanggalAwal', 'tanggalAkhir'
         // ));
-        return view('admin.laporan.laporanhasil5', compact(
+        return view('pages.laporan-tambahan', compact(
             'tindakanTambahan',  'tanggalAwal', 'tanggalAkhir', 'hospitalTime'
         ));
     }
@@ -391,7 +391,7 @@ class LaporanController extends Controller
             $rataRataWaktu[$tindakan->id] = $jumlahTindakan > 0 ? ($totalDurasi / $jumlahTindakan) / 60 : 0;
         }
 
-        return view('admin.laporan.laporanhasil6', compact('users', 'selectedUserId', 'rataRataWaktu', 'swl', 'laporan', 'tindakanGrouped', 'tindakanPokok'));
+        return view('pages.laporan-perawat', compact('users', 'selectedUserId', 'rataRataWaktu', 'swl', 'laporan', 'tindakanGrouped', 'tindakanPokok'));
     }
 
     public function detailTindakan($tindakanId, $userId)

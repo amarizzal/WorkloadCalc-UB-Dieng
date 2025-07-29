@@ -97,7 +97,7 @@ Route::middleware(['role:perawat'])->prefix('perawat')
     ->name('perawat.')
     ->group(function () {
         // Route untuk dashboard perawat
-        Route::get('/', [HomeController::class, 'perawat'])->name('perawat.dashboard');
+        Route::get('/', [HomeController::class, 'perawat'])->name('dashboard');
         Route::get('/home', [PerawatController::class, 'home'])->name('home');
 
         /////////////////////////////////////////////////////////////////////////////////////////////////

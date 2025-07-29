@@ -19,7 +19,7 @@ class PerawatController extends Controller
 {
     public function home()
     {
-        return view('perawat.home');
+        return view('pages.perawat.home');
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////

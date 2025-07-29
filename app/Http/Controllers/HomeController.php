@@ -58,6 +58,6 @@ class HomeController extends Controller
      */
     public function perawat()
     {
-        return view('perawat.home'); // Mengarah ke view dashboard perawat
+        return view('pages.perawat.home'); // Mengarah ke view dashboard perawat
     }
 }

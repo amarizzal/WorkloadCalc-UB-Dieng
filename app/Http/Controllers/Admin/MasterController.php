@@ -209,7 +209,7 @@ public function deleteRuangan($id)
     // Menampilkan view master keamanan privasi
     public function masterKeamananPrivasi()
     {
-        return view('admin.master.masterkeamananprivasi');
+        return view('pages.master-keamanan');
     }
 
     // Menampilkan view master panduan

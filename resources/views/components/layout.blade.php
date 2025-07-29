@@ -38,6 +38,11 @@
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('css/material-dashboard.css') }}" rel="stylesheet" />
     <link id="pagestyle" href="{{ asset('css/custom-datatables.css') }}" rel="stylesheet" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    {{-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    
+
 </head>
 <body class="{{ $bodyClass }}">
 
@@ -48,6 +53,7 @@
 <script src="{{ asset('assets') }}/js/plugins/perfect-scrollbar.min.js"></script>
 <script src="{{ asset('assets') }}/js/plugins/smooth-scrollbar.min.js"></script>
 <script src="{{ asset('js/app.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 @stack('js')
 <script>
     var win = navigator.platform.indexOf('Win') > -1;

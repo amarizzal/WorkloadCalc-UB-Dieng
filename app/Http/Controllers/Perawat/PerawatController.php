@@ -123,7 +123,7 @@ class PerawatController extends Controller
             }
         }
 
-        return view('perawat.timer', compact('shiftName', 'shiftId', 'tindakanWaktu', 'currentTime', 'laporanAktif', 'sisaWaktu', 'isTimerRunning'));
+        return view('pages.perawat.perawat-pokok', compact('shiftName', 'shiftId', 'tindakanWaktu', 'currentTime', 'laporanAktif', 'sisaWaktu', 'isTimerRunning'));
     }
 
     public function startAction(Request $request)

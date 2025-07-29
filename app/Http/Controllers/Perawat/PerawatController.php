@@ -74,7 +74,7 @@ class PerawatController extends Controller
 
     public function keamananPrivasi()
     {
-        return view('perawat.layouts.home.keamananprivasi');
+        return view('pages.perawat.perawat-keamanan');
     }
 
     public function tentangKami()

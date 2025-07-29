@@ -1,4 +1,4 @@
-<x-layout bodyClass="g-sidenav-show  bg-gray-200">
+<x-layout bodyClass="g-sidenav-show  bg-gray-200 pb-5">
     <x-navbars.bottombar activePage="dashboard"></x-navbars.bottombar>
 
     <!-- Menampilkan alert jika ada pesan sukses -->
@@ -59,7 +59,7 @@
                     </a>
                 </div>
                 <div class="col-lg-4 col-6 mt-4 mb-3">
-                    <a href="{{ route('admin.data-rumah-sakit')}}">
+                    <a href="{{ route('perawat.keamananprivasi') }}">
                         <div class="card z-index-2 ">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
                                 <div class="bg-gradient-primary shadow-dark border-radius-lg py-3 pe-1 text-center" style="min-height: 7rem">

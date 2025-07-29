@@ -1,5 +1,7 @@
-<x-layout bodyClass="g-sidenav-show  bg-gray-200">
-        <x-navbars.bottombar activePage="master-keamanan"></x-navbars.bottombar>
+<!-- home.blade.php -->
+@extends('perawat.layouts.app')
+
+@section('content')
 
    <!-- Menampilkan alert jika ada pesan sukses -->
    @if(session('success'))
@@ -78,4 +80,4 @@
         </div>
     </div>
 </div>
-</x-layout>
+@endsection

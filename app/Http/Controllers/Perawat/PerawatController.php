@@ -302,7 +302,7 @@ class PerawatController extends Controller
         $jenisTindakan = TindakanWaktu::where('status', 'Tugas Penunjang')->get();
 
         
-        return view('perawat.tindakan', compact('jenisTindakan'));
+        return view('pages.perawat.perawat-penunjang', compact('jenisTindakan'));
     }
     
     public function tindakanTambahan()

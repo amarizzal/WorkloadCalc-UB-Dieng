@@ -35,8 +35,7 @@ Route::get('/', function () {
 // Route untuk logout
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::middleware(['role:admin'])->prefix('admin')
-    ->middleware(['auth'])
+Route::middleware(['auth', 'role:admin'])->prefix('admin')
     ->group(function () {
         Route::get('/', [HomeController::class, 'admin'])->name('admin.dashboard');
         Route::get('/master-user', [MasterController::class, 'masterUser'])->name('admin.master-user');
@@ -93,7 +92,7 @@ Route::middleware(['role:admin'])->prefix('admin')
 ////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-Route::middleware(['role:perawat'])->prefix('perawat')
+Route::middleware(['auth', 'role:perawat'])->prefix('perawat')
     ->name('perawat.')
     ->group(function () {
         // Route untuk dashboard perawat

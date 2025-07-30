@@ -216,7 +216,6 @@
                     </div>
                 </div>
                 <x-footers.auth></x-footers.auth>
-                <br><br><br>
             </div>
         </main>
 

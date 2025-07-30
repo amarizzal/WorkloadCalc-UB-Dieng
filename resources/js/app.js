@@ -14,3 +14,4 @@ window.JSZip = jsZip;
 window.$ = $;
 window.jQuery = $;
 import '../scss/custom-datatables.scss';
+import '../scss/custom-mobile.scss';

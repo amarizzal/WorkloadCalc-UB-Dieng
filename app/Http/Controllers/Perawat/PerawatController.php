@@ -214,7 +214,7 @@ class PerawatController extends Controller
             ->first();
 
 
-        return view('perawat.hasil', compact('laporan', 'startDate', 'endDate', 'recordAnalisa'));
+        return view('pages.perawat.perawat-hasil', compact('laporan', 'startDate', 'endDate', 'recordAnalisa'));
     }
     
     public function storeKeterangan(Request $request, $id)

@@ -392,15 +392,21 @@
                                 {{-- Beban Kerja --}}
                                 <div class="row justify-content-center mt-1 px-4">
                                     <p class="mt-2 text-danger font-weight-bolder text-center">Pilih tanggal untuk analisa data</p>
-                                    <div class="col-md-4">
-                                        <label for="tanggal_awal">Tanggal Awal:</label>
-                                        <input id="tanggal_awal" type="date" name="tanggal_awal" value="{{ request('tanggal_awal') }}" required class="form-control"
-                                            {{-- max="{{ \Carbon\Carbon::today()->subDays(30)->subDay()->format('Y-m-d') }}"> --}}>
+                                    <div class="col-md-4 ">
+                                        <div class=" input-group input-group-static">
+                                            <label for="tanggal_awal">Tanggal Awal:</label>
+                                            <input id="tanggal_awal" type="date" name="tanggal_awal" value="{{ request('tanggal_awal') }}" required class="form-control"
+                                                {{-- max="{{ \Carbon\Carbon::today()->subDays(30)->subDay()->format('Y-m-d') }}"> --}}>
+
+                                        </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <label for="tanggal_akhir">Tanggal Akhir:</label>
-                                        <input id="tanggal_akhir" type="date" name="tanggal_akhir" value="{{ request('tanggal_akhir') }}" required class="form-control"
-                                            {{-- max="{{ \Carbon\Carbon::today()->subDays(30)->subDay()->format('Y-m-d') }}"> --}}>
+                                        <div class=" input-group input-group-static">
+
+                                            <label for="tanggal_akhir">Tanggal Akhir:</label>
+                                            <input id="tanggal_akhir" type="date" name="tanggal_akhir" value="{{ request('tanggal_akhir') }}" required class="form-control"
+                                                {{-- max="{{ \Carbon\Carbon::today()->subDays(30)->subDay()->format('Y-m-d') }}"> --}}>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row my-3 mt-5 mx-auto">

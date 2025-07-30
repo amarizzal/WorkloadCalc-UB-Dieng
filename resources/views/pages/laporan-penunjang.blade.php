@@ -20,12 +20,12 @@
                                         <form action="{{ route('admin.laporan.index3') }}" method="GET" class="row align-items-end justify-content-center w-100">
                                             <div class="col-12 col-md-6 ps-5">
                                                 <div class="d-flex align-items-end justify-content-center gap-5">
-                                                    <div class="col mr-2">
+                                                    <div class="col input-group input-group-static mr-2">
                                                         <label for="start_date" class="me-2">Dari:</label>
                                                         <input type="date" name="start_date" id="start_date" class="form-control me-2" value="">
 
                                                     </div>
-                                                    <div class="col input-group-outline mr-2 align-items-center">
+                                                    <div class="col  input-group input-group-static mr-2 align-items-center">
                                                         <label for="end_date" class="me-2">Sampai:</label>
                                                         <input type="date" name="end_date" id="end_date" class="form-control me-2" value="">
 

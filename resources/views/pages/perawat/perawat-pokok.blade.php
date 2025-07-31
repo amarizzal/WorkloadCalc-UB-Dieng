@@ -257,10 +257,11 @@
                 const progressCircle = document.getElementById("progress-circle");
 
                 let timerInterval;
+                let elapsedTime = 0; // Pindahkan ke luar agar bisa diakses di stopButton
 
                 // Fungsi untuk memulai timer (menghitung maju)
                 function startTimer() {
-                    let elapsedTime = 0;
+                    elapsedTime = 0;
 
                     timerInterval = setInterval(() => {
                         const minutes = Math.floor(elapsedTime / 60);
@@ -326,6 +327,20 @@
                     if (!laporanId) {
                         alert("Tidak ada laporan aktif untuk dihentikan!");
                         return;
+                    }
+
+                    // Tambahan: konfirmasi jika durasi < 10 detik
+                    if (elapsedTime < 10) {
+                        const confirmSend = confirm(`Durasi baru ${elapsedTime} detik. Yakin ingin mengirim data?`);
+                        if (!confirmSend) {
+                            clearInterval(timerInterval);
+                            timerText.textContent = "00:00";
+                            elapsedTime = 0;
+
+                            startButton.disabled = false;
+                            stopButton.disabled = true;
+                            return;
+                        }
                     }
 
                     fetch(`/perawat/stop-action/${laporanId}`, {

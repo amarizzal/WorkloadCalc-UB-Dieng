@@ -1,5 +1,5 @@
 <x-layout bodyClass="g-sidenav-show  bg-gray-200">
-        <x-navbars.bottombar activePage="penunjang"></x-navbars.bottombar>
+        <x-navbars.bottombar activePage="dashboard"></x-navbars.bottombar>
         <style>
             /* Tampilan lebih seperti input Bootstrap */
             .select2-container--default .select2-selection--single {
@@ -156,59 +156,99 @@
                         <div class="card my-4">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div class="bg-gradient-primary shadow-primary border-radius-lg pt-3 pb-2">
-                                    <h5 class="text-white text-capitalize ps-3">Tugas Penunjang</h5>
+                                    <h5 class="text-white text-capitalize ps-3">Edit Profil</h5>
                                 </div>
                             </div>
                             <div class="card-body px-3 pb-2">
                                 <section class="container my-1">
-                                    <h5 class="card-title text-center mb-3">Tambah Jenis Tindakan Penunjang</h5>
-                                    <form action="{{ route('perawat.tindakan.store') }}" method="POST">
-                                        @csrf
-                                        <div class="mb-3 input-group input-group-static">
-                                            <label for="select_jenis_tindakan" class="form-label">Jenis Tindakan</label>
-                                            <select onchange="selectTindakan(this.value)" class="form-select select2-tindakan" id="select_jenis_tindakan" name="jenis_tindakan" required>
-                                                <option value="" disabled selected>Pilih atau Tambah Tindakan</option>
-                                                @foreach($jenisTindakan as $tindakan)
-                                                    <option value="{{ $tindakan->tindakan }}" data-satuan="{{ $tindakan->satuan ? $tindakan->satuan : '' }}" data-kategori="{{ $tindakan->kategori ? $tindakan->kategori : '' }}">{{ $tindakan->tindakan }} - {{ $tindakan->satuan ? $tindakan->satuan : '(belum ada satuan)' }}</option>
-                                                @endforeach
-                                            </select>
+                                    <div class="row gx-4 mb-4">
+                                        <div class="col-auto">
+                                            <div class="avatar avatar-xl position-relative">
+                                                <img src="
+                                                {{ auth()->user()->foto ? asset('storage/' . auth()->user()->foto) : asset('assets/img/team-2.jpg') }}
+                                                " alt="profile_image"
+                                                    class="w-100 border-radius-lg shadow-sm">
+                                            </div>
                                         </div>
+                                        <div class="col-auto my-auto">
+                                            <div class="h-100">
+                                                <h5 class="mb-1">
+                                                    {{ auth()->user()->nama_lengkap }}
+                                                </h5>
+                                                <p class="mb-0 font-weight-normal text-sm">
+                                                    {{ auth()->user()->role }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <form action="{{ route('perawat.profil.edit.store') }}" method="POST" enctype="multipart/form-data">
+                                        @csrf
 
                                         <input type="hidden" name="waktu" value="0">
                                         <input type="hidden" name="status" value="Tugas Penunjang">
 
                                         <div class="mb-3 input-group input-group-static">
-                                            <label for="tanggal">Tanggal</label>
-                                            <input type="date" class="form-control" name="tanggal" required>
+                                            <label for="nama_lengkap">Nama Lengkap</label>
+                                            <input type="text" class="form-control" name="nama_lengkap" value="{{ auth()->user()->nama_lengkap }}" required>
                                         </div>
                                         <div class="mb-3 input-group input-group-static">
-                                            <label for="jam_mulai" >Waktu</label>
-                                            <input type="number" class="form-control" name="waktu" placeholder="" required>
+                                            <label for="email">Email</label>
+                                            <input type="text" class="form-control" name="email" value="{{ auth()->user()->email }}" required>
                                         </div>
                                         <div class="mb-3 input-group input-group-static">
-                                            <label for="satuan" class="ms-0">Satuan</label>
-                                            <select name="satuan" id="satuan" class="form-control" required>
-                                                <option value="" disabled selected>Pilih Satuan</option>
-                                                <option value="menit">Menit</option>
-                                                <option value="jam">Jam</option>
-                                                <option value="hari">Hari</option>
+                                            <label for="nomor_telepon">Nomor Telepon</label>
+                                            <input type="text" class="form-control" name="nomor_telepon" value="{{ auth()->user()->nomor_telepon }}" required>
+                                        </div>
+                                        <div class="mb-3 input-group input-group-static">
+                                            <label for="tanggal_lahir">Tanggal Lahir</label>
+                                            <input type="date" class="form-control" name="tanggal_lahir" value="{{ auth()->user()->tanggal_lahir }}" required>
+                                        </div>
+                                        <div class="mb-3 input-group input-group-static">
+                                            <label for="lama_bekerja" >Lama Bekerja</label>
+                                            <input type="number" class="form-control" name="lama_bekerja" value="{{ auth()->user()->lama_bekerja }}" required>
+                                        </div>
+                                        <div class="mb-3 input-group input-group-static">
+                                            <label for="posisi" >Posisi</label>
+                                            <select name="posisi" id="posisi" class="form-control" required>
+                                                <option value="" disabled selected>Pilih Posisi</option>
+                                                <option value="perawat_pelaksana" @if (auth()->user()->posisi == 'perawat_pelaksana') selected @endif>Perawat Pelaksana</option>
+                                                <option value="ketua_tim" @if (auth()->user()->posisi == 'ketua_tim') selected @endif>Ketua Tim</option>
+                                                <option value="kepala_ruangan" @if (auth()->user()->posisi == 'kepala_ruangan') selected @endif>Kepala Ruangan</option>
                                             </select>
                                         </div>
                                         <div class="mb-3 input-group input-group-static">
-                                            <label for="kategori" >Kategori</label>
-                                            <select name="kategori" id="kategori" class="form-control" required>
-                                                <option value="" disabled selected>Pilih Kategori</option>
-                                                <option value="harian">Harian</option>
-                                                <option value="mingguan">Mingguan</option>
-                                                <option value="bulanan">Bulanan</option>
-                                                <option value="tahunan">Tahunan</option>
+                                            <label for="pendidikan" >Pendidikan</label>
+                                            <select name="pendidikan" id="pendidikan" class="form-control" required>
+                                                <option value="" disabled selected>Pilih Pendidikan</option>
+                                                <option value="diploma" @if (auth()->user()->pendidikan == 'diploma') selected @endif>D III/IV</option>
+                                                <option value="sarjana" @if (auth()->user()->pendidikan == 'sarjana') selected @endif>S1/Ners</option>
                                             </select>
                                         </div>
                                         <div class="mb-3 input-group input-group-static">
-                                            <label for="keterangan" >Keterangan</label>
-                                            <textarea class="form-control" name="keterangan" rows="3" required></textarea>
+                                            <label for="level" >Level</label>
+                                            <select name="level" id="level" class="form-control" required>
+                                                <option value="" disabled selected>Pilih Level</option>
+                                                <option value="pk1" @if (auth()->user()->level == 'pk1') selected @endif>PK I</option>
+                                                <option value="pk2" @if (auth()->user()->level == 'pk2') selected @endif>PK II</option>
+                                                <option value="pk3" @if (auth()->user()->level == 'pk3') selected @endif>PK III</option>
+                                                <option value="pk4" @if (auth()->user()->level == 'pk4') selected @endif>PK IV</option>
+                                                <option value="pk5" @if (auth()->user()->level == 'pk5') selected @endif>PK V</option>
+                                            </select>
                                         </div>
-                                        <button type="submit" class="btn btn-primary w-100">Simpan Tindakan</button>
+                                        <div class="mb-3 input-group input-group-static">
+                                            <label for="status" >Status Kepegawaian</label>
+                                            <select name="status" id="status" class="form-control" required>
+                                                <option value="" disabled selected>Pilih Status</option>
+                                                <option value="asn" @if (auth()->user()->status == 'asn') selected @endif>ASN</option>
+                                                <option value="pppk" @if (auth()->user()->status == 'pppk') selected @endif>PPPK</option>
+                                                <option value="non_asn" @if (auth()->user()->status == 'non_asn') selected @endif>Non ASN</option>
+                                            </select>
+                                        </div>
+                                        <label for="foto" >Foto (Biarkan kosong jika tidak ingin diganti)</label>
+                                        <div class="mb-3 input-group input-group-outline">
+                                            <input type="file" name="foto" id="foto" class="form-control">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary w-100">Simpan</button>
                                     </form>
                                 </section>
                             </div>

@@ -415,6 +415,63 @@ class PerawatController extends Controller
     // Menampilkan halaman profil
     public function profil()
     {
-        return view('perawat.profil');
+        return view('pages.perawat.perawat-profil');
+    }
+
+    // Menampilkan halaman profil
+    public function profilEdit()
+    {
+        return view('pages.perawat.perawat-profil-edit');
+    }
+
+    // Menampilkan halaman profil
+    public function profilEditStore()
+    {
+        $user = Auth::user();
+
+        // Validasi input
+        request()->validate([
+            'nama_lengkap' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'nomor_telepon' => 'nullable|string|max:15',
+            'tanggal_lahir' => 'required|date',
+            'lama_bekerja' => 'required|numeric',
+            'posisi' => 'required|string|max:255',
+            'pendidikan' => 'required|string|max:255',
+            'level' => 'required|string|max:255',
+            'status' => 'required|string|max:255',
+            'foto' => 'required|image|max:2048',
+        ]);
+
+        // Update data user
+        $user->update([
+            'nama_lengkap' => request('nama_lengkap'),
+            'email' => request('email'),
+            'nomor_telepon' => request('nomor_telepon'),
+            'tanggal_lahir' => Carbon::parse(request('tanggal_lahir'))->toDateString(),
+            'lama_bekerja' => request('lama_bekerja'),
+            'posisi' => request('posisi'),
+            'pendidikan' => request('pendidikan'),
+            'level' => request('level'),
+            'status' => request('status'),
+        ]);
+
+        // Jika password diisi, update password
+        if (request('password')) {
+            $user->password = Hash::make(request('password'));
+            $user->save();
+        }
+
+        // sotre foto jika ada
+        if (request()->hasFile('foto')) {
+            $foto = request()->file('foto');
+            $fotoPath = $foto->storeAs('user_photos', $user->id . '.' . $foto->getClientOriginalExtension(), 'public');
+            $user->foto = $fotoPath; // simpan 'user_photos/12.jpg'
+            $user->save();
+        }
+
+        session()->flash('success', 'Profil berhasil diperbarui.');
+        // Redirect ke halaman profil
+        return redirect()->route('perawat.profil');
     }
 }

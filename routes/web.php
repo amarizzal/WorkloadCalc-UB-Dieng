@@ -117,6 +117,8 @@ Route::middleware(['auth', 'role:perawat'])->prefix('perawat')
         Route::get('/tindakan-tambahan', [PerawatController::class, 'tindakanTambahan'])->name('tindakan.tambahan');
         //////////////////////////////////////////////////////////////////////
         Route::get('/profil', [PerawatController::class, 'profil'])->name('profil');
+        Route::get('/profil-edit', [PerawatController::class, 'profilEdit'])->name('profil.edit');
+        Route::post('/profil-edit', [PerawatController::class, 'profilEditStore'])->name('profil.edit.store');
         //////////////////////////////////////////////////////////////////////
     
         // Menambahkan route baru

@@ -22,6 +22,12 @@ class User extends Model implements AuthenticatableContract
         'nomor_telepon',
         'jenis_kelamin_id',
         'ruangan_id',
+        'usia',
+        'lama_bekerja',
+        'posisi',
+        'pendidikan',
+        'level',
+        'status',
         'tanggal_lahir', // Tambahkan tanggal_lahir
     ];
 

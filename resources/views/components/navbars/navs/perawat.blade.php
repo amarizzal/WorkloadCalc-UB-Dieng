@@ -23,11 +23,11 @@
                 @csrf
             </form>
             <ul class="navbar-nav  justify-content-end ms-md-auto pe-md-3">
-                <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
-                    <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+                <li class="nav-item ps-3 d-flex align-items-center">
+                    <a href="{{ route('perawat.profil') }}" class="nav-link text-body p-0" id="iconNavbarSidenav">
                         <div class="d-flex px-1 py-1">
                             <div>
-                                <img src="{{ asset('assets') }}/img/team-2.jpg"
+                                <img src="{{ auth()->user()->foto ? asset('storage/' . auth()->user()->foto) : asset('assets/img/team-2.jpg') }}"
                                     class="avatar avatar-sm me-1 border-radius-lg"
                                     alt="user1">
                             </div>

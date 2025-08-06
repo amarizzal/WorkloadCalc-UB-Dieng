@@ -24,7 +24,7 @@
         <div class="container-fluid py-4">
             <div class="row mt-4">
                 <div class="col-lg-4 col-6 col-md-6 mt-4 mb-4 d-flex">
-                    <a class="h-100 w-100" href="{{ route('admin.master-user')}}">
+                    <a class="h-100 w-100" href="{{ route('perawat.profil.password') }}">
                         <div class="card z-index-2 "  style="height: 100%">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
                                 <div class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1 text-center" style="min-height: 7rem">

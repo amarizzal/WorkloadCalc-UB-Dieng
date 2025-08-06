@@ -181,72 +181,17 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <form action="{{ route('perawat.profil.edit.store') }}" method="POST" enctype="multipart/form-data">
+                                    <form action="{{ route('perawat.profil.password.store') }}" method="POST" enctype="multipart/form-data">
                                         @csrf
 
-                                        <input type="hidden" name="waktu" value="0">
-                                        <input type="hidden" name="status" value="Tugas Penunjang">
 
                                         <div class="mb-3 input-group input-group-static">
-                                            <label for="nama_lengkap">Nama Lengkap</label>
-                                            <input type="text" class="form-control" name="nama_lengkap" value="{{ auth()->user()->nama_lengkap }}" required>
+                                            <label for="password">Password Baru</label>
+                                            <input type="password" class="form-control" name="password" required>
                                         </div>
                                         <div class="mb-3 input-group input-group-static">
-                                            <label for="email">Email</label>
-                                            <input type="text" class="form-control" name="email" value="{{ auth()->user()->email }}" required>
-                                        </div>
-                                        <div class="mb-3 input-group input-group-static">
-                                            <label for="nomor_telepon">Nomor Telepon</label>
-                                            <input type="text" class="form-control" name="nomor_telepon" value="{{ auth()->user()->nomor_telepon }}" required>
-                                        </div>
-                                        <div class="mb-3 input-group input-group-static">
-                                            <label for="tanggal_lahir">Tanggal Lahir</label>
-                                            <input type="date" class="form-control" name="tanggal_lahir" value="{{ auth()->user()->tanggal_lahir }}" required>
-                                        </div>
-                                        <div class="mb-3 input-group input-group-static">
-                                            <label for="lama_bekerja" >Lama Bekerja</label>
-                                            <input type="number" class="form-control" name="lama_bekerja" value="{{ auth()->user()->lama_bekerja }}">
-                                        </div>
-                                        <div class="mb-3 input-group input-group-static">
-                                            <label for="posisi" >Posisi</label>
-                                            <select name="posisi" id="posisi" class="form-control" >
-                                                <option value="" disabled selected>Pilih Posisi</option>
-                                                <option value="perawat_pelaksana" @if (auth()->user()->posisi == 'perawat_pelaksana') selected @endif>Perawat Pelaksana</option>
-                                                <option value="ketua_tim" @if (auth()->user()->posisi == 'ketua_tim') selected @endif>Ketua Tim</option>
-                                                <option value="kepala_ruangan" @if (auth()->user()->posisi == 'kepala_ruangan') selected @endif>Kepala Ruangan</option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3 input-group input-group-static">
-                                            <label for="pendidikan" >Pendidikan</label>
-                                            <select name="pendidikan" id="pendidikan" class="form-control" >
-                                                <option value="" disabled selected>Pilih Pendidikan</option>
-                                                <option value="diploma" @if (auth()->user()->pendidikan == 'diploma') selected @endif>D III/IV</option>
-                                                <option value="sarjana" @if (auth()->user()->pendidikan == 'sarjana') selected @endif>S1/Ners</option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3 input-group input-group-static">
-                                            <label for="level" >Level</label>
-                                            <select name="level" id="level" class="form-control" >
-                                                <option value="" disabled selected>Pilih Level</option>
-                                                <option value="pk1" @if (auth()->user()->level == 'pk1') selected @endif>PK I</option>
-                                                <option value="pk2" @if (auth()->user()->level == 'pk2') selected @endif>PK II</option>
-                                                <option value="pk3" @if (auth()->user()->level == 'pk3') selected @endif>PK III</option>
-                                                <option value="pk4" @if (auth()->user()->level == 'pk4') selected @endif>PK IV</option>
-                                                <option value="pk5" @if (auth()->user()->level == 'pk5') selected @endif>PK V</option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3 input-group input-group-static">
-                                            <label for="status" >Status Kepegawaian</label>
-                                            <select name="status" id="status" class="form-control" >
-                                                <option value="" disabled selected>Pilih Status</option>
-                                                <option value="asn" @if (auth()->user()->status == 'asn') selected @endif>ASN</option>
-                                                <option value="pppk" @if (auth()->user()->status == 'pppk') selected @endif>PPPK</option>
-                                                <option value="non_asn" @if (auth()->user()->status == 'non_asn') selected @endif>Non ASN</option>
-                                            </select>
-                                        </div>
-                                        <label for="foto" >Foto (Biarkan kosong jika tidak ingin diganti)</label>
-                                        <div class="mb-3 input-group input-group-outline">
-                                            <input type="file" name="foto" id="foto" class="form-control">
+                                            <label for="password_confirmation">Konfirmasi Password</label>
+                                            <input type="password" class="form-control" name="password_confirmation" required>
                                         </div>
                                         <button type="submit" class="btn btn-primary w-100">Simpan</button>
                                     </form>

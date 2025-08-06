@@ -431,16 +431,16 @@ class PerawatController extends Controller
 
         // Validasi input
         request()->validate([
-            'nama_lengkap' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'nama_lengkap' => 'nullable|string|max:255',
+            'email' => 'nullable|email|max:255|unique:users,email,' . $user->id,
             'nomor_telepon' => 'nullable|string|max:15',
-            'tanggal_lahir' => 'required|date',
-            'lama_bekerja' => 'required|numeric',
-            'posisi' => 'required|string|max:255',
-            'pendidikan' => 'required|string|max:255',
-            'level' => 'required|string|max:255',
-            'status' => 'required|string|max:255',
-            'foto' => 'required|image|max:2048',
+            'tanggal_lahir' => 'nullable|date',
+            'lama_bekerja' => 'nullable|numeric',
+            'posisi' => 'nullable|string|max:255',
+            'pendidikan' => 'nullable|string|max:255',
+            'level' => 'nullable|string|max:255',
+            'status' => 'nullable|string|max:255',
+            'foto' => 'nullable|image|max:2048',
         ]);
 
         // Update data user
@@ -471,6 +471,34 @@ class PerawatController extends Controller
         }
 
         session()->flash('success', 'Profil berhasil diperbarui.');
+        // Redirect ke halaman profil
+        return redirect()->route('perawat.profil');
+    }
+
+    // Menampilkan halaman profil
+    public function profilPassword()
+    {
+        return view('pages.perawat.perawat-password');
+    }
+
+    // Menampilkan halaman profil
+    public function profilPasswordStore()
+    {
+        $user = Auth::user();
+
+        // Validasi input
+        request()->validate([
+            'password' => 'required|string|max:255',
+            'password_confirmation' => 'required|string|max:255|same:password',
+        ]);
+
+        // Update data user
+        $user->update([
+            'password' => request('password'),
+        ]);
+
+
+        session()->flash('success', 'Password berhasil diperbarui.');
         // Redirect ke halaman profil
         return redirect()->route('perawat.profil');
     }

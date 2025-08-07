@@ -79,7 +79,7 @@ class PerawatController extends Controller
 
     public function tentangKami()
     {
-        return view('perawat.layouts.home.tentangkami');
+        return view('pages.perawat.perawat-tentang');
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////

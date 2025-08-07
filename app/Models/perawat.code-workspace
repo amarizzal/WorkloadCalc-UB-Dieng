@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "../../../material-dashboard-laravel-master"
+		},
+		{
+			"path": "../../../../UB Dieng EWS/ews-rssa-ub"
 		}
 	],
 	"settings": {}

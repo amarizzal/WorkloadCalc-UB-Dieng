@@ -152,6 +152,27 @@ div.dt-buttons {
   }
 }
 
+#button-add {
+  font-size: 0.875rem;
+  max-width: 160px; /* batas maksimal lebar input */
+  border-radius: 10px;
+  position: absolute;
+  left: 20px;
+  top: 50px;
+  z-index: 1000;
+}
+@media (max-width: 576px) {
+  #button-add {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 100%;
+    max-width: 100%; /* batas maksimal lebar input */
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
 table td {
   padding-top: 0;
   padding-bottom: 0;

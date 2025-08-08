@@ -7,10 +7,16 @@
             <div class="container-fluid py-4">
                 <div class="row">
                     <div class="col-12">
+                        
                         <div class="card my-4">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                                 <div class="bg-gradient-primary shadow-primary border-radius-lg pt-3 pb-2">
                                     <h5 class="text-white text-capitalize ps-3">Tindakan table</h5>
+                                </div>
+                                <div class=" me-3 my-3 text-end">
+                                    <a class="btn bg-gradient-dark mb-0" href="javascript:;"><i
+                                            class="material-icons text-sm">add</i>&nbsp;&nbsp;Add New
+                                        Tindakan</a>
                                 </div>
                             </div>
                             <div class="card-body px-0 pb-2">

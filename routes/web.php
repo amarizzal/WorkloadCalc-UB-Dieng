@@ -39,6 +39,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')
     ->group(function () {
         Route::get('/', [HomeController::class, 'admin'])->name('admin.dashboard');
         Route::get('/master-user', [MasterController::class, 'masterUser'])->name('admin.master-user');
+        Route::post('/master-user-post', [MasterController::class, 'masterUserStore'])->name('admin.master-user-post');
+        Route::post('/master-user/import', [MasterController::class, 'masterUserImport'])->name('admin.master-user-import');
+        Route::get('/master-user/template', [MasterController::class, 'downloadTemplate'])->name('admin.master-user-template');
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
     

@@ -8,6 +8,16 @@ use App\Models\User;
 use App\Models\TindakanWaktu;
 use App\Models\Ruangan;
 use App\Models\ShiftKerja;
+use App\Models\JenisKelamin; // Pastikan model JenisKelamin sudah di-import
+use Carbon\Carbon;
+use App\Exports\UserTemplateExport;  // Import UserTemplateExport
+// Pastikan model yang digunakan sudah di-import
+use Illuminate\Support\Facades\Storage;
+
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
 
 class MasterController extends Controller
@@ -15,8 +25,129 @@ class MasterController extends Controller
    public function masterUser()
 {
     $users = User::with(['jenisKelamin', 'ruangan'])->get();  // Eager load relasi jenisKelamin dan ruangan
+    $jenisKelamin = JenisKelamin::all(); // Ambil jenis kelamin yang unik
+    $ruangan = Ruangan::all(); // Ambil semua data ruangan
+    return view('pages.master-user', compact('users', 'jenisKelamin', 'ruangan'));
+}
+
+   public function masterUserStore(Request $request)
+{
+    // Validasi input
+    request()->validate([
+        'role' => 'required|string|max:255',
+        'username' => 'required|string|max:255',
+        'password' => 'required|string|max:255',
+        'nama_lengkap' => 'required|string|max:255',
+        'email' => 'required|email|max:255|unique:users,email',
+        'nomor_telepon' => 'required|string|max:15',
+        'jenis_kelamin_id' => 'required|int|max:15',
+        'ruangan_id' => 'required|int|max:15',
+        'tanggal_lahir' => 'required|date',
+        'lama_bekerja' => 'required|numeric',
+        'posisi' => 'required|string|max:255',
+        'pendidikan' => 'required|string|max:255',
+        'level' => 'required|string|max:255',
+        'status' => 'required|string|max:255',
+        'foto' => 'required|image|max:2048',
+    ]);
+
+    // create data user
+    $user = User::create([
+        'role' => request('role'),
+        'nama_lengkap' => request('nama_lengkap'),
+        'password' => bcrypt(request('password')),
+        'username' => request('username'),
+        'email' => request('email'),
+        'ruangan_id' => request('ruangan_id'),
+        'jenis_kelamin_id' => request('jenis_kelamin_id'),
+        'nomor_telepon' => request('nomor_telepon'),
+        'tanggal_lahir' => Carbon::parse(request('tanggal_lahir'))->toDateString(),
+        'lama_bekerja' => request('lama_bekerja'),
+        'posisi' => request('posisi'),
+        'pendidikan' => request('pendidikan'),
+        'level' => request('level'),
+        'status' => request('status'),
+    ]);
+
+
+    // sotre foto jika ada
+    if (request()->hasFile('foto')) {
+        $foto = request()->file('foto');
+        $fotoPath = $foto->storeAs('user_photos', $user->id . '.' . $foto->getClientOriginalExtension(), 'public');
+        $user->foto = $fotoPath; // simpan 'user_photos/12.jpg'
+        $user->save();
+    }
+
+    session()->flash('success', 'User berhasil dibuat.');
+    // Redirect ke halaman profil
     return view('pages.master-user', compact('users'));
 }
+
+   public function masterUserImport(Request $request)
+{
+    // Validasi file
+        $request->validate([
+            'excel' => 'required|mimes:xlsx,xls'
+        ]);
+
+        $file = $request->file('excel');
+
+        // Baca file Excel
+        $data = Excel::toArray([], $file);
+
+        // Ambil sheet pertama
+        $rows = $data[0];
+
+        // Lewati header (asumsi baris pertama adalah header)
+        foreach (array_slice($rows, 1) as $index => $row) {
+            if (!isset($row[2])) continue; // pastikan ada kolom username
+
+            // Validasi username unik
+            if (User::where('username', $row[2])->exists()) {
+                return back()->withErrors([
+                    "Excel row " . ($index + 2) . ": username '{$row[2]}' already exists."
+                ]);
+            }
+
+            // get jenis_kelamin_id dan ruangan_id
+            $jenisKelamin = JenisKelamin::where('nama', $row[6])->first();
+            $ruangan = Ruangan::where('nama_ruangan', $row[5])->first();
+
+            if (!$jenisKelamin || !$ruangan) {
+                return back()->withErrors([
+                    "Excel row " . ($index + 2) . ": Invalid jenis_kelamin or ruangan."
+                ]);
+            }
+
+
+            // Buat user
+            User::create([
+                'role' => $row[0],
+                'nama_lengkap' => $row[1],
+                'username' => $row[2],
+                'email' => $row[3],
+                'password' => bcrypt($row[4]),
+                'ruangan_id' => $ruangan->id,
+                'jenis_kelamin_id' => $jenisKelamin->id,
+                'nomor_telepon' => $row[7],
+                'tanggal_lahir' => Carbon::parse($row[8])->toDateString(),
+                'lama_bekerja' => $row[9],
+                'posisi' => $row[10],
+                'pendidikan' => $row[11],
+                'level' => $row[12],
+                'status' => $row[13],
+            ]);
+        }
+
+        return back()->with('success', 'Users imported successfully!');
+
+}
+
+// Export template
+    public function downloadTemplate()
+    {
+        return Excel::download(new UserTemplateExport, 'template_users.xlsx');
+    }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -114,6 +114,7 @@ Route::middleware(['auth', 'role:perawat'])->prefix('perawat')
         // routes/web.php
         Route::post('/tindakan/store', [PerawatController::class, 'storeTindakanLain'])->name('tindakan.store');
         Route::post('/tindakan/store-tambahan', [PerawatController::class, 'storeTindakanTambahan'])->name('tindakan.storeTambahan');
+        Route::post('/tindakan/store-pokok', [PerawatController::class, 'storeTindakanPokok'])->name('tindakan.storePokok');
         Route::get('/tindakan', [PerawatController::class, 'tindakan'])->name('tindakan');
         
         // TINDKAN TAMBAHAN

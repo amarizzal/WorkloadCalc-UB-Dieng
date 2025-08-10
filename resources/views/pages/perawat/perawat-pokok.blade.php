@@ -218,6 +218,57 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card my-4">
+                            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                                <div class="bg-gradient-primary shadow-primary border-radius-lg pt-3 pb-2">
+                                    <h5 class="text-white text-capitalize ps-3">Tambah Manual</h5>
+                                </div>
+                            </div>
+                            <div class="card-body px-3 pb-2">
+                                <section class="container my-1">
+                                    <h5 class="card-title text-center mb-3">Pilih Jenis Tindakan Pokok</h5>
+                                    <form action="{{ route('perawat.tindakan.storePokok') }}" method="POST">
+                                        @csrf
+                                        <div class="mb-3 input-group input-group-outline">
+                                            <div class="mt-4">
+                                        <h5>Pilih Jenis Tindakan</h5>
+                                        <div class="form-group">
+                                            <select class="form-control tindakan-select" id="tindakanSelect2" name="tindakan_id">
+                                                <option value="" disabled selected>Pilih Tindakan</option>
+                                                @foreach ($tindakanWaktu as $tindakan)
+                                                    <option value="{{ $tindakan->id }}">
+                                                        {{ $tindakan->tindakan }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                        </div>
+
+                                        <input type="hidden" name="waktu" value="0">
+                                        <input type="hidden" name="status" value="Tugas Pokok">
+
+                                        <div class="mb-3 input-group input-group-static">
+                                            <label for="tanggal">Tanggal</label>
+                                            <input type="date" class="form-control" name="tanggal" required>
+                                        </div>
+                                        <div class="mb-3 input-group input-group-static">
+                                            <label for="jam_mulai" >Jam Mulai</label>
+                                            <input type="time" class="form-control" name="jam_mulai" placeholder="" required>
+                                        </div>
+                                        <div class="mb-3 input-group input-group-static">
+                                            <label for="jam_berhenti" >Jam Berhenti</label>
+                                            <input type="time" class="form-control" name="jam_berhenti" placeholder="" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary w-100">Simpan Tindakan</button>
+                                    </form>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <x-footers.auth></x-footers.auth>
             </div>
         </main>
@@ -228,6 +279,12 @@
             $(document).ready(function() {
                 $('.tindakan-select').select2({
                     placeholder: "Cari atau pilih tindakan",
+                    allowClear: true,
+                    width: 'resolve',
+                    dropdownCssClass: "custom-select2-dropdown"
+                });
+                $('.tindakan-select2').select2({
+                    placeholder: "Pilih tindakan",
                     allowClear: true,
                     width: 'resolve',
                     dropdownCssClass: "custom-select2-dropdown"

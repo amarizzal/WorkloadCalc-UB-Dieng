@@ -402,6 +402,54 @@ class PerawatController extends Controller
         return redirect()->route('perawat.hasil');
     }
 
+    public function storeTindakanPokok(Request $request)
+    {
+        
+        $validated = $request->validate([
+            'tindakan_id' => 'required|exists:tindakan_waktu,id',
+            // 'shift_id' => 'required|exists:shift_kerja,id',
+        ]);
+
+        
+
+        // Ambil waktu yang diinputkan
+        // $waktu = $request->input('waktu');
+
+        // Gunakan getShiftByJamMulai untuk mendapatkan shift berdasarkan jam_mulai yang dimasukkan
+        $jamMulaiInput = Carbon::parse($request->input('jam_mulai'))->format('H:i'); // Ambil jam mulai saat ini
+        $shiftId = $this->getShiftByJamMulai($jamMulaiInput);
+    
+        // Pastikan shift ditemukan
+        if (!$shiftId) {
+            session()->flash('error', 'Shift tidak ditemukan untuk waktu sekarang.');
+            dd('Shift tidak ditemukan untuk waktu sekarang.');
+            return redirect()->back();
+        }
+    
+    
+        // Menambahkan tanggal pada jam_mulai dan jam_berhenti
+        $tanggal = $request->input('tanggal');
+        $jamMulai = Carbon::parse($tanggal . ' ' . $request->input('jam_mulai') . ':00');
+        $jamBerhenti = Carbon::parse($tanggal . ' ' . $request->input('jam_berhenti') . ':00');
+    
+        // Hitung durasi dalam detik (selisih antara jam_berhenti dan jam_mulai)
+        $durasi = Carbon::parse($jamMulai)->diffInSeconds($jamBerhenti);
+
+        $laporan = LaporanTindakanPerawat::create([
+            'user_id' => auth()->user()->id,
+            'ruangan_id' => auth()->user()->ruangan_id,
+            'shift_id' => $shiftId,
+            'tindakan_id' => $validated['tindakan_id'],
+            'tanggal' => $tanggal,
+            'jam_mulai' => $jamMulai,
+            'jam_berhenti' => $jamBerhenti,
+            'durasi' => $durasi,
+        ]);
+    
+        session()->flash('success', 'Tindakan tambahan berhasil ditambahkan.');
+        return redirect()->route('perawat.hasil');
+    }
+
     public function getTindakanIdTambahan()
     {
         // Ambil ID tindakan 'Tambahan' dari tabel tindakan_waktu

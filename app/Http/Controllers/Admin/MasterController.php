@@ -164,15 +164,14 @@ public function storeTindakan(Request $request)
     // Validasi inputan yang diterima dari form
     $request->validate([
         'tindakan' => 'required|string|max:255', // Pastikan kolom tindakan ada dan berupa string
-        'waktu' => 'required|integer|min:1',
         'status' => 'required|string',     // Pastikan kolom waktu ada dan merupakan angka positif
     ]);
 
     // Menyimpan data Tindakan dan Waktu ke database
     TindakanWaktu::create([
         'tindakan' => $request->tindakan,   // Menyimpan data tindakan dari form
-        'waktu' => $request->waktu,
         'status' => $request->status,         // Menyimpan data waktu dari form
+        'waktu' => 0,           
     ]);
 
     // Mengarahkan kembali ke halaman master tindakan dengan pesan sukses

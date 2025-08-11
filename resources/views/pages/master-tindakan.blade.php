@@ -13,10 +13,10 @@
                                 <div class="bg-gradient-primary shadow-primary border-radius-lg pt-3 pb-2">
                                     <h5 class="text-white text-capitalize ps-3">Tindakan table</h5>
                                 </div>
-                                <div class=" me-3 my-3 text-end">
-                                    <a class="btn bg-gradient-dark mb-0" href="javascript:;"><i
-                                            class="material-icons text-sm">add</i>&nbsp;&nbsp;Add New
-                                        Tindakan</a>
+                                <div id="button-add" class=" me-3 my-4 text-end">
+                                    <button type="button" class="btn bg-gradient-dark mb-0" data-bs-toggle="modal" data-bs-target="#modal-form"><i
+                                            class="material-icons text-sm">add</i>&nbsp;&nbsp;Tambah
+                                        </button>
                                 </div>
                             </div>
                             <div class="card-body px-0 pb-2">
@@ -81,7 +81,39 @@
                     </div>
                 </div>
                 <x-footers.auth></x-footers.auth>
-            </div>
+                    <div class="modal fade" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="modal-form" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                        <div class="modal-body p-0">
+                            <div class="card card-plain">
+                            <div class="card-header pb-0 text-left">
+                                <h5 class="">Tambah Tindakan</h5>
+                                <p class="mb-0">Masukkan informasi tindakan baru</p>
+                            </div>
+                            <div class="card-body">
+                                <form action="{{ route('admin.master.tindakan.store') }}" method="POST" >
+                                    @csrf
+
+                                    <div class="mb-3 input-group input-group-static">
+                                        <label for="status" >Jenis</label>
+                                        <select name="status" id="status" class="form-control" >
+                                            <option value="" disabled selected>Pilih Jenis Tindakan</option>
+                                            <option value="Tugas Pokok" >Tugas Pokok</option>
+                                            <option value="Tugas Penunjang" >Tugas Penunjang</option>
+                                            <option value="tambahan" >Tugas Tambahan</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 input-group input-group-static">
+                                        <label for="username">Tindakan</label>
+                                        <input type="text" class="form-control" name="tindakan" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">Simpan</button>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         </main>
 
         @push('js')

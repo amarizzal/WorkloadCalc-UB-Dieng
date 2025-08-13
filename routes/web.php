@@ -82,8 +82,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')
         Route::get('/laporan4', [LaporanController::class, 'index4'])->name('admin.laporan.index4');
         Route::get('/laporan5', [LaporanController::class, 'index5'])->name('admin.laporan.index5');
         Route::get('/laporan6', [LaporanController::class, 'index6'])->name('admin.laporan.index6');
+        Route::get('/laporan7', [LaporanController::class, 'index7'])->name('admin.laporan.index7');
         Route::get('/laporan/detail-tindakan/{tindakanId}/{userId}', [LaporanController::class, 'detailTindakan'])->name('admin.laporan.detailTindakan');
         Route::get('/laporan/analisa-data/{userId}', [LaporanController::class, 'analisaData'])->name('admin.laporan.analisaData');
+        Route::get('/laporan/analisa-data-semua', [LaporanController::class, 'analisaDataSemua'])->name('admin.laporan.analisaDataSemua');
 
         // DATA RUMAH SAKIT
         Route::get('/data-rumah-sakit', [HospitalController::class, 'index'])->name('admin.data-rumah-sakit');

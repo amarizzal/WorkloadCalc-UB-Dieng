@@ -394,6 +394,10 @@ class LaporanController extends Controller
         return view('pages.laporan-perawat', compact('users', 'selectedUserId', 'rataRataWaktu', 'swl', 'laporan', 'tindakanGrouped', 'tindakanPokok'));
     }
 
+    public function index7(Request $request) {
+        return view('pages.laporan-beban');
+    }
+
     public function detailTindakan($tindakanId, $userId)
     {
         try {
@@ -708,4 +712,157 @@ class LaporanController extends Controller
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
+
+    
+    public function analisaDataSemua(Request $request)
+    {
+        try {
+            $tanggalAwal = $request->query('tanggalAwal');
+            $tanggalAkhir = $request->query('tanggalAkhir');
+
+            // Ambil semua laporan dengan filter tanggal
+            $laporanQuery = LaporanTindakanPerawat::with(['tindakan', 'user']);
+            if ($tanggalAwal && $tanggalAkhir) {
+                $laporanQuery->whereBetween('tanggal', [
+                    $tanggalAwal . " 00:00:00",
+                    $tanggalAkhir . " 23:59:59"
+                ]);
+            }
+            $semuaLaporan = $laporanQuery->get();
+
+            // Ambil semua perawat unik dari laporan
+            $daftarPerawat = $semuaLaporan->pluck('user')->unique('id');
+
+            $hasilAnalisa = [];
+
+            foreach ($daftarPerawat as $perawat) {
+                $userId = $perawat->id;
+
+                // Filter laporan per user
+                $laporanUser = $semuaLaporan->where('user_id', $userId);
+
+                // Pisahkan berdasarkan status
+                $laporanPenunjang = $laporanUser->where('tindakan.status', 'Tugas Penunjang');
+                $laporanPokok     = $laporanUser->where('tindakan.status', 'Tugas Pokok');
+                $laporanTambahan  = $laporanUser->where('tindakan.status', 'tambahan');
+
+                // Data rumah sakit
+                $hospitalTime = $this->getHospitalWorkingHours();
+
+                // ===== Hitung rata-rata waktu per tindakan penunjang =====
+                $tindakanPenunjang = TindakanWaktu::where('status', 'Tugas Penunjang')->get();
+                $rataRataWaktu = [];
+                foreach ($tindakanPenunjang as $tindakan) {
+                    $laporanTindakan = $laporanPenunjang->where('tindakan_id', $tindakan->id);
+                    $totalDurasi = $laporanTindakan->sum('durasi');
+                    $jumlahTindakan = $laporanTindakan->count();
+                    $rataRataWaktu[$tindakan->id] = $jumlahTindakan > 0
+                        ? ($totalDurasi / $jumlahTindakan) / 60
+                        : 0;
+                }
+
+                // ===== Hitung SWL =====
+                $jamTersediaPerTahun = 2000;
+                $swl = [];
+                foreach ($rataRataWaktu as $tindakanId => $rataWaktu) {
+                    $swl[$tindakanId] = $rataWaktu > 0 ? $jamTersediaPerTahun / ($rataWaktu / 60) : 0;
+                }
+
+                // ===== Hitung Faktor =====
+                $totalFaktor = 0;
+                foreach ($tindakanPenunjang as $tindakan) {
+                    if ($tindakan->satuan == 'jam') {
+                        $totalWaktu = $tindakan->waktu;
+                    } elseif ($tindakan->satuan == 'menit') {
+                        $totalWaktu = $tindakan->waktu / 60;
+                    } elseif ($tindakan->satuan == 'hari') {
+                        $totalWaktu = $tindakan->waktu * 24;
+                    } else {
+                        $totalWaktu = 0;
+                    }
+
+                    if ($tindakan->kategori == 'harian') {
+                        $totalWaktu *= 264;
+                    } elseif ($tindakan->kategori == 'mingguan') {
+                        $totalWaktu *= 52;
+                    } elseif ($tindakan->kategori == 'bulanan') {
+                        $totalWaktu *= 12;
+                    }
+
+                    $faktor = $totalWaktu > 0 ? ($totalWaktu / $hospitalTime) * 100 : 0;
+                    $totalFaktor += $faktor;
+                }
+                $averageFaktor = count($tindakanPenunjang) > 0 ? $totalFaktor / count($tindakanPenunjang) : 0;
+                $AF = number_format(1 / (1 - ($averageFaktor / 100)), 2);
+
+                // ===== Hitung Total Waktu Kerja (totalHasil) =====
+                $totalWaktuKerja = 0;
+                $groupedTindakanPokok = $laporanPokok->groupBy('tindakan_id');
+                foreach ($groupedTindakanPokok as $tindakan) {
+                    $totalJamTindakan = 0;
+                    foreach ($tindakan as $items) {
+                        $mulai = \Carbon\Carbon::parse($items->jam_mulai);
+                        $berhenti = \Carbon\Carbon::parse($items->jam_berhenti);
+                        $totalJamTindakan += $mulai->floatDiffInHours($berhenti);
+                    }
+                    $frequency = $tindakan->count();
+                    $totalWaktuKerja += number_format(($totalJamTindakan * $frequency), 2);
+                }
+
+                // ===== Hitung IAF (Tugas Tambahan) =====
+                $totalTindakanTambahan = [];
+                $totalWaktuTambahan = 0;
+                foreach ($laporanTambahan as $tindakan) {
+                    $namaTindakan = $tindakan->tindakan->tindakan ?? 'Tidak Ada Data';
+                    $durasi = $tindakan->durasi ?? 0;
+
+                    if (!isset($totalTindakanTambahan[$namaTindakan])) {
+                        $totalTindakanTambahan[$namaTindakan] = [
+                            'frequency' => 0,
+                            'durasi' => 0
+                        ];
+                    }
+                    $totalTindakanTambahan[$namaTindakan]['frequency']++;
+                    $totalTindakanTambahan[$namaTindakan]['durasi'] += $durasi;
+                }
+                foreach ($totalTindakanTambahan as $tindakanData) {
+                    $totalWaktuTambahan += $tindakanData['durasi'];
+                }
+                $IAF = $totalWaktuTambahan / $hospitalTime;
+
+                // ===== Hitung Beban Kerja =====
+                $result = (($totalWaktuKerja * $AF) / $hospitalTime) + $IAF;
+
+                // Simpan ke DB
+                RecordAnalisaData::updateOrCreate(
+                    ['user_id' => $userId],
+                    [
+                        'tanggal_awal' => $tanggalAwal,
+                        'tanggal_akhir' => $tanggalAkhir,
+                        'total_waktu_kerja' => $totalWaktuKerja,
+                        'beban_kerja' => $result,
+                    ]
+                );
+
+                // Simpan hasil untuk respon
+                $hasilAnalisa[] = [
+                    'user' => $perawat,
+                    'total_waktu_kerja' => $totalWaktuKerja,
+                    'AF' => $AF,
+                    'IAF' => $IAF,
+                    'result' => $result,
+                    'averageFaktor' => $averageFaktor
+                ];
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $hasilAnalisa
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error analisaDataSemua:', ['error' => $e->getMessage()]);
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
 }

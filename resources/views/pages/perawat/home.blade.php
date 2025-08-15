@@ -23,7 +23,7 @@
 
         <div class="container-fluid py-4">
             <div class="row mt-4">
-                <div class="col-lg-4 col-6 col-md-6 mt-4 mb-4 d-flex">
+                <div class="col-lg-6 col-6 col-md-6 mt-4 mb-4 d-flex">
                     <a class="h-100 w-100" href="{{ route('perawat.profil.password') }}">
                         <div class="card z-index-2 "  style="height: 100%">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
@@ -43,7 +43,7 @@
 
                     </a>
                 </div>
-                <div class="col-lg-4 col-6 col-md-6 mt-4 mb-4 d-flex">
+                <div class="col-lg-6 col-6 col-md-6 mt-4 mb-4 d-flex">
                     <a class="h-100 w-100" href="#">
                         <div class="card z-index-2  " style="height: 100%">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
@@ -58,7 +58,7 @@
                         </div>
                     </a>
                 </div>
-                <div class="col-lg-4 col-6 mt-4 mb-3 d-flex">
+                <div class="col-lg-6 col-6 mt-4 mb-3 d-flex">
                     <a class="h-100 w-100" href="{{ route('perawat.keamananprivasi') }}">
                         <div class="card z-index-2 " style="height: 100%">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
@@ -74,7 +74,7 @@
 
                     </a>
                 </div>
-                <div class="col-lg-4 col-6 mt-4 mb-3 d-flex">
+                <div class="col-lg-6 col-6 mt-4 mb-3 d-flex">
                     <a class="h-100 w-100" href="{{ route('perawat.tentangkami') }}">
                         <div class="card z-index-2 " style="height: 100%">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">

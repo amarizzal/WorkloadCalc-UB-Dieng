@@ -14,6 +14,10 @@
                                 </div>
                             </div>
                             <div class="card-body px-0 pb-2">
+                                <div id="button-add" class=" me-3 my-2 text-end">
+                                    <button type="button" class="btn bg-gradient-dark mb-0" data-bs-toggle="modal" data-bs-target="#modal-form"><i
+                                            class="material-icons text-sm">add</i>&nbsp;&nbsp;Tambah</button>
+                                </div>
                                 <div class="table-responsive p-0">
                                     <table id="author_table" class="table align-items-center mb-0">
                                         <thead>
@@ -40,16 +44,11 @@
                                                     </div>
                                                 </td>
                                                 <td class="align-middle">
-                                                    <a href="javascript:;"
-                                                        class="text-warning font-weight-bold text-xs"
-                                                        data-toggle="tooltip" data-original-title="Edit user">
-                                                        Ubah
-                                                    </a>
-                                                    <a href="javascript:;"
-                                                        class="ms-4 text-danger font-weight-bold text-xs"
-                                                        data-toggle="tooltip" data-original-title="Edit user">
-                                                        Hapus
-                                                    </a>
+                                                    <form action="{{ route('master.ruangan.delete', $shift->id) }}" method="POST" style="display:inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="ms-4 btn btn-danger font-weight-bold text-xs">Hapus</button>
+                                                    </form>
                                                 </td>
                                             </tr>
                                             @endforeach
@@ -61,6 +60,32 @@
                     </div>
                 </div>
                 <x-footers.auth></x-footers.auth>
+                <div class="modal fade" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="modal-form" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                        <div class="modal-body p-0">
+                            <div class="card card-plain">
+                            <div class="card-header pb-0 text-left">
+                                <h5 class="">Tambah Ruangan</h5>
+                                <p class="mb-0">Masukkan informasi ruangan baru</p>
+                            </div>
+                            <div class="card-body">
+                                <form action="{{ route('master.ruangan.store') }}" method="POST" >
+                                    @csrf
+
+                                    <div class="mb-3 input-group input-group-static">
+                                        <label for="nama_ruangan">Nama Ruangan</label>
+                                        <input type="text" class="form-control" name="nama_ruangan" required>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary w-100">Simpan</button>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </main>
 

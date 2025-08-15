@@ -14,6 +14,10 @@
                                 </div>
                             </div>
                             <div class="card-body px-0 pb-2">
+                                <div id="button-add" class=" me-3 my-2 text-end">
+                                    <button type="button" class="btn bg-gradient-dark mb-0" data-bs-toggle="modal" data-bs-target="#modal-form"><i
+                                            class="material-icons text-sm">add</i>&nbsp;&nbsp;Tambah</button>
+                                </div>
                                 <div class="table-responsive p-0">
                                     <table id="author_table" class="table align-items-center mb-0">
                                         <thead>
@@ -67,6 +71,40 @@
                     </div>
                 </div>
                 <x-footers.auth></x-footers.auth>
+                <div class="modal fade" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="modal-form" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                        <div class="modal-body p-0">
+                            <div class="card card-plain">
+                            <div class="card-header pb-0 text-left">
+                                <h5 class="">Tambah Shift</h5>
+                                <p class="mb-0">Masukkan informasi shift baru</p>
+                            </div>
+                            <div class="card-body">
+                                <form action="{{ route('admin.master.shiftkerja.store') }}" method="POST" >
+                                    @csrf
+
+                                    <div class="mb-3 input-group input-group-static">
+                                        <label for="nama_shift">Nama Shift</label>
+                                        <input type="text" class="form-control" name="nama_shift" required>
+                                    </div>
+
+                                    <div class="mb-3 input-group input-group-static">
+                                        <label for="waktu_mulai">Waktu Mulai</label>
+                                        <input type="time" class="form-control" name="jam_mulai" required>
+                                    </div>
+
+                                    <div class="mb-3 input-group input-group-static">
+                                        <label for="waktu_selesai">Waktu Selesai</label>
+                                        <input type="time" class="form-control" name="jam_selesai" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">Simpan</button>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
 

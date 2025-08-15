@@ -345,6 +345,6 @@ public function deleteRuangan($id)
     // Menampilkan view master panduan
     public function masterPanduan()
     {
-        return view('admin.master.masterpanduan');
+        return view('pages.master-panduan');
     }
 }

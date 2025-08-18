@@ -44,7 +44,7 @@
                     </a>
                 </div>
                 <div class="col-lg-6 col-6 col-md-6 mt-4 mb-4 d-flex">
-                    <a class="h-100 w-100" href="#">
+                    <a class="h-100 w-100" href="{{ route('perawat.panduan') }}">
                         <div class="card z-index-2  " style="height: 100%">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
                                 <div class="bg-gradient-primary shadow-success border-radius-lg py-3 pe-1 text-center" style="min-height: 7rem">

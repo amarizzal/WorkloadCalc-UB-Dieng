@@ -64,7 +64,7 @@ class PerawatController extends Controller
 
     public function panduan()
     {
-        return view('perawat.layouts.home.panduan');
+        return view('pages.perawat.perawat-panduan');
     }
 
     public function pengaturan()

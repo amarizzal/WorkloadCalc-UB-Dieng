@@ -42,6 +42,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')
         Route::post('/master-user-post', [MasterController::class, 'masterUserStore'])->name('admin.master-user-post');
         Route::post('/master-user/import', [MasterController::class, 'masterUserImport'])->name('admin.master-user-import');
         Route::get('/master-user/template', [MasterController::class, 'downloadTemplate'])->name('admin.master-user-template');
+        Route::delete('/master-user/delete/{id}', [MasterController::class, 'deleteUser'])->name('admin.master.user.delete');
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
     

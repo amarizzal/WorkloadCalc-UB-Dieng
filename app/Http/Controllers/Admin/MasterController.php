@@ -83,6 +83,18 @@ class MasterController extends Controller
     return view('pages.master-user', compact('users'));
 }
 
+public function deleteUser($id)
+{
+    $user = User::find($id);
+
+    if ($user) {
+        $user->delete();
+        return redirect()->route('admin.master-user')->with('success', 'User berhasil dihapus!');
+    }
+
+    return redirect()->route('admin.master-user')->with('error', 'User tidak ditemukan!');
+}
+
    public function masterUserImport(Request $request)
 {
     // Validasi file

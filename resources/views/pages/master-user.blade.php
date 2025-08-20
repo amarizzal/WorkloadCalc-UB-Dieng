@@ -74,16 +74,16 @@
                                                         class="text-secondary text-xs font-weight-bold">{{ $user->created_at }}</span>
                                                 </td>
                                                 <td class="align-middle">
-                                                    <a href="javascript:;"
-                                                        class="text-warning font-weight-bold text-xs"
+                                                    {{-- <button href="javascript:;"
+                                                        class="btn btn-warning btn-sm"
                                                         data-toggle="tooltip" data-original-title="Edit user">
                                                         Ubah
-                                                    </a>
-                                                    <a href="javascript:;"
-                                                        class="ms-4 text-danger font-weight-bold text-xs"
-                                                        data-toggle="tooltip" data-original-title="Edit user">
-                                                        Hapus
-                                                    </a>
+                                                    </button> --}}
+                                                    <form action="{{ route('admin.master.user.delete', $user->id) }}" method="POST" style="display:inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                                    </form>
                                                 </td>
                                             </tr>
                                             @endforeach

@@ -60,16 +60,11 @@
                                                     @endif
                                                 </td>
                                                 <td class="align-middle">
-                                                    <a href="javascript:;"
-                                                        class="text-warning font-weight-bold text-xs"
-                                                        data-toggle="tooltip" data-original-title="Edit user">
-                                                        Ubah
-                                                    </a>
-                                                    <a href="javascript:;"
-                                                        class="ms-4 text-danger font-weight-bold text-xs"
-                                                        data-toggle="tooltip" data-original-title="Edit user">
-                                                        Hapus
-                                                    </a>
+                                                    <form action="{{ route('admin.master.tindakan.delete', $item->id) }}" method="POST" style="display:inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                                    </form>
                                                 </td>
                                             </tr>
                                             @endforeach

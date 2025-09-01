@@ -153,7 +153,7 @@
                 <h1 class="text-white fw-bold">Analysis System</h1>
             </div>
             <div class="col-md-6 text-center">
-                <img src="{{asset('images/illustration.gif')}}" alt="Nurse" class="img-fluid mt-4 mt-lg-0 w-50 w-md-75 text-center mx-auto bg-yellow">
+                <img src="{{asset('images/illustration.gif')}}" alt="Nurse" class="img-fluid mt-4 mt-lg-0 w-50 w-md-50 text-center mx-auto bg-yellow">
             </div>
         </div>
     </section>
@@ -182,7 +182,7 @@
                         <p class="text-dark text-sec w-500" style="font-size: 1.5rem">Nursing Workload Analysis System adalah aplikasi digital yang dikembangkan untuk membantu perawat dan manajemen rumah sakit dalam menghitung dan menganalisis beban kerja secara akurat dan efisien. Aplikasi ini dirancang berdasarkan pendekatan ilmiah dan metode <em>Workload Indicators of Staffing Need (WISN)</em> termodifikasi yang direkomendasikan oleh World Health Organization (WHO).</p>
                     </div>
                     <div class="col-md-6 col-12 text-center">
-                        <img src="{{asset('images/Logo nursing workload.png')}}" alt="Logo" class="img-fluid rounded-16 mx-auto my-auto" style="max-height: 300px;" loading="lazy">
+                        <img src="{{asset('images/Logo nursing workload.png')}}" alt="Logo" class="img-fluid w-50 rounded-16 mx-auto my-auto" style="max-height: 300px;" loading="lazy">
                     </div>
                 </div>
                 <a href="{{ route('login')}}" class="btn btn-dark mt-2 text-lg rounded-xl">LEARN MORE</a>
@@ -199,7 +199,7 @@
                 <a href="{{ route('login')}}" class="btn btn-light mt-2 text-lg rounded-xl">AKSES DISINI</a>
             </div>
             <div class="col-md-6 col-12 text-center">
-                <img src="{{ asset('images/3.png')}}" alt="Guide" class="img-fluid mt-4 mt-lg-0 rounded-16" style="max-height: 300px;" loading="lazy">
+                <img src="{{ asset('images/3.png')}}" alt="Guide" class="img-fluid mt-4 mt-lg-0 rounded-16 w-50" style="max-height: 300px;" loading="lazy">
             </div>
         </div>
     </section>

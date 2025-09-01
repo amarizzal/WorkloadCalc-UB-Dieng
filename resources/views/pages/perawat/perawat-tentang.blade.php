@@ -17,20 +17,10 @@
                                 <section class="container my-1">
                                     <h2 class="mb-4">Tentang Kami</h2>
 
-                                    <p><strong>Nursing Workload</strong> merupakan aplikasi berbasis web yang dikembangkan sebagai media bantu dalam menganalisis beban kerja tenaga keperawatan secara objektif dan sistematis. Aplikasi ini mengadaptasi metode Workload Indicators of Staffing Need (WISN) yang dikeluarkan oleh World Health Organization (WHO), dengan tujuan mendukung perencanaan kebutuhan SDM keperawatan yang lebih tepat dan berbasis eviden.</p>
+                                    <p><strong>Nursing Workload</strong> merupakan aplikasi berbasis web yang dikembangkan sebagai media bantu dalam menganalisis beban kerja tenaga keperawatan secara objektif dan sistematis. Aplikasi ini mengadaptasi metode Workload Indicators of Staffing Need (WISN) yang dikeluarkan oleh World Health Organization (WHO), dengan tujuan mendukung perencanaan kebutuhan SDM keperawatan yang lebih tepat dan objektif</p>
 
                                     <p>Aplikasi ini dirancang dan dikembangkan oleh tim mahasiswa dan dosen dari Universitas Brawijaya, dengan latar belakang keilmuan di bidang keperawatan, manajemen rumah sakit, dan teknologi informasi kesehatan. Pengembangan ini merupakan bagian dari upaya untuk menyediakan perangkat digital yang aplikatif, terstandar, dan relevan dengan kebutuhan layanan kesehatan di Indonesia.</p>
 
-                                    <h4>Visi:</h4>
-
-                                    <p>Menjadi platform digital fungsional dalam mendukung pengukuran beban kerja keperawatan yang terintegrasi dan berbasis data.</p>
-
-                                    <h4>Misi:</h4>
-                                    <p class="my-1">1. Mengembangkan aplikasi analisis beban kerja yang valid, reliabel, dan user-friendly.</p>
-                                    <p class="my-1">2. Menyediakan data pendukung pengambilan keputusan terkait perencanaan SDM keperawatan.</p>
-                                    <p class="my-1">3. Mendorong penerapan metode WISN di fasilitas layanan kesehatan melalui platform teknologi.</p>
-                                    <p class="my-1">4. Menjadi sarana pembelajaran dan pengembangan keilmuan di bidang manajemen keperawatan.</p>
-                                    
                                     <h4 class="my-2">Tim Pengembang:</h4>
                                     <div class="row" style="min-height: 10rem">
                                         
@@ -48,10 +38,6 @@
                                                         <h5 class="text-primary">
                                                             Ns. Ike Nesdia Rahmawati
                                                         </h5>
-                                                        <div>
-                                                            <i class="ni education_hat mr-2"></i>NIK: 2016098806052001
-
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -70,10 +56,6 @@
                                                         <h5 class="text-primary">
                                                             Farida Kholishoti Amali
                                                         </h5>
-                                                        <div>
-                                                            <i class="ni education_hat mr-2"></i>NIM. 225170101111022
-
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -92,10 +74,6 @@
                                                         <h5 class="text-primary">
                                                             Tria Armanaena
                                                         </h5>
-                                                        <div>
-                                                            <i class="ni education_hat mr-2"></i>NIM. 225170101111008
-
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

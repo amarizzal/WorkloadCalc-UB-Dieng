@@ -27,7 +27,87 @@
                     <a class="h-100 w-100" href="{{ route('perawat.profil.password') }}">
                         <div class="card z-index-2 "  style="height: 100%">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
-                                <div class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1 text-center" style="min-height: 7rem">
+                                <div class="bg-gradient-info shadow-info border-radius-lg py-3 pe-1 text-center" style="min-height: 7rem">
+                                    <i class="material-icons text-white w-100 my-auto" style="font-size: 5rem">work</i>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-0 font-weight-bolder text-md">Tugas Pokok</p>
+                                <hr class="dark horizontal">
+                                {{-- <div class="d-flex ">
+                                    <i class="material-icons text-sm my-auto me-1">schedule</i>
+                                    <p class="mb-0 text-sm"> campaign sent 2 days ago </p>
+                                </div> --}}
+                            </div>
+                        </div>
+
+                    </a>
+                </div>
+                <div class="col-lg-6 col-6 col-md-6 mt-4 mb-4 d-flex">
+                    <a class="h-100 w-100" href="{{ route('perawat.profil.password') }}">
+                        <div class="card z-index-2 "  style="height: 100%">
+                            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+                                <div class="bg-gradient-success shadow-success border-radius-lg py-3 pe-1 text-center" style="min-height: 7rem">
+                                    <i class="material-icons text-white w-100 my-auto" style="font-size: 5rem">cases</i>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-0 font-weight-bolder text-md">Tugas Penunjang</p>
+                                <hr class="dark horizontal">
+                                {{-- <div class="d-flex ">
+                                    <i class="material-icons text-sm my-auto me-1">schedule</i>
+                                    <p class="mb-0 text-sm"> campaign sent 2 days ago </p>
+                                </div> --}}
+                            </div>
+                        </div>
+
+                    </a>
+                </div>
+                <div class="col-lg-6 col-6 col-md-6 mt-4 mb-4 d-flex">
+                    <a class="h-100 w-100" href="{{ route('perawat.profil.password') }}">
+                        <div class="card z-index-2 "  style="height: 100%">
+                            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+                                <div class="bg-gradient-danger shadow-danger border-radius-lg py-3 pe-1 text-center" style="min-height: 7rem">
+                                    <i class="material-icons text-white w-100 my-auto" style="font-size: 5rem">add_box</i>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-0 font-weight-bolder text-md">Tugas Tambahan</p>
+                                <hr class="dark horizontal">
+                                {{-- <div class="d-flex ">
+                                    <i class="material-icons text-sm my-auto me-1">schedule</i>
+                                    <p class="mb-0 text-sm"> campaign sent 2 days ago </p>
+                                </div> --}}
+                            </div>
+                        </div>
+
+                    </a>
+                </div>
+                <div class="col-lg-6 col-6 col-md-6 mt-4 mb-4 d-flex">
+                    <a class="h-100 w-100" href="{{ route('perawat.profil.password') }}">
+                        <div class="card z-index-2 "  style="height: 100%">
+                            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+                                <div class="bg-gradient-warning shadow-warning border-radius-lg py-3 pe-1 text-center" style="min-height: 7rem">
+                                    <i class="material-icons text-white w-100 my-auto" style="font-size: 5rem">table_view</i>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-0 font-weight-bolder text-md">Hasil</p>
+                                <hr class="dark horizontal">
+                                {{-- <div class="d-flex ">
+                                    <i class="material-icons text-sm my-auto me-1">schedule</i>
+                                    <p class="mb-0 text-sm"> campaign sent 2 days ago </p>
+                                </div> --}}
+                            </div>
+                        </div>
+
+                    </a>
+                </div>
+                <div class="col-lg-6 col-6 col-md-6 mt-4 mb-4 d-flex">
+                    <a class="h-100 w-100" href="{{ route('perawat.profil.password') }}">
+                        <div class="card z-index-2 "  style="height: 100%">
+                            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+                                <div class="bg-gradient-secondary shadow-secondary border-radius-lg py-3 pe-1 text-center" style="min-height: 7rem">
                                     <i class="material-icons text-white w-100 my-auto" style="font-size: 5rem">key</i>
                                 </div>
                             </div>
@@ -47,7 +127,7 @@
                     <a class="h-100 w-100" href="{{ route('perawat.panduan') }}">
                         <div class="card z-index-2  " style="height: 100%">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
-                                <div class="bg-gradient-primary shadow-success border-radius-lg py-3 pe-1 text-center" style="min-height: 7rem">
+                                <div class="bg-gradient-dark shadow-dark border-radius-lg py-3 pe-1 text-center" style="min-height: 7rem">
                                     <i class="material-icons text-white w-100 my-auto" style="font-size: 5rem">help</i>
                                 </div>
                             </div>
@@ -62,7 +142,7 @@
                     <a class="h-100 w-100" href="{{ route('perawat.keamananprivasi') }}">
                         <div class="card z-index-2 " style="height: 100%">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
-                                <div class="bg-gradient-primary shadow-dark border-radius-lg py-3 pe-1 text-center" style="min-height: 7rem">
+                                <div class="bg-gradient-info shadow-info border-radius-lg py-3 pe-1 text-center" style="min-height: 7rem">
                                     <i class="material-icons text-white w-100 my-auto" style="font-size: 5rem">security</i>
                                 </div>
                             </div>
@@ -78,7 +158,7 @@
                     <a class="h-100 w-100" href="{{ route('perawat.tentangkami') }}">
                         <div class="card z-index-2 " style="height: 100%">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
-                                <div class="bg-gradient-primary shadow-dark border-radius-lg py-3 pe-1 text-center" style="min-height: 7rem">
+                                <div class="bg-gradient-success shadow-success border-radius-lg py-3 pe-1 text-center" style="min-height: 7rem">
                                     <i class="material-icons text-white w-100 my-auto" style="font-size: 5rem">contact_page</i>
                                 </div>
                             </div>

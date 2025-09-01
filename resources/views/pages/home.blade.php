@@ -150,18 +150,16 @@
         <div class="container px-3 d-flex flex-column flex-lg-row align-items-center justify-content-between">
             <div class="col-md-6">
                 <h1 class="text-yellow fw-bold">Nursing Workload</h1>
-                <h2 class="text-white fw-bold">Calculator</h2>
-                <a href="{{ route('login')}}" class="btn btn-warning mt-3 fw-bold px-4 bg-yellow text-dark text-sec text-lg rounded-xl"
-                    style="border: 5px white dashed">TRY</a>
+                <h1 class="text-white fw-bold">Analysis System</h1>
             </div>
-            <div class="col-md-6">
-                <img src="{{asset('images/illustration.gif')}}" alt="Nurse" class="img-fluid mt-4 mt-lg-0 w-100 bg-yellow">
+            <div class="col-md-6 text-center">
+                <img src="{{asset('images/illustration.gif')}}" alt="Nurse" class="img-fluid mt-4 mt-lg-0 w-50 w-md-75 text-center mx-auto bg-yellow">
             </div>
         </div>
     </section>
 
     <!-- Login Role Section -->
-    <section class="bg-yellow py-5">
+    {{-- <section class="bg-yellow py-5">
         <div class="container d-flex flex-column flex-md-row gap-5 justify-content-center">
             <div class="icon-box text-center">
                 <img src="{{ asset('images/1.png')}}" alt="Admin" style="height: 150px;" loading="lazy">
@@ -172,7 +170,7 @@
                 <h3 class="mt-3 fw-bold text-primary">PERAWAT</h3>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <!-- Tentang Kami -->
     <section class="py-5" style="background-color: #faf1d8">
@@ -181,7 +179,7 @@
                 <div class="row justify-content-center align-items-center">
                     <div class="col-md-6 col-12">
                         <h1 class="fw-bold text-primary">Tentang Kami</h1>
-                        <p class="text-dark text-sec w-500" style="font-size: 1.5rem">Nursing Workload adalah aplikasi digital yang dikembangkan untuk membantu perawat dan manajemen rumah sakit dalam menghitung dan menganalisis beban kerja secara akurat dan efisien. Aplikasi ini dirancang berdasarkan pendekatan ilmiah dan metode <em>Workload Indicators of Staffing Need (WISN)</em> termodifikasi yang direkomendasikan oleh World Health Organization (WHO).</p>
+                        <p class="text-dark text-sec w-500" style="font-size: 1.5rem">Nursing Workload Analysis System adalah aplikasi digital yang dikembangkan untuk membantu perawat dan manajemen rumah sakit dalam menghitung dan menganalisis beban kerja secara akurat dan efisien. Aplikasi ini dirancang berdasarkan pendekatan ilmiah dan metode <em>Workload Indicators of Staffing Need (WISN)</em> termodifikasi yang direkomendasikan oleh World Health Organization (WHO).</p>
                     </div>
                     <div class="col-md-6 col-12 text-center">
                         <img src="{{asset('images/Logo nursing workload.png')}}" alt="Logo" class="img-fluid rounded-16 mx-auto my-auto" style="max-height: 300px;" loading="lazy">

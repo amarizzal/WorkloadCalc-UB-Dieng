@@ -386,8 +386,22 @@
                         return;
                     }
 
-                    // Tambahan: konfirmasi jika durasi < 10 detik
-                    if (elapsedTime < 10) {
+                    // Tambahan: konfirmasi jika durasi < 30 detik
+                    if (elapsedTime < 30) {
+                        const confirmSend = confirm(`Durasi baru ${elapsedTime} detik. Yakin ingin mengirim data?`);
+                        if (!confirmSend) {
+                            clearInterval(timerInterval);
+                            timerText.textContent = "00:00";
+                            elapsedTime = 0;
+
+                            startButton.disabled = false;
+                            stopButton.disabled = true;
+                            return;
+                        }
+                    }
+
+                    // Tambahan: konfirmasi jika durasi > 15 menit
+                    if (elapsedTime > 900) {
                         const confirmSend = confirm(`Durasi baru ${elapsedTime} detik. Yakin ingin mengirim data?`);
                         if (!confirmSend) {
                             clearInterval(timerInterval);

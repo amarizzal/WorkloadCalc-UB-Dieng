@@ -73,9 +73,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         Route::get('/laporan', [LaporanController::class, 'index'])->name('admin.laporan.index');
-        Route::get('/laporan2', 
-        
+        Route::delete('/laporan/delete/{id}', [LaporanController::class, 'deleteLaporan'])->name('admin.laporan.delete');
+
         // tugas pokok
+        Route::get('/laporan2', 
         [LaporanController::class, 'index2'])->name('admin.laporan.index2');
 
         

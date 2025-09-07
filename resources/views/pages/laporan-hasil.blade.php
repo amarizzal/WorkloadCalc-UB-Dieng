@@ -72,6 +72,9 @@
                                                 <th
                                                     class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                     Keterangan</th>
+                                                <th
+                                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                    Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -121,7 +124,14 @@
                                                     <p class="text-xs font-weight-bold mb-0 text-success">{{ floor($data->durasi / 60) }} menit {{ $data->durasi % 60 }} detik</p>
                                                 </td>
                                                 <td class="align-middle text-center text-sm">
-                                                    <p class="text-xs font-weight-bold mb-0">{{ $data->keterangan ?? 'Tidak Ada Keterangan' }}</p>
+                                                    <p class="text-xs font-weight-bold mb-0">{{ $data->keterangan ?? '-' }}</p>
+                                                </td>
+                                                <td class="align-middle">
+                                                    <form action="{{ route('admin.laporan.delete', $data->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus laporan ini?');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                                    </form>
                                                 </td>
                                             </tr>
                                             @endforeach

@@ -27,10 +27,24 @@ class LaporanController extends Controller
     public function index()
     {
         // Mengambil data laporan tindakan perawat beserta relasinya
-        $laporan = LaporanTindakanPerawat::with(['user', 'ruangan', 'shift', 'tindakan'])->get();
+        $laporan = LaporanTindakanPerawat::with(['user', 'ruangan', 'shift', 'tindakan'])->orderBy('tanggal', 'desc')->get();
 
         // Jika sudah benar, kembalikan ke view
         return view('pages.laporan-hasil', compact('laporan'));
+    }
+
+    public function deleteLaporan($id)
+    {
+        $laporan = LaporanTindakanPerawat::find($id);
+        if ($laporan) {
+            $laporan->delete();
+            // Mengambil data laporan tindakan perawat beserta relasinya
+            $laporan = LaporanTindakanPerawat::with(['user', 'ruangan', 'shift', 'tindakan'])->orderBy('tanggal', 'desc')->get();
+            return view('pages.laporan-hasil', compact('laporan'))->with('message', 'Laporan deleted successfully.');
+        }
+        // Mengambil data laporan tindakan perawat beserta relasinya
+        $laporan = LaporanTindakanPerawat::with(['user', 'ruangan', 'shift', 'tindakan'])->orderBy('tanggal', 'desc')->get();
+        return view('pages.laporan-hasil', compact('laporan'))->withErrors(['message' => 'Laporan not found.']);
     }
 
     public function index2(Request $request)

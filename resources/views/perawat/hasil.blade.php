@@ -222,7 +222,7 @@
                         <td class="text-center">
                             {{ number_format($totalJamTindakan * $tindakan->count(), 3) }}
                             @php
-                                $totalHasil += number_format(number_format($totalJamTindakan, 3) * $tindakan->count(), 2)
+                                $totalHasil += number_format($totalJamTindakan * $tindakan->count(), 2)
                             @endphp
                         </td>
                         @php

@@ -204,8 +204,8 @@
 
                                     <!-- Action Buttons -->
                                     <div class="mt-4 text-center">
-                                        <button type="button" class="btn btn-primary me-2" id="startButton">Start</button>
-                                        <button id="stopButton" class="btn btn-danger" disabled>Stop</button>
+                                        <button type="button" class="btn btn-primary me-2" id="toggleButton">Start</button>
+                                        {{-- <button id="stopButton" class="btn btn-danger" disabled>Stop</button> --}}
                                     </div>
 
                                     <!-- Menampilkan waktu berhenti dan durasi -->
@@ -305,38 +305,39 @@
         </script>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-                const startButton = document.getElementById("startButton");
-                const stopButton = document.getElementById("stopButton");
+                // const startButton = document.getElementById("startButton");
+                // const stopButton = document.getElementById("stopButton");
                 const timerText = document.getElementById("timer-text");
                 const timerDetails = document.getElementById("timerDetails");
                 const circleLength = 283; // Panjang keliling lingkaran SVG (misalnya 2 * π * r)
                 const duration = 60; // Dalam detik, 1 menit
                 const progressCircle = document.getElementById("progress-circle");
 
+                // let timerInterval;
+                // let elapsedTime = 0; // Pindahkan ke luar agar bisa diakses di stopButton
+
+                let isRunning = false; 
+                let startTime = null;
                 let timerInterval;
-                let elapsedTime = 0; // Pindahkan ke luar agar bisa diakses di stopButton
+                let elapsedTime = 0;
 
-                // Fungsi untuk memulai timer (menghitung maju)
+                const toggleButton = document.getElementById("toggleButton");
+
                 function startTimer() {
+                    startTime = new Date(); // catat jam mulai lokal
                     elapsedTime = 0;
-
                     timerInterval = setInterval(() => {
-                        const minutes = Math.floor(elapsedTime / 60);
-                        const seconds = elapsedTime % 60;
-
-                        // Perbarui tampilan timer
-                        timerText.textContent = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-
+                        elapsedTime++;
                         // Update progress circle
                         const progress = (elapsedTime / duration) * circleLength;
                         progressCircle.style.strokeDashoffset = circleLength - progress;
-
-                        elapsedTime++; // Tambahkan waktu setiap detik
-
+                        const minutes = String(Math.floor(elapsedTime / 60)).padStart(2, "0");
+                        const seconds = String(elapsedTime % 60).padStart(2, "0");
+                        timerText.textContent = `${minutes}:${seconds}`;
                     }, 1000);
                 }
 
-                startButton.addEventListener("click", () => {
+                toggleButton.addEventListener("click", () => {
                     const tindakanId = document.getElementById("tindakanSelect").value;
                     const shiftId = document.getElementById("shiftId").value;
 
@@ -345,7 +346,46 @@
                         return;
                     }
 
-                    fetch("/perawat/start-action", {
+                    if (!isRunning) {
+                        // === START (hanya frontend) ===
+                        startTimer();
+                        isRunning = true;
+                        toggleButton.textContent = "Stop";
+                    } else {
+                        // === STOP (konfirmasi + kirim ke server) ===
+                        clearInterval(timerInterval);
+                        const jamMulai = startTime.toISOString();
+                        const jamBerhenti = new Date().toISOString();
+
+                        // hitung durasi dalam detik
+                        const durasi = Math.floor((new Date(jamBerhenti) - new Date(jamMulai)) / 1000);
+
+                        // Konfirmasi jika durasi < 30 detik
+                        if (durasi < 30) {
+                            const confirmSend = confirm(`Durasi baru ${durasi} detik. Yakin ingin mengirim data?`);
+                            if (!confirmSend) {
+                                timerText.textContent = "00:00";
+                                elapsedTime = 0;
+                                isRunning = false;
+                                toggleButton.textContent = "Start";
+                                return;
+                            }
+                        }
+
+                        // Konfirmasi jika durasi > 15 menit (900 detik)
+                        if (durasi > 900) {
+                            const confirmSend = confirm(`Durasi ${durasi} detik (>15 menit). Yakin ingin mengirim data?`);
+                            if (!confirmSend) {
+                                timerText.textContent = "00:00";
+                                elapsedTime = 0;
+                                isRunning = false;
+                                toggleButton.textContent = "Start";
+                                return;
+                            }
+                        }
+
+                        // Lolos validasi → kirim request ke server
+                        fetch("/perawat/stop-action", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
@@ -353,98 +393,159 @@
                             },
                             body: JSON.stringify({
                                 tindakan_id: tindakanId,
-                                shift_id: shiftId
+                                shift_id: shiftId,
+                                jam_mulai: jamMulai,
+                                jam_berhenti: jamBerhenti,
                             }),
                         })
-                        .then((response) => response.json())
-                        .then((data) => {
-                            if (data.success) {
-                                alert(data.message);
-
-                                // Perbarui laporanId dengan ID yang baru
-                                document.getElementById("laporanId").value = data.laporan_id;
-
-                                startTimer(); // Mulai timer
-                                startButton.disabled = true;
-                                stopButton.disabled = false;
-                            } else {
-                                alert("Gagal memulai timer.");
-                            }
-                        })
-                        .catch((error) => {
-                            console.error("Error:", error);
-                            alert("Terjadi kesalahan.");
-                        });
-                });
-
-                stopButton.addEventListener("click", () => {
-                    const laporanId = document.getElementById("laporanId").value;
-
-                    // Pastikan laporanId tidak kosong
-                    if (!laporanId) {
-                        alert("Tidak ada laporan aktif untuk dihentikan!");
-                        return;
-                    }
-
-                    // Tambahan: konfirmasi jika durasi < 30 detik
-                    if (elapsedTime < 30) {
-                        const confirmSend = confirm(`Durasi baru ${elapsedTime} detik. Yakin ingin mengirim data?`);
-                        if (!confirmSend) {
-                            clearInterval(timerInterval);
-                            timerText.textContent = "00:00";
-                            elapsedTime = 0;
-
-                            startButton.disabled = false;
-                            stopButton.disabled = true;
-                            return;
-                        }
-                    }
-
-                    // Tambahan: konfirmasi jika durasi > 15 menit
-                    if (elapsedTime > 900) {
-                        const confirmSend = confirm(`Durasi baru ${elapsedTime} detik. Yakin ingin mengirim data?`);
-                        if (!confirmSend) {
-                            clearInterval(timerInterval);
-                            timerText.textContent = "00:00";
-                            elapsedTime = 0;
-
-                            startButton.disabled = false;
-                            stopButton.disabled = true;
-                            return;
-                        }
-                    }
-
-                    fetch(`/perawat/stop-action/${laporanId}`, {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                                "X-CSRF-TOKEN": document.querySelector("meta[name='csrf-token']").content,
-                            },
-                        })
-                        .then((response) => response.json())
-                        .then((data) => {
+                        .then(res => res.json())
+                        .then(data => {
                             if (data.status === "success") {
-                                clearInterval(timerInterval); // Hentikan timer
-                                timerText.textContent = "00:00"; // Reset tampilan timer
-                                alert(`Timer dihentikan.`);
-
-                                startButton.disabled = false;
-                                stopButton.disabled = true;
-
-                                // Menampilkan detail waktu berhenti
-                                timerDetails.style.display = "block";
-                                timerDetails.innerHTML = `
-                    <p><span class='time-label'>Jam Berhenti:</span> ${data.jam_berhenti}</p>
-                `;
+                                alert(`Durasi tercatat: ${data.durasi} detik`);
                             } else {
-                                alert("Gagal menghentikan timer.");
+                                alert("Gagal menyimpan data.");
                             }
                         })
-                        .catch((error) => {
-                            console.error("Error:", error);
-                            alert("Terjadi kesalahan.");
-                        });
+                        .catch(err => console.error(err));
+
+                        timerText.textContent = "00:00";
+                        isRunning = false;
+                        toggleButton.textContent = "Start";
+                    }
+
+
                 });
+
+
+                // // Fungsi untuk memulai timer (menghitung maju)
+                // function startTimer() {
+                //     elapsedTime = 0;
+
+                //     timerInterval = setInterval(() => {
+                //         const minutes = Math.floor(elapsedTime / 60);
+                //         const seconds = elapsedTime % 60;
+
+                //         // Perbarui tampilan timer
+                //         timerText.textContent = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+
+                //         // Update progress circle
+                //         const progress = (elapsedTime / duration) * circleLength;
+                //         progressCircle.style.strokeDashoffset = circleLength - progress;
+
+                //         elapsedTime++; // Tambahkan waktu setiap detik
+
+                //     }, 1000);
+                // }
+
+                // startButton.addEventListener("click", () => {
+                //     const tindakanId = document.getElementById("tindakanSelect").value;
+                //     const shiftId = document.getElementById("shiftId").value;
+
+                //     if (!tindakanId || !shiftId) {
+                //         alert("Pilih tindakan dan shift terlebih dahulu!");
+                //         return;
+                //     }
+
+                //     fetch("/perawat/start-action", {
+                //             method: "POST",
+                //             headers: {
+                //                 "Content-Type": "application/json",
+                //                 "X-CSRF-TOKEN": document.querySelector("meta[name='csrf-token']").content,
+                //             },
+                //             body: JSON.stringify({
+                //                 tindakan_id: tindakanId,
+                //                 shift_id: shiftId
+                //             }),
+                //         })
+                //         .then((response) => response.json())
+                //         .then((data) => {
+                //             if (data.success) {
+                //                 alert(data.message);
+
+                //                 // Perbarui laporanId dengan ID yang baru
+                //                 document.getElementById("laporanId").value = data.laporan_id;
+
+                //                 startTimer(); // Mulai timer
+                //                 startButton.disabled = true;
+                //                 stopButton.disabled = false;
+                //             } else {
+                //                 alert("Gagal memulai timer.");
+                //             }
+                //         })
+                //         .catch((error) => {
+                //             console.error("Error:", error);
+                //             alert("Terjadi kesalahan.");
+                //         });
+                // });
+
+                // stopButton.addEventListener("click", () => {
+                //     const laporanId = document.getElementById("laporanId").value;
+
+                //     // Pastikan laporanId tidak kosong
+                //     if (!laporanId) {
+                //         alert("Tidak ada laporan aktif untuk dihentikan!");
+                //         return;
+                //     }
+
+                //     // Tambahan: konfirmasi jika durasi < 30 detik
+                //     if (elapsedTime < 30) {
+                //         const confirmSend = confirm(`Durasi baru ${elapsedTime} detik. Yakin ingin mengirim data?`);
+                //         if (!confirmSend) {
+                //             clearInterval(timerInterval);
+                //             timerText.textContent = "00:00";
+                //             elapsedTime = 0;
+
+                //             startButton.disabled = false;
+                //             stopButton.disabled = true;
+                //             return;
+                //         }
+                //     }
+
+                //     // Tambahan: konfirmasi jika durasi > 15 menit
+                //     if (elapsedTime > 900) {
+                //         const confirmSend = confirm(`Durasi baru ${elapsedTime} detik. Yakin ingin mengirim data?`);
+                //         if (!confirmSend) {
+                //             clearInterval(timerInterval);
+                //             timerText.textContent = "00:00";
+                //             elapsedTime = 0;
+
+                //             startButton.disabled = false;
+                //             stopButton.disabled = true;
+                //             return;
+                //         }
+                //     }
+
+                //     fetch(`/perawat/stop-action/${laporanId}`, {
+                //             method: "POST",
+                //             headers: {
+                //                 "Content-Type": "application/json",
+                //                 "X-CSRF-TOKEN": document.querySelector("meta[name='csrf-token']").content,
+                //             },
+                //         })
+                //         .then((response) => response.json())
+                //         .then((data) => {
+                //             if (data.status === "success") {
+                //                 clearInterval(timerInterval); // Hentikan timer
+                //                 timerText.textContent = "00:00"; // Reset tampilan timer
+                //                 alert(`Timer dihentikan.`);
+
+                //                 startButton.disabled = false;
+                //                 stopButton.disabled = true;
+
+                //                 // Menampilkan detail waktu berhenti
+                //                 timerDetails.style.display = "block";
+                //                 timerDetails.innerHTML = `
+                //     <p><span class='time-label'>Jam Berhenti:</span> ${data.jam_berhenti}</p>
+                // `;
+                //             } else {
+                //                 alert("Gagal menghentikan timer.");
+                //             }
+                //         })
+                //         .catch((error) => {
+                //             console.error("Error:", error);
+                //             alert("Terjadi kesalahan.");
+                //         });
+                // });
 
 
 

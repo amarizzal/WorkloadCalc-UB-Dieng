@@ -109,8 +109,8 @@ Route::middleware(['auth', 'role:perawat'])->prefix('perawat')
         /////////////////////////////////////////////////////////////////////////////////////////////////
     
         Route::get('/timer', [PerawatController::class, 'timer'])->name('timer');
-        Route::post('/start-action', [PerawatController::class, 'startAction'])->name('start-action');
-        Route::post('/stop-action/{id}', [PerawatController::class, 'stopAction'])->name('stop-action');
+        // Route::post('/start-action', [PerawatController::class, 'startAction'])->name('start-action');
+        Route::post('/stop-action', [PerawatController::class, 'stopAction'])->name('stop-action');
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
         Route::get('/hasil', [PerawatController::class, 'hasil'])->name('hasil');

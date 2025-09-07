@@ -126,61 +126,95 @@ class PerawatController extends Controller
         return view('pages.perawat.perawat-pokok', compact('shiftName', 'shiftId', 'tindakanWaktu', 'currentTime', 'laporanAktif', 'sisaWaktu', 'isTimerRunning'));
     }
 
-    public function startAction(Request $request)
+    public function stopAction(Request $request)
     {
         $validated = $request->validate([
             'tindakan_id' => 'required|exists:tindakan_waktu,id',
             'shift_id' => 'required|exists:shift_kerja,id',
+            'jam_mulai' => 'required|date',
+            'jam_berhenti' => 'required|date',
         ]);
 
+        $jamMulai = Carbon::parse($validated['jam_mulai']);
+        $jamBerhenti = Carbon::parse($validated['jam_berhenti']);
+        $durasi = $jamMulai->diffInSeconds($jamBerhenti);
+
         $laporan = LaporanTindakanPerawat::create([
-            'user_id' => auth()->user()->id,
+            'user_id' => auth()->id(),
             'ruangan_id' => auth()->user()->ruangan_id,
             'shift_id' => $validated['shift_id'],
             'tindakan_id' => $validated['tindakan_id'],
             'tanggal' => Carbon::now()->toDateString(),
-            'jam_mulai' => Carbon::now(),
-        ]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Timer dimulai',
-            'laporan_id' => $laporan->id,
-            'jam_mulai' => $laporan->jam_mulai->toIso8601String(),
-            'durasi_tindakan' => $laporan->tindakan->waktu * 60,
-        ]);
-    }
-    public function stopAction($id)
-    {
-        // Cari laporan berdasarkan ID
-        $laporan = LaporanTindakanPerawat::findOrFail($id);
-
-        // Ambil waktu saat tombol stop diklik
-        $jamBerhenti = Carbon::now(); // Waktu saat tombol stop diklik
-
-        // Pastikan jam_mulai ada dan valid
-        if (!$laporan->jam_mulai) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Jam mulai tidak ditemukan.',
-            ]);
-        }
-
-        // Hitung durasi dalam detik (selisih antara jam_berhenti dan jam_mulai)
-        $durasi = Carbon::parse($laporan->jam_mulai)->diffInSeconds($jamBerhenti);
-
-        // Update data jam_berhenti dan durasi di database
-        $laporan->update([
-            'jam_berhenti' => $jamBerhenti, // Simpan waktu berhenti
-            'durasi' => $durasi, // Simpan durasi dalam detik
+            'jam_mulai' => $jamMulai,
+            'jam_berhenti' => $jamBerhenti,
+            'durasi' => $durasi,
         ]);
 
         return response()->json([
             'status' => 'success',
-            'jam_berhenti' => $laporan->jam_berhenti->format('H:i:s'), // Format jam berhenti
-            'durasi' => $laporan->durasi, // Durasi dalam detik
+            'laporan_id' => $laporan->id,
+            'jam_mulai' => $laporan->jam_mulai->format('H:i:s'),
+            'jam_berhenti' => $laporan->jam_berhenti->format('H:i:s'),
+            'durasi' => $laporan->durasi,
         ]);
     }
+
+
+    // public function startAction(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'tindakan_id' => 'required|exists:tindakan_waktu,id',
+    //         'shift_id' => 'required|exists:shift_kerja,id',
+    //     ]);
+
+    //     $laporan = LaporanTindakanPerawat::create([
+    //         'user_id' => auth()->user()->id,
+    //         'ruangan_id' => auth()->user()->ruangan_id,
+    //         'shift_id' => $validated['shift_id'],
+    //         'tindakan_id' => $validated['tindakan_id'],
+    //         'tanggal' => Carbon::now()->toDateString(),
+    //         'jam_mulai' => Carbon::now(),
+    //     ]);
+
+    //     return response()->json([
+    //         'success' => true,
+    //         'message' => 'Timer dimulai',
+    //         'laporan_id' => $laporan->id,
+    //         'jam_mulai' => $laporan->jam_mulai->toIso8601String(),
+    //         'durasi_tindakan' => $laporan->tindakan->waktu * 60,
+    //     ]);
+    // }
+    // public function stopAction($id)
+    // {
+    //     // Cari laporan berdasarkan ID
+    //     $laporan = LaporanTindakanPerawat::findOrFail($id);
+
+    //     // Ambil waktu saat tombol stop diklik
+    //     $jamBerhenti = Carbon::now(); // Waktu saat tombol stop diklik
+
+    //     // Pastikan jam_mulai ada dan valid
+    //     if (!$laporan->jam_mulai) {
+    //         return response()->json([
+    //             'status' => 'error',
+    //             'message' => 'Jam mulai tidak ditemukan.',
+    //         ]);
+    //     }
+
+    //     // Hitung durasi dalam detik (selisih antara jam_berhenti dan jam_mulai)
+    //     $durasi = Carbon::parse($laporan->jam_mulai)->diffInSeconds($jamBerhenti);
+
+    //     // Update data jam_berhenti dan durasi di database
+    //     $laporan->update([
+    //         'jam_berhenti' => $jamBerhenti, // Simpan waktu berhenti
+    //         'durasi' => $durasi, // Simpan durasi dalam detik
+    //     ]);
+
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'jam_berhenti' => $laporan->jam_berhenti->format('H:i:s'), // Format jam berhenti
+    //         'durasi' => $laporan->durasi, // Durasi dalam detik
+    //     ]);
+    // }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -200,7 +234,7 @@ class PerawatController extends Controller
     
         // Ambil laporan berdasarkan user_id dan rentang tanggal yang dipilih
         $laporan = LaporanTindakanPerawat::with(['tindakan', 'shift'])
-            ->where('user_id', $user->id);
+            ->where('user_id', $user->id)->orderBy('tanggal', 'desc');
 
         if ($startDate && $endDate) {
             $laporan->whereBetween('jam_berhenti', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']) // Filter berdasarkan rentang tanggal

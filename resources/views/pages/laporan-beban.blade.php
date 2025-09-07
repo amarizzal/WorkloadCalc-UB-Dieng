@@ -66,6 +66,32 @@
                             </div>
                             <div class="card-body px-0 pb-2 mx-4">
                                 {{-- Beban Kerja --}}
+                                <div class="row">
+                                    <div class="col-md-12 d-flex justify-content-between mb-3">
+                                        <form action="{{ route('admin.laporan.index') }}" method="GET" class="row align-items-end justify-content-center w-100">
+                                            <div class="col-12 col-md-4 ps-5">
+                                                <div class="d-flex align-items-end justify-content-center gap-5">
+                                                    {{-- <div class="col input-group input-group-static mr-2">
+                                                        <label for="start_date" class="me-2">Dari:</label>
+                                                        <input type="date" name="start_date" id="start_date" class="form-control me-2" value="">
+
+                                                    </div>
+                                                    <div class="col  input-group input-group-static mr-2 align-items-center">
+                                                        <label for="end_date" class="me-2">Sampai:</label>
+                                                        <input type="date" name="end_date" id="end_date" class="form-control me-2" value="">
+
+                                                    </div> --}}
+                                                    {{-- <div class="col">
+
+                                                        <button type="submit" class="btn btn-primary ">Filter</button>
+                                                    </div> --}}
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-12 col-md-8 button-datatable"></div>
+                                        </form>
+                                    </div>
+                                </div>
                                 <div class="table-responsive p-0">
                                     <table id="author_table" class="table align-items-center mb-0">
                                         <thead>
@@ -113,78 +139,56 @@
         @push('js')
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-                const table = $('#author_table').DataTable({
-                    dom: 'frtip', // 'B' untuk Buttons
-                    buttons: [
-                        {
-                            extend: 'excel',
-                            className: 'btn btn-outline-success border rounded d-flex align-items-center',
-                            text: '<i class="material-icons">grid_on</i> Excel'
-                        },
-                        {
-                            extend: 'pdf',
-                            className: 'btn btn-outline-danger border rounded d-flex align-items-center',
-                            text: '<i class="material-icons">picture_as_pdf</i> PDF'
-                        },
-                        {
-                            extend: 'print',
-                            className: 'btn btn-outline-dark border rounded d-flex align-items-center',
-                            text: '<i class="material-icons">print</i> Print'
-                        }
-                    ],
-                    pagingType: "simple_numbers", // atau "simple_numbers"
-                    language: {
-                        search: "",
-                        searchPlaceholder: "Cari...",
-                        lengthMenu: "_MENU_ data setiap halaman",
-                        info: "Menampilkan <strong>_START_</strong> sampai <strong>_END_</strong> , total <strong>_TOTAL_</strong> data",
-                    },
-                    columnDefs: [
-                        { targets: 0, orderable: false }  // Kolom pertama tidak bisa diurutkan
-                    ],
-                    rowCallback: function(row, data, index) {
-                        if ($(row).hasClass('no-sort')) {
-                        $(row).removeClass('odd even'); // hilangkan styling zebra
-                        }
-                    },
-                    drawCallback: function(settings) {
-                        // Pindahkan ulang row "no-sort" ke bawah setiap kali redraw
-                        let table = this.api();
-                        let noSortRow = table.rows('.no-sort').nodes();
-                        if (noSortRow.length) {
-                        $(noSortRow).appendTo($(table.table().body()));
-                        }
-                    }
-                });
+                // const table = $('#author_table').DataTable({
+                //     dom: 'frtip', // 'B' untuk Buttons
+                //     buttons: [
+                //         {
+                //             extend: 'excel',
+                //             className: 'btn btn-outline-success border rounded d-flex align-items-center',
+                //             text: '<i class="material-icons">grid_on</i> Excel'
+                //         },
+                //         {
+                //             extend: 'pdf',
+                //             className: 'btn btn-outline-danger border rounded d-flex align-items-center',
+                //             text: '<i class="material-icons">picture_as_pdf</i> PDF'
+                //         },
+                //         {
+                //             extend: 'print',
+                //             className: 'btn btn-outline-dark border rounded d-flex align-items-center',
+                //             text: '<i class="material-icons">print</i> Print'
+                //         }
+                //     ],
+                //     pagingType: "simple_numbers", // atau "simple_numbers"
+                //     language: {
+                //         search: "",
+                //         searchPlaceholder: "Cari...",
+                //         lengthMenu: "_MENU_ data setiap halaman",
+                //         info: "Menampilkan <strong>_START_</strong> sampai <strong>_END_</strong> , total <strong>_TOTAL_</strong> data",
+                //     },
+                //     columnDefs: [
+                //         { targets: 0, orderable: false }  // Kolom pertama tidak bisa diurutkan
+                //     ],
+                //     rowCallback: function(row, data, index) {
+                //         if ($(row).hasClass('no-sort')) {
+                //         $(row).removeClass('odd even'); // hilangkan styling zebra
+                //         }
+                //     },
+                //     drawCallback: function(settings) {
+                //         // Pindahkan ulang row "no-sort" ke bawah setiap kali redraw
+                //         let table = this.api();
+                //         let noSortRow = table.rows('.no-sort').nodes();
+                //         if (noSortRow.length) {
+                //         $(noSortRow).appendTo($(table.table().body()));
+                //         }
+                //     }
+                // });
 
-                table.buttons().container().appendTo('.button-datatable');
+                // table.buttons().container().appendTo('.button-datatable');
 
                 const search = $('#author_table_wrapper .dt-search');
                 search.appendTo('.button-datatable');
 
-                const table2 = $('#author_table2').DataTable({
-                    dom: 'frtip', // 'B' untuk Buttons
-                    pagingType: "simple_numbers", // atau "simple_numbers"
-                    language: {
-                        search: "",
-                        searchPlaceholder: "Cari...",
-                        lengthMenu: "_MENU_ data setiap halaman",
-                        info: "Menampilkan <strong>_START_</strong> sampai <strong>_END_</strong> , total <strong>_TOTAL_</strong> data",
-                    },
-                    rowCallback: function(row, data, index) {
-                        if ($(row).hasClass('no-sort')) {
-                        $(row).removeClass('odd even'); // hilangkan styling zebra
-                        }
-                    },
-                    drawCallback: function(settings) {
-                        // Pindahkan ulang row "no-sort" ke bawah setiap kali redraw
-                        let table = this.api();
-                        let noSortRow = table.rows('.no-sort').nodes();
-                        if (noSortRow.length) {
-                        $(noSortRow).appendTo($(table.table().body()));
-                        }
-                    }
-                });
+                
 
                 table2.buttons().container().appendTo('.button-datatable2');
 
@@ -261,6 +265,47 @@
                                 });
                             }
                             tableContainer.style.display = 'block';
+                            const table2 = $('#author_table').DataTable({
+                                dom: 'frtip', // 'B' untuk Buttons
+                                buttons: [
+                                    {
+                                        extend: 'excel',
+                                        className: 'btn btn-outline-success border rounded d-flex align-items-center',
+                                        text: '<i class="material-icons">grid_on</i> Excel'
+                                    },
+                                    {
+                                        extend: 'pdf',
+                                        className: 'btn btn-outline-danger border rounded d-flex align-items-center',
+                                        text: '<i class="material-icons">picture_as_pdf</i> PDF'
+                                    },
+                                    {
+                                        extend: 'print',
+                                        className: 'btn btn-outline-dark border rounded d-flex align-items-center',
+                                        text: '<i class="material-icons">print</i> Print'
+                                    }
+                                ],
+                                pagingType: "simple_numbers", // atau "simple_numbers"
+                                language: {
+                                    search: "",
+                                    searchPlaceholder: "Cari...",
+                                    lengthMenu: "_MENU_ data setiap halaman",
+                                    info: "Menampilkan <strong>_START_</strong> sampai <strong>_END_</strong> , total <strong>_TOTAL_</strong> data",
+                                },
+                                rowCallback: function(row, data, index) {
+                                    if ($(row).hasClass('no-sort')) {
+                                    $(row).removeClass('odd even'); // hilangkan styling zebra
+                                    }
+                                },
+                                drawCallback: function(settings) {
+                                    // Pindahkan ulang row "no-sort" ke bawah setiap kali redraw
+                                    let table = this.api();
+                                    let noSortRow = table.rows('.no-sort').nodes();
+                                    if (noSortRow.length) {
+                                    $(noSortRow).appendTo($(table.table().body()));
+                                    }
+                                }
+                            });
+                            table2.buttons().container().appendTo('.button-datatable');
                         })
                         .catch(error => {
                             console.error('Error fetching detail data:', error);

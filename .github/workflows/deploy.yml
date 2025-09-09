@@ -25,3 +25,10 @@ jobs:
     - name: Deploy via SSH
       run: |
         rsync -az -e "ssh -p ${{ secrets.HOSTINGER_PORT }}" --delete --exclude=".git*" --exclude="node_modules" --exclude="vendor" --exclude=".env" ./ ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }}:${{ secrets.DEPLOY_PATH }}
+
+    - name: Run migrations on server
+      run: |
+        ssh -p ${{ secrets.HOSTINGER_PORT }} ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }} "
+          cd ${{ secrets.DEPLOY_PATH }} && 
+          php artisan migrate --force
+        "

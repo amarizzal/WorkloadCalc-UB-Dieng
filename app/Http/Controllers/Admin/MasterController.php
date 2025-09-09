@@ -80,7 +80,7 @@ class MasterController extends Controller
 
     session()->flash('success', 'User berhasil dibuat.');
     // Redirect ke halaman profil
-    return view('pages.master-user', compact('users'));
+    return back()->with('success', 'Users imported successfully!');
 }
 
 public function deleteUser($id)

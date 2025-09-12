@@ -97,7 +97,11 @@ class PerawatController extends Controller
                 $query->whereTime('jam_mulai', '<=', $now->toTimeString())->whereTime('jam_selesai', '>=', $now->toTimeString());
             })
             ->orWhere(function ($query) use ($now) {
-                $query->whereTime('jam_mulai', '>=', $now->toTimeString())->whereTime('jam_selesai', '<', $now->toTimeString());
+                $query->whereTime('jam_mulai', '>', 'jam_selesai') // shift yang melewati midnight
+                    ->where(function ($sub) use ($now) {
+                        $sub->whereTime('jam_mulai', '<=', $now->toTimeString())
+                            ->orWhereTime('jam_selesai', '>=', $now->toTimeString());
+                    });
             })
             ->first();
 

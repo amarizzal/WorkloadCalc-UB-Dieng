@@ -185,6 +185,10 @@
                                                 <label for="jam_mulai" >Waktu (Jam)</label>
                                                 <input type="float" class="form-control" name="waktu" placeholder="" required>
                                             </div>
+                                            <div class="mb-3 input-group input-group-static">
+                                                <label for="keterangan" >Keterangan</label>
+                                                <textarea class="form-control" name="keterangan" placeholder=""></textarea>
+                                            </div>
                                             <button type="submit" class="btn btn-primary w-100">Simpan Tindakan</button>
                                         </form>
                                 </section>

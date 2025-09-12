@@ -172,7 +172,7 @@
                                                     <th>Mulai</th>
                                                     <th>Berhenti</th>
                                                     <th>Durasi</th>
-                                                    <th>Keterangan</th>
+                                                    <th>Nama Pasien (No. RM)</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -184,7 +184,7 @@
                                                             <td class="text-center">{{ \Carbon\Carbon::parse($data->jam_mulai)->format('H:i:s') }}</td>
                                                             <td class="text-center">{{ \Carbon\Carbon::parse($data->jam_berhenti)->format('H:i:s') }}</td>
                                                             <td class="text-center">{{ floor($data->durasi / 60) }} menit {{ $data->durasi % 60 }} detik</td>
-                                                            <td class="text-center">{{ $data->keterangan ?? '-' }}</td>
+                                                            <td class="text-center">{{ $data->nama_pasien && $data->no_rekam_medis ? $data->nama_pasien . ' (' . $data->no_rekam_medis . ')' : '-' }}</td>
                                                         </tr>
                                                     @endforeach
                                                 @else

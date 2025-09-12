@@ -180,6 +180,17 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+
+                                        </div>
+
+
+                                        <div class="my-3 input-group input-group-static">
+                                            <label for="no_rekam_medis">No Rekam Medis</label>
+                                            <input type="text" class="form-control" name="no_rekam_medis" required>
+                                        </div>
+                                        <div class="mb-3 input-group input-group-static">
+                                            <label for="nama_pasien">Nama Pasien</label>
+                                            <input type="text" class="form-control" name="nama_pasien" required>
                                         </div>
                                     </div>
 
@@ -233,18 +244,18 @@
                                         @csrf
                                         <div class="mb-3 input-group input-group-outline">
                                             <div class="mt-4">
-                                        <h5>Pilih Jenis Tindakan</h5>
-                                        <div class="form-group">
-                                            <select class="form-control tindakan-select" id="tindakanSelect2" name="tindakan_id">
-                                                <option value="" disabled selected>Pilih Tindakan</option>
-                                                @foreach ($tindakanWaktu as $tindakan)
-                                                    <option value="{{ $tindakan->id }}">
-                                                        {{ $tindakan->tindakan }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
+                                                <h5>Pilih Jenis Tindakan</h5>
+                                                <div class="form-group">
+                                                    <select class="form-control tindakan-select" id="tindakanSelect2" name="tindakan_id">
+                                                        <option value="" disabled selected>Pilih Tindakan</option>
+                                                        @foreach ($tindakanWaktu as $tindakan)
+                                                            <option value="{{ $tindakan->id }}">
+                                                                {{ $tindakan->tindakan }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <input type="hidden" name="waktu" value="0">
@@ -261,6 +272,14 @@
                                         <div class="mb-3 input-group input-group-static">
                                             <label for="jam_berhenti" >Jam Berhenti</label>
                                             <input type="time" class="form-control" name="jam_berhenti" placeholder="" required>
+                                        </div>
+                                        <div class="my-3 input-group input-group-static">
+                                            <label for="no_rekam_medis">No Rekam Medis</label>
+                                            <input type="text" class="form-control" name="no_rekam_medis" required>
+                                        </div>
+                                        <div class="mb-3 input-group input-group-static">
+                                            <label for="nama_pasien">Nama Pasien</label>
+                                            <input type="text" class="form-control" name="nama_pasien" required>
                                         </div>
                                         <button type="submit" class="btn btn-primary w-100">Simpan Tindakan</button>
                                     </form>
@@ -340,9 +359,11 @@
                 toggleButton.addEventListener("click", () => {
                     const tindakanId = document.getElementById("tindakanSelect").value;
                     const shiftId = document.getElementById("shiftId").value;
+                    const noRekamMedis = document.querySelector("input[name='no_rekam_medis']").value;
+                    const namaPasien = document.querySelector("input[name='nama_pasien']").value;
 
-                    if (!tindakanId || !shiftId) {
-                        alert("Pilih tindakan dan shift terlebih dahulu!");
+                    if (!tindakanId || !shiftId || !noRekamMedis || !namaPasien) {
+                        alert("Semua field harus diisi!");
                         return;
                     }
 
@@ -396,6 +417,8 @@
                                 shift_id: shiftId,
                                 jam_mulai: jamMulai,
                                 jam_berhenti: jamBerhenti,
+                                no_rekam_medis: noRekamMedis,
+                                nama_pasien: namaPasien
                             }),
                         })
                         .then(res => res.json())
@@ -411,6 +434,8 @@
                         timerText.textContent = "00:00";
                         isRunning = false;
                         toggleButton.textContent = "Start";
+                        document.querySelector("input[name='no_rekam_medis']").value = "";
+                        document.querySelector("input[name='nama_pasien']").value = "";
                     }
 
 

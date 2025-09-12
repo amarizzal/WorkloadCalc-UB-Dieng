@@ -22,6 +22,8 @@ class LaporanTindakanPerawat extends Model
         'jam_berhenti',
         'durasi',
         'keterangan',
+        'no_rekam_medis',
+        'nama_pasien',
         'record_analisa_data_id'
     ];
 

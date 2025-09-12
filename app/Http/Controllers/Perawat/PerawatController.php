@@ -137,6 +137,8 @@ class PerawatController extends Controller
             'shift_id' => 'required|exists:shift_kerja,id',
             'jam_mulai' => 'required|date',
             'jam_berhenti' => 'required|date',
+            'no_rekam_medis' => 'required|string',
+            'nama_pasien' => 'required|string',
         ]);
 
         $jamMulai = Carbon::parse($validated['jam_mulai']);
@@ -151,6 +153,8 @@ class PerawatController extends Controller
             'tanggal' => Carbon::now()->toDateString(),
             'jam_mulai' => $jamMulai,
             'jam_berhenti' => $jamBerhenti,
+            'no_rekam_medis' => $validated['no_rekam_medis'],
+            'nama_pasien' => $validated['nama_pasien'],
             'durasi' => $durasi,
         ]);
 
@@ -445,6 +449,8 @@ class PerawatController extends Controller
         
         $validated = $request->validate([
             'tindakan_id' => 'required|exists:tindakan_waktu,id',
+            'no_rekam_medis' => 'required|string',
+            'nama_pasien' => 'required|string',
             // 'shift_id' => 'required|exists:shift_kerja,id',
         ]);
 
@@ -481,6 +487,8 @@ class PerawatController extends Controller
             'tanggal' => $tanggal,
             'jam_mulai' => $jamMulai,
             'jam_berhenti' => $jamBerhenti,
+            'no_rekam_medis' => $validated['no_rekam_medis'],
+            'nama_pasien' => $validated['nama_pasien'],
             'durasi' => $durasi,
         ]);
     

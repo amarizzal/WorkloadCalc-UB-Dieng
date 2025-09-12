@@ -124,7 +124,18 @@
                                                     <p class="text-xs font-weight-bold mb-0 text-success">{{ floor($data->durasi / 60) }} menit {{ $data->durasi % 60 }} detik</p>
                                                 </td>
                                                 <td class="align-middle text-center text-sm">
-                                                    <p class="text-xs font-weight-bold mb-0">{{ $data->keterangan ?? '-' }}</p>
+                                                    <p class="text-xs font-weight-bold mb-0">
+                                                        @if ($data->tindakan)
+                                                            @if ($data->tindakan->status === 'Tugas Pokok')
+                                                                {{ $data->nama_pasien && $data->no_rekam_medis ? $data->nama_pasien . ' (' . $data->no_rekam_medis . ')' : '-' }}
+                                                            @else
+                                                                {{ $data->keterangan ?? '-' }}
+                                                            @endif
+                                                        @else
+                                                            {{ $data->keterangan ?? '-' }}
+                                                        @endif
+
+                                                    </p>
                                                 </td>
                                                 <td class="align-middle">
                                                     <form action="{{ route('admin.laporan.delete', $data->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus laporan ini?');">

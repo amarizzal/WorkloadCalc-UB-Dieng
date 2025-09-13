@@ -375,8 +375,8 @@
                     } else {
                         // === STOP (konfirmasi + kirim ke server) ===
                         clearInterval(timerInterval);
-                        const jamMulai = startTime.toISOString();
-                        const jamBerhenti = new Date().toISOString();
+                        const jamMulai = startTime.toLocaleString("sv-SE", { timeZone: "Asia/Jakarta" }).replace(" ", "T");
+                        const jamBerhenti = new Date().toLocaleString("sv-SE", { timeZone: "Asia/Jakarta" }).replace(" ", "T");
 
                         // hitung durasi dalam detik
                         const durasi = Math.floor((new Date(jamBerhenti) - new Date(jamMulai)) / 1000);

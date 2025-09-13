@@ -1,6 +1,7 @@
 <x-layout bodyClass="g-sidenav-show  bg-gray-200">
         <x-navbars.sidebar activePage="master-user"></x-navbars.sidebar>
         <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+            
             <!-- Navbar -->
             <x-navbars.navs.master titlePage="Perawat"></x-navbars.navs.auth>
             <!-- End Navbar -->
@@ -14,6 +15,15 @@
                                 </div>
                             </div>
                             <div class="card-body px-0 pb-2">
+                                @if ($errors->any())
+                                    <div class="alert alert-danger my-5">
+                                        <ul class="mt-4">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
                                 <div id="button-add" class=" me-3 my-3 text-end">
                                     <button type="button" class="btn bg-gradient-dark mb-0" data-bs-toggle="modal" data-bs-target="#modal-form"><i
                                             class="material-icons text-sm">add</i>&nbsp;&nbsp;Add New

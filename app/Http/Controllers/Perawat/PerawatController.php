@@ -93,17 +93,20 @@ class PerawatController extends Controller
 
         // Cari shift kerja yang sesuai dengan waktu sekarang
         $currentShift = ShiftKerja::query()
-            ->where(function ($query) use ($now) {
-                $query->whereTime('jam_mulai', '<=', $now->toTimeString())->whereTime('jam_selesai', '>=', $now->toTimeString());
-            })
-            ->orWhere(function ($query) use ($now) {
-                $query->whereTime('jam_mulai', '>', 'jam_selesai') // shift yang melewati midnight
-                    ->where(function ($sub) use ($now) {
-                        $sub->whereTime('jam_mulai', '<=', $now->toTimeString())
-                            ->orWhereTime('jam_selesai', '>=', $now->toTimeString());
-                    });
-            })
-            ->first();
+        ->where(function ($query) use ($now) {
+            $query->whereTime('jam_mulai', '<=', $now->toTimeString())
+                ->whereTime('jam_selesai', '>=', $now->toTimeString());
+        })
+        ->orWhere(function ($query) use ($now) {
+            $query->whereTime('jam_mulai', '>', 'jam_selesai')
+                ->where(function ($sub) use ($now) {
+                    $sub->whereTime('jam_mulai', '<=', $now->toTimeString())
+                        ->orWhereTime('jam_selesai', '>=', $now->toTimeString());
+                });
+        })
+        ->orderBy('jam_mulai', 'desc')
+        ->first();
+
 
         $shiftName = $currentShift->nama_shift ?? 'Tidak Ada Shift Aktif';
         $shiftId = $currentShift->id ?? null;

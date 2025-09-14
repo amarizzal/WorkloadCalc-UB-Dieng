@@ -357,11 +357,22 @@ class PerawatController extends Controller
 
     public function getShiftByJamMulai($jamMulai)
     {
-        // Cari shift yang memiliki jam_mulai lebih kecil atau sama dengan jam_mulai yang diinputkan
-        // dan jam_selesai lebih besar atau sama dengan jam_mulai yang diinputkan
-        $shift = ShiftKerja::where('jam_mulai', '<=', $jamMulai)->where('jam_selesai', '>=', $jamMulai)->first();
+        $shift = ShiftKerja::where(function ($query) use ($jamMulai) {
+                // Shift normal: jam_mulai <= jamMasuk <= jam_selesai
+                $query->where('jam_mulai', '<=', $jamMulai)
+                    ->where('jam_selesai', '>=', $jamMulai);
+            })
+            ->orWhere(function ($query) use ($jamMulai) {
+                // Shift yang melewati tengah malam: jam_mulai > jam_selesai
+                $query->whereColumn('jam_mulai', '>', 'jam_selesai')
+                    ->where(function ($sub) use ($jamMulai) {
+                        $sub->where('jam_mulai', '<=', $jamMulai) // masih di hari yang sama
+                            ->orWhere('jam_selesai', '>=', $jamMulai); // sudah lewat midnight
+                    });
+            })
+            ->first();
 
-        return $shift ? $shift->id : null; // Mengembalikan ID shift jika ditemukan
+        return $shift ? $shift->id : null;
     }
 
     public function getTindakanIdLainLain()

@@ -138,7 +138,7 @@ public function deleteUser($id)
                 'nama_lengkap' => $row[1],
                 'username' => $row[2],
                 'email' => $row[3],
-                'password' => bcrypt($row[4]),
+                'password' => $row[4],
                 'ruangan_id' => $ruangan->id,
                 'jenis_kelamin_id' => $jenisKelamin->id,
                 'nomor_telepon' => $row[7],

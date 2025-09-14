@@ -55,7 +55,7 @@ class MasterController extends Controller
     $user = User::create([
         'role' => request('role'),
         'nama_lengkap' => request('nama_lengkap'),
-        'password' => bcrypt(request('password')),
+        'password' => request('password'),
         'username' => request('username'),
         'email' => request('email'),
         'ruangan_id' => request('ruangan_id'),

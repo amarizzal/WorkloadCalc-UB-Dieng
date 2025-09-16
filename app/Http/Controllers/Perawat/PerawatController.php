@@ -111,7 +111,7 @@ class PerawatController extends Controller
 
         $shiftName = $currentShift->nama_shift ?? 'Tidak Ada Shift Aktif';
         $shiftId = $currentShift->id ?? null;
-        $currentTime = $now->format('H:i');
+        $currentTime = $now;
 
         $laporanAktif = LaporanTindakanPerawat::where('user_id', auth()->user()->id)
             ->whereNull('jam_berhenti')

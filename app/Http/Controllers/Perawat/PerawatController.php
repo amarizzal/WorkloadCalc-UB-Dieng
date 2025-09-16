@@ -89,23 +89,24 @@ class PerawatController extends Controller
     public function timer()
     {
         $tindakanWaktu = TindakanWaktu::all();
-        $now = Carbon::now('Asia/Jakarta');
+        $now = Carbon::now('Asia/Jakarta')->format('H:i:s'); // jam saja, sama seperti getShiftByJamMulai
 
-        // Cari shift kerja yang sesuai dengan waktu sekarang
         $currentShift = ShiftKerja::query()
-        ->where(function ($query) use ($now) {
-            $query->whereTime('jam_mulai', '<=', $now->toTimeString())
-                ->whereTime('jam_selesai', '>=', $now->toTimeString());
-        })
-        ->orWhere(function ($query) use ($now) {
-            $query->whereTime('jam_mulai', '>', 'jam_selesai')
-                ->where(function ($sub) use ($now) {
-                    $sub->whereTime('jam_mulai', '<=', $now->toTimeString())
-                        ->orWhereTime('jam_selesai', '>=', $now->toTimeString());
-                });
-        })
-        ->orderBy('jam_mulai', 'desc')
-        ->first();
+            ->where(function ($query) use ($now) {
+                // Shift normal: jam_mulai <= now <= jam_selesai
+                $query->where('jam_mulai', '<=', $now)
+                    ->where('jam_selesai', '>=', $now);
+            })
+            ->orWhere(function ($query) use ($now) {
+                // Shift yang melewati tengah malam: jam_mulai > jam_selesai
+                $query->whereColumn('jam_mulai', '>', 'jam_selesai')
+                    ->where(function ($sub) use ($now) {
+                        $sub->where('jam_mulai', '<=', $now) // masih di hari yang sama
+                            ->orWhere('jam_selesai', '>=', $now); // sudah lewat midnight
+                    });
+            })
+            ->orderBy('jam_mulai', 'desc')
+            ->first();
 
 
         $shiftName = $currentShift->nama_shift ?? 'Tidak Ada Shift Aktif';

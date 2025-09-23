@@ -53,9 +53,6 @@
                                                     Tindakan</th>
                                                 <th
                                                     class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                    Satuan</th>
-                                                <th
-                                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                     Kategori</th>
                                                 <th
                                                     class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
@@ -77,9 +74,6 @@
                                                 </td>
                                                 <td class="align-middle text-md">
                                                     <strong class="text-dark">{{ $tindakan->tindakan ?? 'Tidak Ada Data' }}</strong>
-                                                </td>
-                                                <td class="text-center limitid-height text-md">
-                                                    <p class="text-md">{{ $tindakan->satuan ?? '-' }}</p>
                                                 </td>
                                                 <td class="align-middle text-center text-md">
                                                     <p class="">{{ $tindakan->kategori ?? '-' }}</p>
@@ -135,7 +129,7 @@
                                                 $averageFaktor = number_format($averageFaktor, 2);
                                             @endphp
                                             <tr class="no-sort">
-                                                <td colspan="5" class="text-end fw-bold text-dark">Rata-rata Faktor (%)</td>
+                                                <td colspan="4" class="text-end fw-bold text-dark">Rata-rata Faktor (%)</td>
                                                 <td class="d-none"></td>
                                                 <td class="d-none"></td>
                                                 <td class="d-none"></td>
@@ -176,10 +170,6 @@
                                                 <th
                                                     class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                     Rata-rata Waktu (Jam)</th>
-                                                <th
-                                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                    Allowance Factor (AF)</th>
-                                                
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -205,12 +195,18 @@
                                                     <td class="text-center limitid-height text-md">
                                                         <p class="text-md">{{ number_format($rataWaktu / 60, 2) }} jam</p>
                                                     </td>
-                                                    <td class="align-middle text-center text-md text-danger">
-                                                        <strong class="">{{ number_format(1 / (1 - ($averageFaktor/100)), 2) }}</strong>
-                                                    </td>
                                                 </tr>
                                             @endif
                                             @endforeach
+                                            <tr class="no-sort">
+                                                <td colspan="2" class="text-end fw-bold text-dark">Allowance Factor (AF)</td>
+                                                <td class="d-none"></td>
+                                                <td class="d-none"></td>
+                                                <td class="d-none"></td>
+                                                <td class="d-none"></td>
+                                                <td class="text-center text-danger text-lg"><strong>{{ number_format(1 / (1 - ($averageFaktor/100)), 2) }}</strong></td>
+                                                <td class="d-none"></td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>

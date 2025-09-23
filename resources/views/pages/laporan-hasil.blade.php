@@ -127,6 +127,8 @@
                                                     <p class="text-xs font-weight-bold mb-0">
                                                         @if ($data->tindakan)
                                                             @if ($data->tindakan->status === 'Tugas Pokok')
+                                                                {{ $data->keterangan ?? '-' }}
+                                                                <br>
                                                                 {{ $data->nama_pasien && $data->no_rekam_medis ? $data->nama_pasien . ' (' . $data->no_rekam_medis . ')' : '-' }}
                                                             @else
                                                                 {{ $data->keterangan ?? '-' }}

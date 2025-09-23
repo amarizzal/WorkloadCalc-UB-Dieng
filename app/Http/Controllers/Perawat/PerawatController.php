@@ -417,18 +417,32 @@ class PerawatController extends Controller
         }
 
         // Ambil waktu yang diinputkan
-        $waktu = $request->input('waktu');
+        // $waktu = $request->input('waktu');
 
         // Gunakan getShiftByJamMulai untuk mendapatkan shift berdasarkan jam_mulai yang dimasukkan
-        $jamMulaiInput = Carbon::now()->format('H:i'); // Ambil jam mulai saat ini
-        $shiftId = $this->getShiftByJamMulai($jamMulaiInput);
+        // $jamMulaiInput = Carbon::now()->format('H:i'); // Ambil jam mulai saat ini
+
+        // konversi jam mulai dan jam selesai ke waktu (dalam bentuk jam)
+        // Ambil input "14:30" / "08:15"
+        $jamMulai   = $request->input('jam_mulai');
+        $jamBerhenti = $request->input('jam_berhenti');
+        $shiftId = $this->getShiftByJamMulai($jamMulai);
+        
     
         // Pastikan shift ditemukan
         if (!$shiftId) {
             session()->flash('error', 'Shift tidak ditemukan untuk waktu sekarang.');
             return redirect()->back();
         }
-    
+
+        // Konversi ke Carbon (anggap hari ini)
+        $mulai   = Carbon::createFromFormat('H:i', $jamMulai);
+        $selesai = Carbon::createFromFormat('H:i', $jamBerhenti);
+        // Hitung selisih dalam menit
+        $durasiMenit = $mulai->diffInMinutes($selesai);
+        
+        // Konversi ke jam pecahan
+        $durasiJam = $durasiMenit / 60;
         // Periksa apakah tindakan sudah ada di database atau merupakan tindakan baru
         $tindakan = TindakanWaktu::where(['tindakan' => $request->jenis_tindakan, 'status' => 'tambahan'])->first();
 
@@ -436,12 +450,12 @@ class PerawatController extends Controller
             // Jika tindakan belum ada, buat yang baru dengan waktu = 0 dan status = Tugas Tambahan
             $tindakan = TindakanWaktu::create([
                 'tindakan' => $request->jenis_tindakan,
-                'waktu' => $request->waktu, // Waktu default 0 jika tidak diisi
+                'waktu' => $durasiJam, // Waktu default 0 jika tidak diisi
                 'status' => 'tambahan'
             ]);
         } else {
             // Jika tindakan sudah ada, gunakan ID tindakan yang sudah ada
-            $tindakan->waktu = $request->waktu + $tindakan->waktu; // Update waktu jika diperlukan
+            $tindakan->waktu = $durasiJam + $tindakan->waktu; // Update waktu jika diperlukan
             $tindakan->save(); // Simpan perubahan
         }
     
@@ -450,7 +464,7 @@ class PerawatController extends Controller
         // $jamMulai = Carbon::parse($tanggal . ' ' . $request->input('jam_mulai') . ':00');
         // $jamBerhenti = Carbon::parse($tanggal . ' ' . $request->input('jam_berhenti') . ':00');
     
-        $durasi = 0; // Hitung durasi dalam detik
+        // $durasi = 0; // Hitung durasi dalam detik
 
         // dd($user);
     
@@ -465,8 +479,10 @@ class PerawatController extends Controller
             'ruangan_id' => $ruanganId,
             'shift_id' => $shiftId, // Gunakan shift yang ditemukan
             'tindakan_id' => $tindakan->id, // Selalu menggunakan tindakan ID 40
+            'jam_mulai' => Carbon::parse($request->input('tanggal') . ' ' . $request->input('jam_mulai')),
+            'jam_berhenti' => Carbon::parse($request->input('tanggal') . ' ' . $request->input('jam_berhenti')),
             'tanggal' => $request->input('tanggal'),
-            'durasi' => $waktu,
+            'durasi' => $durasiJam,
             'keterangan' => $request->input('keterangan'),
         ]);
     

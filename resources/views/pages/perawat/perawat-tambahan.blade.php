@@ -174,7 +174,6 @@
                                                 </select>
                                             </div>
 
-                                            <input type="hidden" name="waktu" value="0">
                                             <input type="hidden" name="status" value="Tugas Penunjang">
 
                                             <div class="mb-3 input-group input-group-static">
@@ -182,12 +181,16 @@
                                                 <input type="date" class="form-control" name="tanggal" required>
                                             </div>
                                             <div class="mb-3 input-group input-group-static">
-                                                <label for="jam_mulai" >Waktu (Jam)</label>
-                                                <input type="float" class="form-control" name="waktu" placeholder="" required>
+                                                <label for="jam_mulai" >Jam Mulai</label>
+                                                <input type="time" class="form-control" name="jam_mulai" placeholder="" required>
+                                            </div>
+                                            <div class="mb-3 input-group input-group-static">
+                                                <label for="jam_berhenti" >Jam Selesai</label>
+                                                <input type="time" class="form-control" name="jam_berhenti" placeholder="" required>
                                             </div>
                                             <div class="mb-3 input-group input-group-static">
                                                 <label for="keterangan" >Keterangan</label>
-                                                <textarea class="form-control" name="keterangan" placeholder=""></textarea>
+                                                <textarea class="form-control" name="keterangan" placeholder="(Opsional)"></textarea>
                                             </div>
                                             <button type="submit" class="btn btn-primary w-100">Simpan Tindakan</button>
                                         </form>

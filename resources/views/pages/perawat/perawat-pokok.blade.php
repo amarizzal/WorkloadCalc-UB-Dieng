@@ -185,12 +185,12 @@
 
 
                                         <div class="my-3 input-group input-group-static">
-                                            <label for="no_rekam_medis">No Rekam Medis</label>
-                                            <input type="text" class="form-control" name="no_rekam_medis" required>
+                                            <label for="keterangan">Keterangan</label>
+                                            <input type="text" class="form-control" name="keterangan" placeholder="(opsional)">
                                         </div>
                                         <div class="mb-3 input-group input-group-static">
-                                            <label for="nama_pasien">Nama Pasien</label>
-                                            <input type="text" class="form-control" name="nama_pasien" required>
+                                            <label for="nama_pasien">Nama Pasien/No. RM</label>
+                                            <input type="text" class="form-control" name="nama_pasien" placeholder="(opsional)">
                                         </div>
                                     </div>
 
@@ -274,12 +274,12 @@
                                             <input type="time" class="form-control" name="jam_berhenti" placeholder="" required>
                                         </div>
                                         <div class="my-3 input-group input-group-static">
-                                            <label for="no_rekam_medis">No Rekam Medis</label>
-                                            <input type="text" class="form-control" name="no_rekam_medis" required>
+                                            <label for="keterangan">Keterangan</label>
+                                            <input type="text" class="form-control" name="keterangan" placeholder="(opsional)">
                                         </div>
                                         <div class="mb-3 input-group input-group-static">
-                                            <label for="nama_pasien">Nama Pasien</label>
-                                            <input type="text" class="form-control" name="nama_pasien" required>
+                                            <label for="nama_pasien">Nama Pasien/No. RM</label>
+                                            <input type="text" class="form-control" name="nama_pasien" placeholder="(opsional)">
                                         </div>
                                         <button type="submit" class="btn btn-primary w-100">Simpan Tindakan</button>
                                     </form>
@@ -359,10 +359,10 @@
                 toggleButton.addEventListener("click", () => {
                     const tindakanId = document.getElementById("tindakanSelect").value;
                     const shiftId = document.getElementById("shiftId").value;
-                    const noRekamMedis = document.querySelector("input[name='no_rekam_medis']").value;
+                    const keterangan = document.querySelector("input[name='keterangan']").value;
                     const namaPasien = document.querySelector("input[name='nama_pasien']").value;
 
-                    if (!tindakanId || !shiftId || !noRekamMedis || !namaPasien) {
+                    if (!tindakanId || !shiftId ) {
                         alert("Semua field harus diisi!");
                         return;
                     }
@@ -417,8 +417,8 @@
                                 shift_id: shiftId,
                                 jam_mulai: jamMulai,
                                 jam_berhenti: jamBerhenti,
-                                no_rekam_medis: noRekamMedis,
-                                nama_pasien: namaPasien
+                                keterangan: keterangan ?? null,
+                                nama_pasien: namaPasien ?? null
                             }),
                         })
                         .then(res => res.json())
@@ -434,7 +434,7 @@
                         timerText.textContent = "00:00";
                         isRunning = false;
                         toggleButton.textContent = "Start";
-                        document.querySelector("input[name='no_rekam_medis']").value = "";
+                        document.querySelector("input[name='keterangan']").value = "";
                         document.querySelector("input[name='nama_pasien']").value = "";
                     }
 

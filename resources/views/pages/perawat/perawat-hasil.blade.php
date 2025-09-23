@@ -228,7 +228,7 @@
                                                             <td class="text-center">{{ $data->tanggal }}</td>
                                                             {{-- <td class="text-center">{{ \Carbon\Carbon::parse($data->jam_mulai)->format('H:i:s') }}</td>
                                                             <td class="text-center">{{ \Carbon\Carbon::parse($data->jam_berhenti)->format('H:i:s') }}</td> --}}
-                                                            <td class="text-center">{{ $data->durasi }} {{ $data->tindakan->satuan ?? '-' }}</td>
+                                                            <td class="text-center">{{ $data->durasi }} jam</td>
                                                             <td class="text-center">{{ $data->keterangan ?? '-' }}</td>
                                                         </tr>
                                                     @endforeach

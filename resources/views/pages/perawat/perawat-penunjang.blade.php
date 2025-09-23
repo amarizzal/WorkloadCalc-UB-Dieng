@@ -169,12 +169,11 @@
                                             <select onchange="selectTindakan(this.value)" class="form-select select2-tindakan" id="select_jenis_tindakan" name="jenis_tindakan" required>
                                                 <option value="" disabled selected>Pilih atau Tambah Tindakan</option>
                                                 @foreach($jenisTindakan as $tindakan)
-                                                    <option value="{{ $tindakan->tindakan }}" data-satuan="{{ $tindakan->satuan ? $tindakan->satuan : '' }}" data-kategori="{{ $tindakan->kategori ? $tindakan->kategori : '' }}">{{ $tindakan->tindakan }} - {{ $tindakan->satuan ? $tindakan->satuan : '(belum ada satuan)' }}</option>
+                                                    <option value="{{ $tindakan->tindakan }}" data-satuan="{{ $tindakan->satuan ? $tindakan->satuan : '' }}" data-kategori="{{ $tindakan->kategori ? $tindakan->kategori : '' }}">{{ $tindakan->tindakan }} - {{ $tindakan->kategori ? $tindakan->kategori : '(belum ada kateogri)' }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
 
-                                        <input type="hidden" name="waktu" value="0">
                                         <input type="hidden" name="status" value="Tugas Penunjang">
 
                                         <div class="mb-3 input-group input-group-static">
@@ -182,10 +181,14 @@
                                             <input type="date" class="form-control" name="tanggal" required>
                                         </div>
                                         <div class="mb-3 input-group input-group-static">
-                                            <label for="jam_mulai" >Waktu</label>
-                                            <input type="number" class="form-control" name="waktu" placeholder="" required>
+                                            <label for="jam_mulai" >Jam Mulai</label>
+                                            <input type="time" class="form-control" name="jam_mulai" placeholder="" required>
                                         </div>
                                         <div class="mb-3 input-group input-group-static">
+                                            <label for="jam_berhenti" >Jam Selesai</label>
+                                            <input type="time" class="form-control" name="jam_berhenti" placeholder="" required>
+                                        </div>
+                                        {{-- <div class="mb-3 input-group input-group-static">
                                             <label for="satuan" class="ms-0">Satuan</label>
                                             <select name="satuan" id="satuan" class="form-control" required>
                                                 <option value="" disabled selected>Pilih Satuan</option>
@@ -193,7 +196,7 @@
                                                 <option value="jam">Jam</option>
                                                 <option value="hari">Hari</option>
                                             </select>
-                                        </div>
+                                        </div> --}}
                                         <div class="mb-3 input-group input-group-static">
                                             <label for="kategori" >Kategori</label>
                                             <select name="kategori" id="kategori" class="form-control" required>
@@ -206,7 +209,7 @@
                                         </div>
                                         <div class="mb-3 input-group input-group-static">
                                             <label for="keterangan" >Keterangan</label>
-                                            <textarea class="form-control" name="keterangan" rows="3" required></textarea>
+                                            <textarea class="form-control" name="keterangan" rows="3" placeholder="(Opsional)"></textarea>
                                         </div>
                                         <button type="submit" class="btn btn-primary w-100">Simpan Tindakan</button>
                                     </form>

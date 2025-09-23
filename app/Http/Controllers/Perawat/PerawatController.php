@@ -88,7 +88,7 @@ class PerawatController extends Controller
     /////////////////////////////////////////////////////////////////////////////////////////////
     public function timer()
     {
-        $tindakanWaktu = TindakanWaktu::all();
+        $tindakanWaktu = TindakanWaktu::where('status', 'Tugas Pokok')->get();
         $now = Carbon::now('Asia/Jakarta')->format('H:i:s'); // jam saja, sama seperti getShiftByJamMulai
 
         $currentShift = ShiftKerja::query()
@@ -301,19 +301,34 @@ class PerawatController extends Controller
     
         // Periksa apakah tindakan sudah ada di database atau merupakan tindakan baru
         $tindakan = TindakanWaktu::where('tindakan', $request->jenis_tindakan)->first();
+
+        // konversi jam mulai dan jam selesai ke waktu (dalam bentuk jam)
+        // Ambil input "14:30" / "08:15"
+        $jamMulai   = $request->input('jam_mulai');
+        $jamBerhenti = $request->input('jam_berhenti');
+
+        // Konversi ke Carbon (anggap hari ini)
+        $mulai   = Carbon::createFromFormat('H:i', $jamMulai);
+        $selesai = Carbon::createFromFormat('H:i', $jamBerhenti);
+        // Hitung selisih dalam menit
+        $durasiMenit = $mulai->diffInMinutes($selesai);
+        
+        // Konversi ke jam pecahan
+        $durasiJam = $durasiMenit / 60;
     
         if (!$tindakan) {
             // Jika tindakan belum ada, buat yang baru dengan waktu = 0 dan status = Tugas Penunjang
             $tindakan = TindakanWaktu::create([
                 'tindakan' => $request->jenis_tindakan,
-                'waktu' => $request->waktu, // Waktu default 0 jika tidak diisi
+                'waktu' => $durasiJam, // Waktu default 0 jika tidak diisi
                 'status' => 'Tugas Penunjang',
                 'satuan' => $request->satuan, 
                 'kategori' => $request->kategori 
             ]);
         } else {
             // Jika tindakan sudah ada, gunakan ID tindakan yang sudah ada
-            $tindakan->waktu = $request->waktu + $tindakan->waktu; // Update waktu jika diperlukan
+
+            $tindakan->waktu = $durasiJam + $tindakan->waktu; // Update waktu jika diperlukan
             if ($tindakan->satuan == null) {
                 $tindakan->satuan = $request->satuan; 
             }
@@ -332,7 +347,7 @@ class PerawatController extends Controller
             'tanggal' => $request->input('tanggal'),
             'jam_mulai' => Carbon::parse($request->input('tanggal') . ' ' . $request->input('jam_mulai')),
             'jam_berhenti' => Carbon::parse($request->input('tanggal') . ' ' . $request->input('jam_berhenti')),
-            'durasi' => $request->waktu,
+            'durasi' => $durasiJam,
             'keterangan' => $request->input('keterangan'),
             'jenis_tindakan' => $tindakan->tindakan
         ]);

@@ -189,9 +189,9 @@
                         lengthMenu: "_MENU_ data setiap halaman",
                         info: "Menampilkan <strong>_START_</strong> sampai <strong>_END_</strong> , total <strong>_TOTAL_</strong> data",
                     },
-                    columnDefs: [
-                        { targets: 4, orderable: false }  // Kolom pertama tidak bisa diurutkan
-                    ]
+                    // columnDefs: [
+                    //     { targets: 4, orderable: false }  // Kolom pertama tidak bisa diurutkan
+                    // ]
                 });
                 table.buttons().container().appendTo('.button-datatable');
 

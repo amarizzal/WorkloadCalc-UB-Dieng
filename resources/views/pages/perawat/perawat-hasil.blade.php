@@ -193,6 +193,11 @@
                                                 @else
                                                     <tr>
                                                         <td colspan="6" class="text-center">Tidak ada tindakan pokok yang ditemukan.</td>
+                                                        <td class="d-none"></td>
+                                                        <td class="d-none"></td>
+                                                        <td class="d-none"></td>
+                                                        <td class="d-none"></td>
+                                                        <td class="d-none"></td>
                                                     </tr>
                                                 @endif
                                             </tbody>
@@ -240,7 +245,10 @@
                                                     @endforeach
                                                 @else
                                                     <tr>
-                                                        <td colspan="6" class="text-center">Tidak ada tindakan penunjang yang ditemukan.</td>
+                                                        <td colspan="4" class="text-center">Tidak ada tindakan penunjang yang ditemukan.</td>
+                                                        <td class="d-none"></td>
+                                                        <td class="d-none"></td>
+                                                        <td class="d-none"></td>
                                                     </tr>
                                                 @endif
                                             </tbody>
@@ -286,7 +294,10 @@
                                                     @endforeach
                                                 @else
                                                     <tr>
-                                                        <td colspan="6" class="text-center">Tidak ada tindakan penunjang yang ditemukan.</td>
+                                                        <td colspan="4" class="text-center">Tidak ada tindakan penunjang yang ditemukan.</td>
+                                                        <td class="d-none"></td>
+                                                        <td class="d-none"></td>
+                                                        <td class="d-none"></td>
                                                     </tr>
                                                 @endif
                                             </tbody>

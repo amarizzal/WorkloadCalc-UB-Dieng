@@ -163,8 +163,11 @@
                             </div>
                             <div class="card-body px-3 pb-2">
                                 <section class="container my-1">
+                                    <div class="row">
+                                        <div class="col-12 col-md-8 button-datatable"></div>
+                                    </div>
                                     <div class="table-responsive">
-                                        <table class="table table-striped table-bordered">
+                                        <table id="author_table" class="table table-striped table-bordered">
                                             <thead>
                                                 <tr class="table-dark">
                                                     <th>Tindakan</th>
@@ -210,8 +213,11 @@
                             </div>
                             <div class="card-body px-3 pb-2">
                                 <section class="container my-1">
+                                    <div class="row">
+                                        <div class="col-12 col-md-8 button-datatable2"></div>
+                                    </div>
                                     <div class="table-responsive">
-                                        <table class="table table-striped table-bordered">
+                                        <table id="author_table2" class="table table-striped table-bordered">
                                             <thead>
                                                 <tr class="table-dark">
                                                     <th>Tindakan</th>
@@ -255,8 +261,11 @@
                             </div>
                             <div class="card-body px-3 pb-2">
                                 <section class="container my-1">
+                                    <div class="row">
+                                        <div class="col-12 col-md-8 button-datatable3"></div>
+                                    </div>
                                     <div class="table-responsive">
-                                        <table class="table table-striped table-bordered">
+                                        <table id="author_table3" class="table table-striped table-bordered">
                                             <thead>
                                                 <tr class="table-dark">
                                                     <th>Tindakan</th>
@@ -432,61 +441,112 @@
 
         @push('js')
         <script>
-            $(document).ready(function() {
-                // Inisialisasi Select2 dengan fitur tagging (bisa input manual)
-                $('.select2-tindakan').select2({
-                    tags: true,
-                    placeholder: "Pilih atau Tambah Tindakan",
-                    allowClear: true
-                });
-
-                // Event handler untuk menampilkan form sesuai pilihan dropdown utama
-                $('#jenis_tindakan').change(function () {
-                    let tindakanLain = $('#form_tindakan_lain');
-                    let tindakanTambahan = $('#form_tindakan_tambahan');
-
-                    tindakanLain.addClass('d-none');
-                    tindakanTambahan.addClass('d-none');
-
-                    if ($(this).val() === 'tindakan_lain') {
-                        tindakanLain.removeClass('d-none');
-                    } else if ($(this).val() === 'tindakan_tambahan') {
-                        tindakanTambahan.removeClass('d-none');
-                    }
-                });
-
-                // Fungsi untuk mengisi satuan dan kategori berdasarkan tindakan yang dipilih
-                window.selectTindakan = function(value) {
-                    // Ambil data tindakan yang dipilih
-                    let selectedOption = $('#select_jenis_tindakan option[value="' + value + '"]');
-                    if (selectedOption.length) {
-                        let satuan = selectedOption.data('satuan');
-                        let kategori = selectedOption.data('kategori');
-                        console.log(satuan);
-                        console.log(kategori);
-
-                        // Set nilai satuan dan kategori pada form
-                        if (satuan ) {
-                            $('#satuan').val(satuan).trigger('change');
-                            $('#satuan').prop('disabled', true);
-                        } else {
-                            $('#satuan').prop('enabled', true);
-
+            document.addEventListener("DOMContentLoaded", function () {
+                const table = $('#author_table').DataTable({
+                    dom: 'frtip', // 'B' untuk Buttons
+                    buttons: [
+                        {
+                            extend: 'excel',
+                            className: 'btn btn-outline-success border rounded d-flex align-items-center',
+                            text: '<i class="material-icons">grid_on</i> Excel'
+                        },
+                        {
+                            extend: 'pdf',
+                            className: 'btn btn-outline-danger border rounded d-flex align-items-center',
+                            text: '<i class="material-icons">picture_as_pdf</i> PDF'
+                        },
+                        {
+                            extend: 'print',
+                            className: 'btn btn-outline-dark border rounded d-flex align-items-center',
+                            text: '<i class="material-icons">print</i> Print'
                         }
-                        if (kategori) {
-                            $('#kategori').val(kategori).trigger('change');
-                            $('#kategori').prop('disabled', true);
+                    ],
+                    pagingType: "simple_numbers", // atau "simple_numbers"
+                    language: {
+                        search: "",
+                        searchPlaceholder: "Cari...",
+                        lengthMenu: "_MENU_ data setiap halaman",
+                        info: "Menampilkan <strong>_START_</strong> sampai <strong>_END_</strong> , total <strong>_TOTAL_</strong> data",
+                    },
+                    // columnDefs: [
+                    //     { targets: 4, orderable: false }  // Kolom pertama tidak bisa diurutkandafsdf
+                    // ]
+                });
+                table.buttons().container().appendTo('.button-datatable');
+
+                const search = $('#author_table .dt-search');
+                search.appendTo('.button-datatable');
+
+                const table2 = $('#author_table2').DataTable({
+                    dom: 'frtip', // 'B' untuk Buttons
+                    buttons: [
+                        {
+                            extend: 'excel',
+                            className: 'btn btn-outline-success border rounded d-flex align-items-center',
+                            text: '<i class="material-icons">grid_on</i> Excel'
+                        },
+                        {
+                            extend: 'pdf',
+                            className: 'btn btn-outline-danger border rounded d-flex align-items-center',
+                            text: '<i class="material-icons">picture_as_pdf</i> PDF'
+                        },
+                        {
+                            extend: 'print',
+                            className: 'btn btn-outline-dark border rounded d-flex align-items-center',
+                            text: '<i class="material-icons">print</i> Print'
                         }
-                        // set agar disabled
-                    } else {
-                        // Jika tidak ada data, kosongkan input
-                        $('#satuan').val('').trigger('change');
-                        $('#kategori').val('').trigger('change');
-                        // set agar disabled
-                        $('#satuan').prop('enabled', false);
-                        $('#kategori').prop('enabled', false);
-                    }
-                };
+                    ],
+                    pagingType: "simple_numbers", // atau "simple_numbers"
+                    language: {
+                        search: "",
+                        searchPlaceholder: "Cari...",
+                        lengthMenu: "_MENU_ data setiap halaman",
+                        info: "Menampilkan <strong>_START_</strong> sampai <strong>_END_</strong> , total <strong>_TOTAL_</strong> data",
+                    },
+                    // columnDefs: [
+                    //     { targets: 4, orderable: false }  // Kolom pertama tidak bisa diurutkan
+                    // ]
+                });
+                table2.buttons().container().appendTo('.button-datatable2');
+
+                const search2 = $('#author_table2 .dt-search');
+                search2.appendTo('.button-datatable2');
+
+                const table3 = $('#author_table3').DataTable({
+                    dom: 'frtip', // 'B' untuk Buttons
+                    buttons: [
+                        {
+                            extend: 'excel',
+                            className: 'btn btn-outline-success border rounded d-flex align-items-center',
+                            text: '<i class="material-icons">grid_on</i> Excel'
+                        },
+                        {
+                            extend: 'pdf',
+                            className: 'btn btn-outline-danger border rounded d-flex align-items-center',
+                            text: '<i class="material-icons">picture_as_pdf</i> PDF'
+                        },
+                        {
+                            extend: 'print',
+                            className: 'btn btn-outline-dark border rounded d-flex align-items-center',
+                            text: '<i class="material-icons">print</i> Print'
+                        }
+                    ],
+                    pagingType: "simple_numbers", // atau "simple_numbers"
+                    language: {
+                        search: "",
+                        searchPlaceholder: "Cari...",
+                        lengthMenu: "_MENU_ data setiap halaman",
+                        info: "Menampilkan <strong>_START_</strong> sampai <strong>_END_</strong> , total <strong>_TOTAL_</strong> data",
+                    },
+                    // columnDefs: [
+                    //     { targets: 4, orderable: false }  // Kolom pertama tidak bisa diurutkan
+                    // ]
+                });
+                table3.buttons().container().appendTo('.button-datatable3');
+
+                const search3 = $('#author_table3 .dt-search');
+                search3.appendTo('.button-datatable3');
+
             });
         </script>
         @endpush

@@ -172,8 +172,8 @@
                                     <div class="mt-4">
                                         <h5>Pilih Jenis Tindakan</h5>
                                         <div class="form-group">
-                                            <select class="form-control tindakan-select" id="tindakanSelect" name="tindakan_id">
-                                                <option value="" disabled selected>Pilih Tindakan</option>
+                                            <select class="form-control tindakan-select" id="tindakanSelect" name="tindakan_id" multiple="multiple" required>
+                                                {{-- <option value="" disabled selected>Pilih Tindakan</option> --}}
                                                 @foreach ($tindakanWaktu as $tindakan)
                                                     <option value="{{ $tindakan->id }}">
                                                         {{ $tindakan->tindakan }}
@@ -215,7 +215,12 @@
 
                                     <!-- Action Buttons -->
                                     <div class="mt-4 text-center">
+                                        <p class="text-black">Sedang dihitung:</p> 
+                                        <p id="current-tindakan" class="fw-bold text-primary"> - </p>
+                                    </div>
+                                    <div class="mt-4 text-center">
                                         <button type="button" class="btn btn-primary me-2" id="toggleButton">Start</button>
+                                        <button id="nextButton" class="btn btn-success" disabled>Next</button>
                                         {{-- <button id="stopButton" class="btn btn-danger" disabled>Stop</button> --}}
                                     </div>
 
@@ -300,7 +305,9 @@
                     placeholder: "Cari atau pilih tindakan",
                     allowClear: true,
                     width: 'resolve',
-                    dropdownCssClass: "custom-select2-dropdown"
+                    tags: true,
+                    // dropdownCssClass: "custom-select2-dropdown"
+                    multiple: true,
                 });
                 $('.tindakan-select2').select2({
                     placeholder: "Pilih tindakan",
@@ -331,6 +338,31 @@
                 const circleLength = 283; // Panjang keliling lingkaran SVG (misalnya 2 * π * r)
                 const duration = 60; // Dalam detik, 1 menit
                 const progressCircle = document.getElementById("progress-circle");
+                // simpan urutan custom
+                let orderedValues = [];
+
+                function reorderSelect2($el, orderedValues) {
+                    // ambil semua option sesuai urutan orderedValues
+                    const options = orderedValues.map(v => $el.find(`option[value='${v}']`));
+                    // append ulang sesuai urutan
+                    $el.append(options);
+                    // set ulang value
+                    $el.val(orderedValues).trigger('change');
+                }
+
+                $('.tindakan-select').on('select2:select', function (e) {
+                    const id = e.params.data.id;
+                    if (!orderedValues.includes(id)) {
+                        orderedValues.push(id);
+                    }
+                    reorderSelect2($(this), orderedValues);
+                });
+
+                $('.tindakan-select').on('select2:unselect', function (e) {
+                    const id = e.params.data.id;
+                    orderedValues = orderedValues.filter(v => v !== id);
+                    reorderSelect2($(this), orderedValues);
+                });
 
                 // let timerInterval;
                 // let elapsedTime = 0; // Pindahkan ke luar agar bisa diakses di stopButton
@@ -339,106 +371,134 @@
                 let startTime = null;
                 let timerInterval;
                 let elapsedTime = 0;
+                let currentStep = 0; // indeks tindakan yg sedang berjalan
+                let tindakanList = []; // array tindakan dari select2 multiple
+                const currentTindakanEl = document.getElementById("current-tindakan");
+                function updateCurrentTindakan() {
+                    if (tindakanList[currentStep]) {
+                        const text = $('#tindakanSelect option[value="'+tindakanList[currentStep]+'"]').text();
+                        currentTindakanEl.textContent = `${text}`;
+                    } else {
+                        currentTindakanEl.textContent = "";
+                    }
+                }
+
+                function setFormDisabled(disabled) {
+                    // disable select2 (butuh .prop untuk select)
+                    $("#tindakanSelect").prop("disabled", disabled);
+                    if (disabled) {
+                        $("#tindakanSelect").select2("close"); // supaya nggak bisa dibuka
+                    }
+                    // disable input lain
+                    document.querySelector("input[name='keterangan']").disabled = disabled;
+                    document.querySelector("input[name='nama_pasien']").disabled = disabled;
+                }
+
 
                 const toggleButton = document.getElementById("toggleButton");
+                const nextButton   = document.getElementById("nextButton");
 
                 function startTimer() {
-                    startTime = new Date(); // catat jam mulai lokal
+                    setFormDisabled(true);
+                    updateCurrentTindakan();
+                    isRunning = true;
+                    startTime = new Date();
                     elapsedTime = 0;
                     timerInterval = setInterval(() => {
                         elapsedTime++;
                         // Update progress circle
                         const progress = (elapsedTime / duration) * circleLength;
                         progressCircle.style.strokeDashoffset = circleLength - progress;
+
                         const minutes = String(Math.floor(elapsedTime / 60)).padStart(2, "0");
                         const seconds = String(elapsedTime % 60).padStart(2, "0");
                         timerText.textContent = `${minutes}:${seconds}`;
                     }, 1000);
                 }
 
-                toggleButton.addEventListener("click", () => {
-                    const tindakanId = document.getElementById("tindakanSelect").value;
-                    const shiftId = document.getElementById("shiftId").value;
-                    const keterangan = document.querySelector("input[name='keterangan']").value;
-                    const namaPasien = document.querySelector("input[name='nama_pasien']").value;
+                function stopTimer() {
+                    clearInterval(timerInterval);
+                    timerText.textContent = "00:00";
+                    elapsedTime = 0;
+                    isRunning = false;
+                }
 
-                    if (!tindakanId || !shiftId ) {
+                toggleButton.addEventListener("click", () => {
+                    const selected = $("#tindakanSelect").val();
+                    tindakanList = selected ?? [];
+                    const shiftId = document.getElementById("shiftId").value;
+
+                    if (!tindakanList.length || !shiftId) {
                         alert("Semua field harus diisi!");
                         return;
                     }
 
                     if (!isRunning) {
-                        // === START (hanya frontend) ===
+                        // START batch
+                        currentStep = 0;
                         startTimer();
                         isRunning = true;
                         toggleButton.textContent = "Stop";
+                        nextButton.disabled = false;
                     } else {
-                        // === STOP (konfirmasi + kirim ke server) ===
-                        clearInterval(timerInterval);
-                        const jamMulai = startTime.toLocaleString("sv-SE", { timeZone: "Asia/Jakarta" }).replace(" ", "T");
-                        const jamBerhenti = new Date().toLocaleString("sv-SE", { timeZone: "Asia/Jakarta" }).replace(" ", "T");
-
-                        // hitung durasi dalam detik
-                        const durasi = Math.floor((new Date(jamBerhenti) - new Date(jamMulai)) / 1000);
-
-                        // Konfirmasi jika durasi < 30 detik
-                        if (durasi < 30) {
-                            const confirmSend = confirm(`Durasi baru ${durasi} detik. Yakin ingin mengirim data?`);
-                            if (!confirmSend) {
-                                timerText.textContent = "00:00";
-                                elapsedTime = 0;
-                                isRunning = false;
-                                toggleButton.textContent = "Start";
-                                return;
-                            }
-                        }
-
-                        // Konfirmasi jika durasi > 15 menit (900 detik)
-                        if (durasi > 900) {
-                            const confirmSend = confirm(`Durasi ${durasi} detik (>15 menit). Yakin ingin mengirim data?`);
-                            if (!confirmSend) {
-                                timerText.textContent = "00:00";
-                                elapsedTime = 0;
-                                isRunning = false;
-                                toggleButton.textContent = "Start";
-                                return;
-                            }
-                        }
-
-                        // Lolos validasi → kirim request ke server
-                        fetch("/perawat/stop-action", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                                "X-CSRF-TOKEN": document.querySelector("meta[name='csrf-token']").content,
-                            },
-                            body: JSON.stringify({
-                                tindakan_id: tindakanId,
-                                shift_id: shiftId,
-                                jam_mulai: jamMulai,
-                                jam_berhenti: jamBerhenti,
-                                keterangan: keterangan ?? null,
-                                nama_pasien: namaPasien ?? null
-                            }),
-                        })
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.status === "success") {
-                                alert(`Durasi tercatat: ${data.durasi} detik`);
-                            } else {
-                                alert("Gagal menyimpan data.");
-                            }
-                        })
-                        .catch(err => console.error(err));
-
-                        timerText.textContent = "00:00";
-                        isRunning = false;
+                        // STOP batch
+                        stopTimer();
                         toggleButton.textContent = "Start";
-                        document.querySelector("input[name='keterangan']").value = "";
-                        document.querySelector("input[name='nama_pasien']").value = "";
+                        nextButton.disabled = true;
                     }
+                });
 
+                nextButton.addEventListener("click", () => {
+                    if (!isRunning) return;
 
+                    const tindakanId = tindakanList[currentStep];
+                    const shiftId = document.getElementById("shiftId").value;
+                    const keterangan = document.querySelector("input[name='keterangan']").value;
+                    const namaPasien = document.querySelector("input[name='nama_pasien']").value;
+
+                    const jamMulai = startTime.toLocaleString("sv-SE", { timeZone: "Asia/Jakarta" }).replace(" ", "T");
+                    const jamBerhenti = new Date().toLocaleString("sv-SE", { timeZone: "Asia/Jakarta" }).replace(" ", "T");
+                    const durasi = Math.floor((new Date(jamBerhenti) - new Date(jamMulai)) / 1000);
+
+                    // kirim ke server
+                    fetch("/perawat/stop-action", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": document.querySelector("meta[name='csrf-token']").content,
+                        },
+                        body: JSON.stringify({
+                            tindakan_id: tindakanId,
+                            shift_id: shiftId,
+                            jam_mulai: jamMulai,
+                            jam_berhenti: jamBerhenti,
+                            keterangan: keterangan ?? null,
+                            nama_pasien: namaPasien ?? null
+                        }),
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === "success") {
+                            alert(`Durasi tercatat: ${data.durasi} detik`);
+                        } else {
+                            alert("Gagal menyimpan data.");
+                        }
+                    })
+                    .catch(err => console.error(err));
+
+                    // lanjut ke step berikut
+                    currentStep++;
+                    if (currentStep < tindakanList.length) {
+                        stopTimer();
+                        startTimer(); // auto restart
+                    } else {
+                        stopTimer();
+                        toggleButton.textContent = "Start";
+                        nextButton.disabled = true;
+                        currentTindakanEl.textContent = "✅ Semua tindakan selesai";
+                        setFormDisabled(false);
+                        isRunning = false;
+                    }
                 });
 
 

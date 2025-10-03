@@ -169,7 +169,7 @@
                                     <hr>
 
                                     <!-- Dropdown untuk Pilih Jenis Tindakan -->
-                                    <div class="mt-4">
+                                    <div id="formTimer" class="mt-4">
                                         <h5>Pilih Jenis Tindakan</h5>
                                         <div class="form-group">
                                             <select class="form-control tindakan-select" id="tindakanSelect" name="tindakan_id" multiple="multiple" required>
@@ -390,8 +390,8 @@
                         $("#tindakanSelect").select2("close"); // supaya nggak bisa dibuka
                     }
                     // disable input lain
-                    document.querySelector("input[name='keterangan']").disabled = disabled;
-                    document.querySelector("input[name='nama_pasien']").disabled = disabled;
+                    document.querySelector("#formTimer input[name='keterangan']").disabled = disabled;
+                    document.querySelector("#formTimer input[name='nama_pasien']").disabled = disabled;
                 }
 
 
@@ -453,8 +453,10 @@
 
                     const tindakanId = tindakanList[currentStep];
                     const shiftId = document.getElementById("shiftId").value;
-                    const keterangan = document.querySelector("input[name='keterangan']").value;
-                    const namaPasien = document.querySelector("input[name='nama_pasien']").value;
+                    const keterangan = document.querySelector("#formTimer input[name='keterangan']").value;
+                    const namaPasien = document.querySelector("#formTimer input[name='nama_pasien']").value;
+
+                    console.log({ tindakanId, shiftId, keterangan, namaPasien });
 
                     const jamMulai = startTime.toLocaleString("sv-SE", { timeZone: "Asia/Jakarta" }).replace(" ", "T");
                     const jamBerhenti = new Date().toLocaleString("sv-SE", { timeZone: "Asia/Jakarta" }).replace(" ", "T");
@@ -480,6 +482,7 @@
                     .then(data => {
                         if (data.status === "success") {
                             alert(`Durasi tercatat: ${data.durasi} detik`);
+                            console.log(data);
                         } else {
                             alert("Gagal menyimpan data.");
                         }

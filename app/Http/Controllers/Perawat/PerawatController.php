@@ -165,6 +165,8 @@ class PerawatController extends Controller
         return response()->json([
             'status' => 'success',
             'laporan_id' => $laporan->id,
+            'keterangan' => $laporan->keterangan,
+            'nama_pasien' => $laporan->nama_pasien,
             'jam_mulai' => $laporan->jam_mulai->format('H:i:s'),
             'jam_berhenti' => $laporan->jam_berhenti->format('H:i:s'),
             'durasi' => $laporan->durasi,

@@ -187,7 +187,8 @@
                                                             <td class="text-center">{{ \Carbon\Carbon::parse($data->jam_mulai)->format('H:i:s') }}</td>
                                                             <td class="text-center">{{ \Carbon\Carbon::parse($data->jam_berhenti)->format('H:i:s') }}</td>
                                                             <td class="text-center">{{ floor($data->durasi / 60) }} menit {{ $data->durasi % 60 }} detik</td>
-                                                            <td class="text-center">{{ $data->nama_pasien && $data->no_rekam_medis ? $data->nama_pasien . ' (' . $data->no_rekam_medis . ')' : '-' }}</td>
+                                                            <td class="text-center">{{ $data->nama_pasien ? $data->nama_pasien  : '-' }} <br>
+                                                            {{ $data->keterangan ? $data->keterangan  : '-' }}</td>
                                                         </tr>
                                                     @endforeach
                                                 @else
@@ -514,9 +515,6 @@
                         lengthMenu: "_MENU_ data setiap halaman",
                         info: "Menampilkan <strong>_START_</strong> sampai <strong>_END_</strong> , total <strong>_TOTAL_</strong> data",
                     },
-                    // columnDefs: [
-                    //     { targets: 4, orderable: false }  // Kolom pertama tidak bisa diurutkan
-                    // ]
                 });
                 table2.buttons().container().appendTo('.button-datatable2');
 

@@ -183,14 +183,13 @@
 
                                         </div>
 
-
                                         <div class="my-3 input-group input-group-static">
-                                            <label for="keterangan">Keterangan</label>
-                                            <input type="text" class="form-control" name="keterangan" placeholder="(opsional)">
-                                        </div>
-                                        <div class="mb-3 input-group input-group-static">
                                             <label for="nama_pasien">Nama Pasien/No. RM</label>
                                             <input type="text" class="form-control" name="nama_pasien" placeholder="(opsional)">
+                                        </div>
+                                        <div class="mb-3 input-group input-group-static">
+                                            <label for="keterangan">Keterangan</label>
+                                            <input type="text" class="form-control" name="keterangan" placeholder="(opsional)">
                                         </div>
                                     </div>
 
@@ -278,13 +277,13 @@
                                             <label for="jam_berhenti" >Jam Berhenti</label>
                                             <input type="time" class="form-control" name="jam_berhenti" placeholder="" required>
                                         </div>
-                                        <div class="my-3 input-group input-group-static">
-                                            <label for="keterangan">Keterangan</label>
-                                            <input type="text" class="form-control" name="keterangan" placeholder="(opsional)">
-                                        </div>
                                         <div class="mb-3 input-group input-group-static">
                                             <label for="nama_pasien">Nama Pasien/No. RM</label>
                                             <input type="text" class="form-control" name="nama_pasien" placeholder="(opsional)">
+                                        </div>
+                                        <div class="my-3 input-group input-group-static">
+                                            <label for="keterangan">Keterangan</label>
+                                            <input type="text" class="form-control" name="keterangan" placeholder="(opsional)">
                                         </div>
                                         <button type="submit" class="btn btn-primary w-100">Simpan Tindakan</button>
                                     </form>

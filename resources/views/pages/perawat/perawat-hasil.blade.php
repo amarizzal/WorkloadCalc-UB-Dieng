@@ -240,7 +240,7 @@
                                                             <td class="text-center">{{ $data->tanggal }}</td>
                                                             {{-- <td class="text-center">{{ \Carbon\Carbon::parse($data->jam_mulai)->format('H:i:s') }}</td>
                                                             <td class="text-center">{{ \Carbon\Carbon::parse($data->jam_berhenti)->format('H:i:s') }}</td> --}}
-                                                            <td class="text-center">{{ $data->durasi }} jam</td>
+                                                            <td class="text-center">{{ floor($data->durasi / 60) }} menit {{ $data->durasi % 60 }} detik</td>
                                                             <td class="text-center">{{ $data->keterangan ?? '-' }}</td>
                                                         </tr>
                                                     @endforeach
@@ -289,7 +289,7 @@
                                                         <tr>
                                                             <td>{{ $tindakan->tindakan->tindakan ?? 'Tidak Ada Data' }}</td>
                                                             <td>{{ $tindakan->tanggal ?? '-' }}</td>
-                                                            <td>{{ $tindakan->durasi ?? '-' }} Jam</td>
+                                                            <td class="text-center">{{ floor($data->durasi / 60) }} menit {{ $data->durasi % 60 }} detik</td>
                                                             <td>{{ $tindakan->keterangan ?? '-' }}</td>
                                                         </tr>
                                                     @endforeach

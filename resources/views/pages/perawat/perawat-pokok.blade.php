@@ -251,7 +251,7 @@
                                             <div class="mt-4">
                                                 <h5>Pilih Jenis Tindakan</h5>
                                                 <div class="form-group">
-                                                    <select class="form-control tindakan-select" id="tindakanSelect2" name="tindakan_id">
+                                                    <select class="form-control tindakan-select2" id="tindakanSelect2" name="tindakan_id">
                                                         <option value="" disabled selected>Pilih Tindakan</option>
                                                         @foreach ($tindakanWaktu as $tindakan)
                                                             <option value="{{ $tindakan->id }}">

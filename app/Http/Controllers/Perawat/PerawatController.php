@@ -497,11 +497,10 @@ class PerawatController extends Controller
         
         $validated = $request->validate([
             'tindakan_id' => 'required|exists:tindakan_waktu,id',
-            'no_rekam_medis' => 'required|string',
             'nama_pasien' => 'required|string',
+            'keterangan' => 'required|string',
             // 'shift_id' => 'required|exists:shift_kerja,id',
         ]);
-
         
 
         // Ambil waktu yang diinputkan
@@ -527,6 +526,7 @@ class PerawatController extends Controller
         // Hitung durasi dalam detik (selisih antara jam_berhenti dan jam_mulai)
         $durasi = Carbon::parse($jamMulai)->diffInSeconds($jamBerhenti);
 
+        
         $laporan = LaporanTindakanPerawat::create([
             'user_id' => auth()->user()->id,
             'ruangan_id' => auth()->user()->ruangan_id,
@@ -535,12 +535,12 @@ class PerawatController extends Controller
             'tanggal' => $tanggal,
             'jam_mulai' => $jamMulai,
             'jam_berhenti' => $jamBerhenti,
-            'no_rekam_medis' => $validated['no_rekam_medis'],
             'nama_pasien' => $validated['nama_pasien'],
+            'keterangan' => $validated['keterangan'],
             'durasi' => $durasi,
         ]);
     
-        session()->flash('success', 'Tindakan tambahan berhasil ditambahkan.');
+        session()->flash('success', 'Tindakan pokok berhasil ditambahkan.');
         return redirect()->route('perawat.hasil');
     }
 

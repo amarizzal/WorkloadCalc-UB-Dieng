@@ -120,14 +120,29 @@
                                                 <td class="align-middle text-center text-sm">
                                                     <p class="text-xs font-weight-bold mb-0">{{ \Carbon\Carbon::parse($data->jam_berhenti)->format('H:i:s') }}</p>
                                                 </td>
-                                                @php
-                                                    $totalMenit = $data->durasi * 60;
-                                                    $jam = floor($totalMenit / 60);
-                                                    $menit = $totalMenit % 60;
-                                                @endphp
-                                                <td class="align-middle text-center text-sm">
-                                                    <p class="text-xs font-weight-bold mb-0 text-success">{{ $jam > 0 ? $jam.' jam ' : '' }}{{ $menit }} menit</p>
-                                                </td>
+                                                @if ($data->tindakan)
+                                                    @if ($data->tindakan->status === 'Tugas Pokok')
+                                                        <td class="align-middle text-center text-sm">
+                                                            <p class="text-xs font-weight-bold mb-0 text-success">{{ floor($data->durasi / 60) }} menit {{ $data->durasi % 60 }} detik</p>
+                                                        </td>
+                                                    @else
+                                                        @php
+                                                            $totalMenit = $data->durasi * 60;
+                                                            $jam = floor($totalMenit / 60);
+                                                            $menit = $totalMenit % 60;
+                                                        @endphp
+
+                                                        <td class="text-center">
+                                                            <p class="text-xs font-weight-bold mb-0 text-success">
+
+                                                                {{ $jam > 0 ? $jam.' jam ' : '' }}{{ $menit }} menit
+                                                            </p>
+                                                        </td>
+                                                    @endif
+                                                @else
+                                                    <td class="align-middle text-center text-sm">
+                                                        </td>
+                                                @endif
                                                 <td class="align-middle text-center text-sm">
                                                     <p class="text-xs font-weight-bold mb-0">
                                                         @if ($data->tindakan)

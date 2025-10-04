@@ -240,7 +240,15 @@
                                                             <td class="text-center">{{ $data->tanggal }}</td>
                                                             {{-- <td class="text-center">{{ \Carbon\Carbon::parse($data->jam_mulai)->format('H:i:s') }}</td>
                                                             <td class="text-center">{{ \Carbon\Carbon::parse($data->jam_berhenti)->format('H:i:s') }}</td> --}}
-                                                            <td class="text-center">{{ floor($data->durasi / 60) }} menit {{ $data->durasi % 60 }} detik</td>
+                                                            @php
+                                                                $totalMenit = $data->durasi * 60;
+                                                                $jam = floor($totalMenit / 60);
+                                                                $menit = $totalMenit % 60;
+                                                            @endphp
+
+                                                            <td class="text-center">
+                                                            {{ $jam > 0 ? $jam.' jam ' : '' }}{{ $menit }} menit
+                                                            </td>
                                                             <td class="text-center">{{ $data->keterangan ?? '-' }}</td>
                                                         </tr>
                                                     @endforeach
@@ -289,7 +297,16 @@
                                                         <tr>
                                                             <td>{{ $tindakan->tindakan->tindakan ?? 'Tidak Ada Data' }}</td>
                                                             <td>{{ $tindakan->tanggal ?? '-' }}</td>
-                                                            <td class="text-center">{{ floor($data->durasi / 60) }} menit {{ $data->durasi % 60 }} detik</td>
+                                                            {{-- <td class="text-center">{{ $tindakan->durasi }} </td> --}}
+                                                            @php
+                                                                $totalMenit = $tindakan->durasi * 60;
+                                                                $jam = floor($totalMenit / 60);
+                                                                $menit = $totalMenit % 60;
+                                                            @endphp
+
+                                                            <td class="text-center">
+                                                            {{ $jam > 0 ? $jam.' jam ' : '' }}{{ $menit }} menit
+                                                            </td>
                                                             <td>{{ $tindakan->keterangan ?? '-' }}</td>
                                                         </tr>
                                                     @endforeach

@@ -497,8 +497,8 @@ class PerawatController extends Controller
         
         $validated = $request->validate([
             'tindakan_id' => 'required|exists:tindakan_waktu,id',
-            'nama_pasien' => 'required|string',
-            'keterangan' => 'required|string',
+            // 'nama_pasien' => 'required|string',
+            // 'keterangan' => 'required|string',
             // 'shift_id' => 'required|exists:shift_kerja,id',
         ]);
         
@@ -535,8 +535,8 @@ class PerawatController extends Controller
             'tanggal' => $tanggal,
             'jam_mulai' => $jamMulai,
             'jam_berhenti' => $jamBerhenti,
-            'nama_pasien' => $validated['nama_pasien'],
-            'keterangan' => $validated['keterangan'],
+            'nama_pasien' => $validated['nama_pasien'] ?? null,
+            'keterangan' => $validated['keterangan'] ?? null,
             'durasi' => $durasi,
         ]);
     

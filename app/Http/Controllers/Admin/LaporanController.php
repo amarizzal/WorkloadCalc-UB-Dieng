@@ -170,7 +170,7 @@ class LaporanController extends Controller
             $totalDurasi = $laporanTindakan->sum('durasi');
             $jumlahTindakan = $laporanTindakan->count();
 
-            $rataRataWaktu[$tindakan->id] = $jumlahTindakan > 0 ? ($totalDurasi / $jumlahTindakan) / 60 : 0;
+            $rataRataWaktu[$tindakan->id] = $jumlahTindakan > 0 ? ($totalDurasi / $jumlahTindakan) : 0;
         }
 
         // Menghitung standar workload (SWL)

@@ -44,30 +44,18 @@
                         <td>{{ $tindakan->satuan ?? '-' }}</td>
                         <td>{{ $tindakan->kategori ?? '-' }}</td>
                         <td>
-                            @php
-                                // Menghitung waktu kegiatan dalam jam
-                                if ($tindakan->satuan == 'jam') {
-                                    $waktuJam = $tindakan->waktu; 
-                                } elseif ($tindakan->satuan == 'menit') {
-                                    $waktuJam = number_format($tindakan->waktu / 60, 2); 
-                                } elseif ($tindakan->satuan == 'hari') {
-                                    $waktuJam = number_format($tindakan->waktu * 24, 2); 
-                                } else {
-                                    $waktuJam = 0; // Jika satuan tidak dikenali
-                                }
-                            @endphp
-                            {{ $waktuJam }}
+                            {{ $tindakan->waktu ?? '0' }}
                         </td>
                         <td>
                             @php
                                 $totalWaktu = 0;
-                                if($tindakan->satuan == 'jam') {
-                                    $totalWaktu = $tindakan->waktu * 1; 
-                                } elseif($tindakan->satuan == 'menit') {
-                                    $totalWaktu = $tindakan->waktu / 60; 
-                                } elseif($tindakan->satuan == 'hari') {
-                                    $totalWaktu = $tindakan->waktu * 24; 
-                                }
+                                // if($tindakan->satuan == 'jam') {
+                                //     $totalWaktu = $tindakan->waktu * 1; 
+                                // } elseif($tindakan->satuan == 'menit') {
+                                //     $totalWaktu = $tindakan->waktu / 60; 
+                                // } elseif($tindakan->satuan == 'hari') {
+                                //     $totalWaktu = $tindakan->waktu * 24; 
+                                // }
                                 if ($tindakan->kategori == 'harian') {
                                     $totalWaktu = $totalWaktu * 264; // 264 hari kerja dalam setahun
                                 } elseif ($tindakan->kategori == 'mingguan') {

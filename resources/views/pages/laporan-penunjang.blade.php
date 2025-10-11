@@ -80,30 +80,23 @@
                                                 </td>
                                                 <td class="align-middle text-center text-sm">
                                                     @php
-                                                        // Menghitung waktu kegiatan dalam jam
-                                                        if ($tindakan->satuan == 'jam') {
-                                                            $waktuJam = $tindakan->waktu; 
-                                                        } elseif ($tindakan->satuan == 'menit') {
-                                                            $waktuJam = number_format($tindakan->waktu / 60, 2); 
-                                                        } elseif ($tindakan->satuan == 'hari') {
-                                                            $waktuJam = number_format($tindakan->waktu * 24, 2); 
-                                                        } else {
-                                                            $waktuJam = 0; // Jika satuan tidak dikenali
+                                                        $totalWaktu = $rataRataWaktu[$tindakan->id] ?? 0;
+                                                        if ($tindakan->kategori == 'harian') {
+                                                            $totalWaktu = $totalWaktu * 264; // 264 hari kerja dalam setahun
+                                                        } elseif ($tindakan->kategori == 'mingguan') {
+                                                            $totalWaktu = $totalWaktu * 52; // 52 minggu dalam setahun
+                                                        } elseif ($tindakan->kategori == 'bulanan') {
+                                                            $totalWaktu = $totalWaktu * 12; // 12 bulan dalam setahun
+                                                        } elseif ($tindakan->kategori == 'tahunan') {
+                                                            $totalWaktu = $totalWaktu; // Sudah dalam satuan tahunan
                                                         }
                                                     @endphp
-                                                    <strong>{{ $waktuJam }}</strong>
-                                                    
+                                                    <strong>{{ $totalWaktu }}</strong>
+
                                                 </td>
                                                 <td class="align-middle text-center text-sm text-danger">
                                                     @php
-                                                        $totalWaktu = 0;
-                                                        if($tindakan->satuan == 'jam') {
-                                                            $totalWaktu = $tindakan->waktu * 1; 
-                                                        } elseif($tindakan->satuan == 'menit') {
-                                                            $totalWaktu = $tindakan->waktu / 60; 
-                                                        } elseif($tindakan->satuan == 'hari') {
-                                                            $totalWaktu = $tindakan->waktu * 24; 
-                                                        }
+                                                        $totalWaktu = $rataRataWaktu[$tindakan->id] ?? 0;
                                                         if ($tindakan->kategori == 'harian') {
                                                             $totalWaktu = $totalWaktu * 264; // 264 hari kerja dalam setahun
                                                         } elseif ($tindakan->kategori == 'mingguan') {
@@ -114,11 +107,12 @@
                                                             $totalWaktu = $totalWaktu; // Sudah dalam satuan tahunan
                                                         }
                                                         $faktor = $totalWaktu > 0 ? ($totalWaktu / $hospitalTime) * 100 : 0;
-                                                        $faktor = number_format($faktor, 2);
+                                                        // $faktor = number_format($faktor, 2);
 
                                                         $totalFaktor += $faktor;
+                                                        $faktorString = number_format($faktor, 2);
                                                     @endphp
-                                                    <strong class="text-danger">{{ $faktor }}</strong>
+                                                    <strong class="text-danger">{{ $faktorString }}</strong>
                                                 </td>
                                             </tr>
                                             @endforeach
@@ -126,7 +120,7 @@
                                                 // Menghitung rata-rata faktor
                                                 $totalTindakanForFaktor = count($tindakanPenunjang);
                                                 $averageFaktor = $totalTindakanForFaktor > 0 ? $totalFaktor / $totalTindakanForFaktor : 0;
-                                                $averageFaktor = number_format($averageFaktor, 2);
+                                                $averageFaktorString = number_format($averageFaktor, 2);
                                             @endphp
                                             <tr class="no-sort">
                                                 <td colspan="4" class="text-end fw-bold text-dark">Rata-rata Faktor (%)</td>
@@ -134,7 +128,7 @@
                                                 <td class="d-none"></td>
                                                 <td class="d-none"></td>
                                                 <td class="d-none"></td>
-                                                <td class="text-center text-danger text-lg"><strong>{{ $averageFaktor }}</strong></td>
+                                                <td class="text-center text-danger text-lg"><strong>{{ $averageFaktorString }}</strong></td>
                                                 <td class="d-none"></td>
                                             </tr>
                                         </tbody>
@@ -193,7 +187,7 @@
                                                         <strong class="text-success">{{ $totalTindakan[$tindakan->id] ?? 0 }}</strong>
                                                     </td>
                                                     <td class="text-center limitid-height text-md">
-                                                        <p class="text-md">{{ number_format($rataWaktu / 60, 2) }} jam</p>
+                                                        <p class="text-md">{{ number_format($rataRataWaktu[$tindakan->id] ?? 0, 2) }} jam</p>
                                                     </td>
                                                 </tr>
                                             @endif

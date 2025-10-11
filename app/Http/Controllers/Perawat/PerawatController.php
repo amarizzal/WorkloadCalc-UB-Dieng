@@ -535,8 +535,8 @@ class PerawatController extends Controller
             'tanggal' => $tanggal,
             'jam_mulai' => $jamMulai,
             'jam_berhenti' => $jamBerhenti,
-            'nama_pasien' => $validated['nama_pasien'] ?? null,
-            'keterangan' => $validated['keterangan'] ?? null,
+            'nama_pasien' => $request->input('nama_pasien') ?? null,
+            'keterangan' => $request->input('keterangan') ?? null,
             'durasi' => $durasi,
         ]);
     
